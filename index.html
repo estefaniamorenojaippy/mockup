@@ -1740,7 +1740,7 @@ svg{display:block}
 }
 .tile-init.done{opacity:1;filter:none;background:rgba(255,255,255,.9);border-color:#fff}
 .tile-obj-icon{width:14px;height:14px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:1.5px solid rgba(255,255,255,.7);flex-shrink:0}
-.tile-profile{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 2px;border:1.5px solid rgba(255,255,255,.6);cursor:help}
+.tile-profile{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:4px auto 0;border:1.5px solid rgba(0,0,0,.12);cursor:help}
 .tiles.hide-pc .t-pc,.tiles.hide-ci .t-ci,.tiles.hide-es .t-es,.tiles.hide-co .t-co{display:none}
 /* Filtro "solo clientes objetivo" */
 .tiles.only-obj .tile:not(.is-obj){display:none}
@@ -2803,7 +2803,7 @@ svg{display:block}
       <button data-size="m" class="active" style="font-size:.8rem">Aa</button>
       <button data-size="l" style="font-size:.95rem">AA</button>
     </div>
-    <button class="btn-tag" onclick="openTagModal()">
+    <button class="btn-tag" onclick="editingTagName=null;openTagModal()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
       ETIQUETA
     </button>
@@ -2931,7 +2931,7 @@ svg{display:block}
               <option value="active">Solo activas</option>
             </select>
           </div>
-          <button class="btn-tag" onclick="openTagModal()">
+          <button class="btn-tag" onclick="editingTagName=null;openTagModal()">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
             ETIQUETA
           </button>
@@ -4817,8 +4817,7 @@ function renderTiles(){
       return `
       <div class="tile t-${t.st}${obj ? " is-obj" : ""}" data-obj-profile="${objProfile ? objProfile.name : ""}" onclick="openRoomModal(${t.i})">
         <div class="tile-status">${initHtml}</div>
-        <div class="tile-num">${t.n}</div>
-        ${objIconBelow}
+        <div class="tile-num">${t.n}${objIconBelow}</div>
         ${t.b ? `<button class="tile-badge tile-qr" onclick="event.stopPropagation();openQrModal(${t.n})" title="QR de valoración" aria-label="QR de valoración">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#2F53D7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5a2 2 0 0 1 2-2h3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M21 16v3a2 2 0 0 1-2 2h-3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><rect x="8.5" y="8.5" width="7" height="7" rx="1" fill="#2F53D7" stroke="none"/></svg>
         </button>` : ""}
@@ -5079,6 +5078,7 @@ function toggleIniFav(id, ev){
 }
 function iniCreateTag(tagName, emoji, profiles, ev){
   ev.stopPropagation();
+  editingTagName = null;
   openTagModal(profiles);
   setTimeout(() => {
     const nameInput = document.getElementById("tagName");
@@ -5740,7 +5740,20 @@ function renderTagPanel(){
       <span class="tag-cell"></span>
     </div>`;
 }
-function editTag(name){ toast(`Editar etiqueta "${name}" (mockup)`); }
+let editingTagName = null;
+function editTag(name){
+  editingTagName = name;
+  const color = RM_TAGS.find(([n])=>n===name)?.[1] || "#f4c014";
+  const profile = getTagProfile(name);
+  openTagModal(profile ? [profile] : []);
+  document.getElementById("tagModalTitle").textContent = "Editar etiqueta";
+  document.getElementById("tagName").value = name;
+  document.getElementById("tagDesc").value = "";
+  document.getElementById("tagCost").value = "";
+  const dot = document.getElementById("tagColorDot");
+  if(dot) dot.style.background = color;
+  tagColor = color;
+}
 function deleteTag(name){
   askConfirm(`Se eliminará la etiqueta "${name}" de todas las habitaciones. Esta acción no se puede deshacer.`, () => {
     delete tagPanelState[name];
@@ -6026,9 +6039,16 @@ function removeTagProfile(idx){
   renderTagAssign();
 }
 function openTagModal(prefillProfiles){
+  if(typeof editingTagName==="undefined"||editingTagName===null) editingTagName = null;
   tagSelectedIcon = "";
   tagAssignedProfiles = prefillProfiles ? [...prefillProfiles] : [];
+  document.getElementById("tagModalTitle").textContent = editingTagName ? "Editar etiqueta" : "Crear etiqueta";
   document.getElementById("tagModal").hidden = false;
+  if(!editingTagName){
+    document.getElementById("tagName").value = "";
+    document.getElementById("tagDesc").value = "";
+    document.getElementById("tagCost").value = "";
+  }
   document.getElementById("tagIconDrop").hidden = true;
   document.getElementById("tagColorBody").hidden = true;
   document.getElementById("tagColorArrow").classList.remove("open");
@@ -7158,7 +7178,7 @@ document.getElementById("stepsList").innerHTML = STEPS.map(s => {
         <div class="ini-grid">
           ${s.inis.map((i, k) => stepIni(i, s.tagTone, s.tagPrefix, s.n, k)).join("")}
         </div>
-        <button class="ini-newtag" onclick="openTagModal()">
+        <button class="ini-newtag" onclick="editingTagName=null;openTagModal()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
           Crear etiqueta para medir una iniciativa
         </button>
