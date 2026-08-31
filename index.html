@@ -952,6 +952,57 @@ svg{display:block}
 .an-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 @media(max-width:1080px){.an-grid{grid-template-columns:1fr}}
 
+/* ─── Tag modal extras ─── */
+.tag-name-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:14px}
+.tag-icon-select{position:relative;flex-shrink:0}
+.tag-icon-trigger{
+  display:flex;align-items:center;gap:6px;padding:9px 12px;border-radius:10px;
+  border:1px solid var(--line);background:#fff;font-size:.82rem;color:var(--ink-soft);
+  cursor:pointer;white-space:nowrap;min-width:80px;justify-content:space-between;
+  height:42px;
+}
+.tag-icon-trigger:hover{border-color:var(--ink-soft)}
+.tag-icon-trigger .has-icon{font-size:1.1rem}
+.tag-icon-drop{
+  position:absolute;top:100%;right:0;margin-top:4px;z-index:10;
+  background:#fff;border:1px solid var(--line);border-radius:12px;
+  padding:10px;box-shadow:0 8px 24px rgba(25,25,25,.1);width:220px;
+}
+.tag-icon-grid{display:flex;flex-wrap:wrap;gap:4px}
+.tag-icon-opt{
+  width:32px;height:32px;border-radius:8px;border:1.5px solid transparent;
+  display:flex;align-items:center;justify-content:center;font-size:.95rem;
+  cursor:pointer;transition:all .12s;background:#fff;
+}
+.tag-icon-opt:hover{background:var(--ivory);border-color:var(--line)}
+.tag-icon-opt.selected{border-color:var(--amber);background:#FFF8E1}
+.tag-assign{margin-bottom:14px}
+.tag-assign-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.tag-assign-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.72rem;font-weight:600;padding:5px 10px 5px 8px;border-radius:10px;
+  background:var(--ivory);color:var(--charcoal);
+}
+.tag-assign-chip .ta-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.tag-assign-chip .tag-chip-x{
+  width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--ink-faint);transition:all .1s;
+}
+.tag-assign-chip .tag-chip-x:hover{background:var(--bad-bg);color:var(--bad)}
+.tag-assign-add{
+  font-size:.72rem;padding:5px 10px;border-radius:8px;border:1px dashed var(--line);
+  color:var(--ink-faint);background:#fff;cursor:pointer;
+}
+.tag-color-section{margin-bottom:14px}
+.tag-color-toggle{
+  display:flex;align-items:center;gap:8px;padding:9px 0;font-size:.78rem;font-weight:600;
+  color:var(--charcoal);background:none;border:none;cursor:pointer;width:100%;
+}
+.tag-color-dot{width:14px;height:14px;border-radius:50%;border:1px solid var(--line);flex-shrink:0}
+.tag-color-arrow{transition:transform .15s;margin-left:auto}
+.tag-color-arrow.open{transform:rotate(180deg)}
+.tag-color-body{padding-top:8px}
+
 /* ─── Vista Iniciativas ─── */
 .ini-bar{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--line)}
 .ini-bar-btn{
@@ -1028,6 +1079,41 @@ svg{display:block}
 .ini-validated{font-size:.56rem;color:var(--ink-faint);display:flex;align-items:center;gap:4px;margin-top:8px}
 .ini-validated svg{color:var(--good)}
 .ini-empty{text-align:center;padding:40px;color:var(--ink-faint);font-size:.85rem}
+.ini-coste{font-size:.58rem;font-weight:600;color:var(--ink-faint);margin-left:2px}
+.ini-chat{
+  margin-top:24px;border-radius:16px;border:1px solid var(--line);
+  background:#fff;overflow:hidden;
+}
+.ini-chat-header{
+  padding:12px 16px;font-size:.78rem;font-weight:700;color:var(--midnight);
+  border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;
+}
+.ini-chat-messages{padding:16px;min-height:60px;max-height:300px;overflow-y:auto}
+.ini-chat-msg{margin-bottom:12px;font-size:.78rem;line-height:1.5}
+.ini-chat-msg.is-user{
+  background:var(--ivory);padding:10px 14px;border-radius:12px 12px 4px 12px;
+  color:var(--charcoal);max-width:85%;margin-left:auto;
+}
+.ini-chat-msg.is-bot{
+  background:#F0F7FF;padding:10px 14px;border-radius:12px 12px 12px 4px;
+  color:var(--charcoal);max-width:85%;
+}
+.ini-chat-msg.is-bot strong{color:var(--midnight)}
+.ini-chat-input{
+  display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line);
+}
+.ini-chat-input input{
+  flex:1;border:1px solid var(--line);border-radius:10px;padding:8px 14px;
+  font-size:.78rem;font-family:inherit;outline:none;
+}
+.ini-chat-input input:focus{border-color:var(--amber)}
+.ini-chat-input button{
+  width:36px;height:36px;border-radius:10px;border:none;
+  background:var(--amber);color:#fff;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;
+}
+.ini-chat-input button:hover{background:#D4A30F}
+.ini-chat-empty{color:var(--ink-faint);font-size:.76rem;text-align:center;padding:12px}
 
 /* ─── Analíticas: resumen ejecutivo ─── */
 .sea-card{padding:14px 22px;margin-bottom:20px}
@@ -1619,9 +1705,10 @@ svg{display:block}
    colorea con el estado de la habitación y solo muestra texto en las de
    cliente objetivo. */
 .tile-status{
-  border-radius:10px 10px 0 0;text-align:center;
+  border-radius:10px 10px 0 0;
   font-size:.5rem;font-weight:700;color:#fff;letter-spacing:-.01em;
-  height:15px;line-height:15px;white-space:nowrap;overflow:hidden;
+  height:18px;line-height:18px;white-space:nowrap;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;gap:3px;padding:0 4px;
 }
 .tile-num{
   border-radius:0 0 10px 10px;text-align:center;
@@ -1644,9 +1731,25 @@ svg{display:block}
   box-shadow:0 1px 3px rgba(25,25,25,.12);
   display:flex;align-items:center;gap:2px;line-height:1.4;
 }
+.tile-inits{display:inline-flex;gap:2px;align-items:center}
+.tile-init{
+  font-size:.45rem;width:13px;height:13px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.5);
+  opacity:.5;filter:grayscale(1);
+}
+.tile-init.done{opacity:1;filter:none;background:rgba(255,255,255,.9);border-color:#fff}
+.tile-obj-icon{width:14px;height:14px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:1.5px solid rgba(255,255,255,.7);flex-shrink:0}
+.tile-profile{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 2px;border:1.5px solid rgba(255,255,255,.6);cursor:help}
 .tiles.hide-pc .t-pc,.tiles.hide-ci .t-ci,.tiles.hide-es .t-es,.tiles.hide-co .t-co{display:none}
 /* Filtro "solo clientes objetivo" */
 .tiles.only-obj .tile:not(.is-obj){display:none}
+.tiles.filter-active .tile.filter-hidden{display:none}
+.sf-obj-select{
+  padding:4px 8px;border-radius:8px;border:1.5px solid var(--midnight);
+  font-size:.7rem;font-weight:600;cursor:pointer;background:#fff;color:var(--midnight);
+  font-family:inherit;
+}
 .sf-obj{
   display:flex;align-items:center;gap:6px;height:35px;padding:0 13px;
   border:1px solid var(--line-strong);border-radius:10px;background:#fff;
@@ -2278,7 +2381,7 @@ svg{display:block}
 .tag-panel{margin-top:24px;padding:22px 24px}
 .tag-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
 .tag-table-scroll{overflow-x:auto;padding-bottom:2px}
-.tag-grid{display:grid;grid-template-columns:1.6fr 118px 96px 108px 108px 116px;min-width:820px}
+.tag-grid{display:grid;grid-template-columns:1.6fr 140px 118px 96px 108px 108px 116px;min-width:960px}
 .tag-name-cell{gap:8px}
 .tag-actions{display:inline-flex;gap:2px}
 .tag-act{
@@ -2308,6 +2411,7 @@ svg{display:block}
   cursor:pointer;transition:all .15s;
 }
 .tag-state .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.tag-profile-sel{font-size:.65rem;padding:3px 4px;border-radius:6px;border:1px solid #ddd;font-family:inherit;max-width:130px;cursor:pointer;background:#fff}
 .tag-state.on{background:var(--good-bg);color:var(--good)}
 .tag-state.on .dot{background:var(--good)}
 .tag-state.off{background:#F0EDE8;color:var(--ink-faint)}
@@ -2725,11 +2829,10 @@ svg{display:block}
         <span class="sf-count" id="sfCountCo"></span>
       </button>
     </div>
-    <button class="sf-obj" id="objFilter" onclick="toggleObjFilter(this)"
-            title="Mostrar solo clientes objetivo" aria-pressed="false">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="13.5" r="8"/><circle cx="10.5" cy="13.5" r="3.6"/><path d="M10.5 13.5 20.5 3.5"/><path d="M16.5 3.5h4v4"/></svg>
-      Cliente objetivo
-    </button>
+    <select class="sf-obj-select" id="objFilter" onchange="filterByProfile(this.value)" aria-label="Filtrar por perfil de cliente">
+      <option value="">Perfiles de cliente</option>
+      <option value="all">👥 Todos los perfiles</option>
+    </select>
   </section>
 
   <section class="card hab-board">
@@ -2851,11 +2954,10 @@ svg{display:block}
             </select>
           </div>
           <div class="select-pill">
-            <select id="iniImpactFilter" onchange="renderIniciativas()" aria-label="Filtrar por impacto">
-              <option value="all">Todo impacto</option>
-              <option value="alto">Alto impacto</option>
-              <option value="medio">Impacto medio</option>
-              <option value="bajo">Bajo impacto</option>
+            <select id="iniSortBy" onchange="renderIniciativas()" aria-label="Ordenar por">
+              <option value="impacto">Ordenar: Impacto</option>
+              <option value="coste">Ordenar: Coste</option>
+              <option value="dificultad">Ordenar: Dificultad</option>
             </select>
           </div>
           <button class="ini-fav-toggle" id="iniFavToggle" onclick="toggleIniFavFilter()" title="Solo favoritos">
@@ -2866,6 +2968,21 @@ svg{display:block}
     </section>
     <p style="font-size:.78rem;color:var(--ink-faint);margin-bottom:16px">Validadas en hoteles similares al tuyo. Añádelas a favoritos o crea una etiqueta para implementarlas.</p>
     <div class="ini-grid" id="iniGrid"></div>
+    <div class="ini-chat" id="iniChat">
+      <div class="ini-chat-header">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Pregunta por iniciativas
+      </div>
+      <div class="ini-chat-messages" id="iniChatMsgs">
+        <div class="ini-chat-empty">Pregunta sobre iniciativas para tu hotel y te recomendaremos las mejores opciones.</div>
+      </div>
+      <div class="ini-chat-input">
+        <input type="text" id="iniChatInput" placeholder="Ej: ¿Qué puedo hacer para mejorar las reseñas de familias?" onkeydown="if(event.key==='Enter')sendIniChat()">
+        <button onclick="sendIniChat()" aria-label="Enviar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/></svg>
+        </button>
+      </div>
+    </div>
   </div>
 </main>
 
@@ -3448,16 +3565,43 @@ svg{display:block}
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
     </div>
-    <input class="m-input" id="tagName" type="text" placeholder="Nombre">
+    <div class="tag-name-row">
+      <input class="m-input" id="tagName" type="text" placeholder="Nombre" style="flex:1;margin-bottom:0">
+      <div class="tag-icon-select" id="tagIconSelect">
+        <button class="tag-icon-trigger" id="tagIconTrigger" onclick="toggleTagIconDrop()" type="button">
+          <span id="tagIconPreview">Icono</span>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="tag-icon-drop" id="tagIconDrop" hidden>
+          <div class="tag-icon-grid" id="tagIconGrid"></div>
+        </div>
+      </div>
+    </div>
     <input class="m-input" id="tagDesc" type="text" placeholder="Descripción">
-    <p class="m-label">Color</p>
-    <div class="color-row" id="colorRow"></div>
-    <div class="custom-row">
-      <span class="custom-dot" id="customDot"></span>
-      <label class="custom-field">
-        <span class="custom-label">Color personalizado</span>
-        <input id="tagHex" type="text" placeholder="#f4c014" oninput="customHexInput()">
-      </label>
+    <input class="m-input" id="tagCost" type="text" placeholder="Coste / unidad (ej: 0,50€)">
+    <p class="m-label">Asignar a</p>
+    <div class="tag-assign" id="tagAssign">
+      <div class="tag-assign-chips" id="tagAssignChips"></div>
+      <select class="tag-assign-add" id="tagAssignAdd" onchange="addTagProfile(this.value);this.value=''">
+        <option value="">+ Añadir perfil</option>
+      </select>
+    </div>
+    <div class="tag-color-section">
+      <button class="tag-color-toggle" onclick="toggleTagColor()" type="button">
+        <span class="tag-color-dot" id="tagColorDot"></span>
+        Color
+        <svg class="tag-color-arrow" id="tagColorArrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="tag-color-body" id="tagColorBody" hidden>
+        <div class="color-row" id="colorRow"></div>
+        <div class="custom-row">
+          <span class="custom-dot" id="customDot"></span>
+          <label class="custom-field">
+            <span class="custom-label">Color personalizado</span>
+            <input id="tagHex" type="text" placeholder="#f4c014" oninput="customHexInput()">
+          </label>
+        </div>
+      </div>
     </div>
     <div class="modal-foot">
       <button class="m-btn" onclick="closeTagModal()">Cancelar</button>
@@ -4636,6 +4780,28 @@ const HAB_TILES = (() => {
    interesa al hotel. Se reparte de forma determinista para que el mockup no
    cambie entre recargas. */
 const habIsObjetivo = (t, i) => (t.n * 7 + i * 3) % 11 < 3;
+function getObjProfile(t, i){
+  try{ if(!HP_PROFILES || !HP_PROFILES.length) return {name:"",bg:"#999"}; }
+  catch(e){ return {name:"",bg:"#999"}; }
+  const idx = (t.n * 13 + i * 5) % HP_PROFILES.length;
+  return HP_PROFILES[idx];
+}
+
+const TAG_ICONS = ["🍫","✉️","💧","🥐","🛏️","🌿","📱","📞","🧹","⬆️","🕐","🚿","🔌","📶","🗺️"];
+function getRoomInitiatives(t, idx){
+  const seed = (t.n * 7 + idx * 3) % 100;
+  const inits = [];
+  if (t.st === "es" || t.st === "ci") {
+    if (seed % 3 === 0) inits.push({icon:"🍫", done: seed % 2 === 0});
+    if (seed % 5 < 2) inits.push({icon:"✉️", done: seed % 4 === 0});
+    if (seed % 7 < 2) inits.push({icon:"⬆️", done: false});
+  }
+  if (t.st === "pc") {
+    if (seed % 4 === 0) inits.push({icon:"📞", done: true});
+    if (seed % 3 === 0) inits.push({icon:"✉️", done: false});
+  }
+  return inits;
+}
 
 function renderTiles(){
   const q = (document.getElementById("roomSearch").value || "").trim();
@@ -4644,10 +4810,15 @@ function renderTiles(){
     .filter(t => !q || String(t.n).startsWith(q))
     .map(t => {
       const obj = habIsObjetivo(t, t.i);
+      const inits = getRoomInitiatives(t, t.i);
+      const initHtml = inits.length ? `<span class="tile-inits">${inits.map(ini => `<span class="tile-init${ini.done ? " done" : ""}" title="${ini.icon}">${ini.icon}</span>`).join("")}</span>` : "";
+      const objProfile = obj ? getObjProfile(t, t.i) : null;
+      const objIconBelow = objProfile && objProfile.name ? `<span class="tile-profile" style="background:${objProfile.bg}" title="${objProfile.name}"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></span>` : "";
       return `
-      <div class="tile t-${t.st}${obj ? " is-obj" : ""}" onclick="openRoomModal(${t.i})">
-        <div class="tile-status">${obj ? "Cliente objetivo" : ""}</div>
+      <div class="tile t-${t.st}${obj ? " is-obj" : ""}" data-obj-profile="${objProfile ? objProfile.name : ""}" onclick="openRoomModal(${t.i})">
+        <div class="tile-status">${initHtml}</div>
         <div class="tile-num">${t.n}</div>
+        ${objIconBelow}
         ${t.b ? `<button class="tile-badge tile-qr" onclick="event.stopPropagation();openQrModal(${t.n})" title="QR de valoración" aria-label="QR de valoración">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#2F53D7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5a2 2 0 0 1 2-2h3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M21 16v3a2 2 0 0 1-2 2h-3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><rect x="8.5" y="8.5" width="7" height="7" rx="1" fill="#2F53D7" stroke="none"/></svg>
         </button>` : ""}
@@ -4664,10 +4835,31 @@ function updateSfCounts(){
   });
 }
 function filterTiles(){ renderTiles(); }
-function toggleObjFilter(btn){
-  const on = btn.classList.toggle("active");
-  btn.setAttribute("aria-pressed", on);
-  document.getElementById("tilesWrap").classList.toggle("only-obj", on);
+function filterByProfile(val){
+  const w = document.getElementById("tilesWrap");
+  w.classList.remove("only-obj","filter-active");
+  w.querySelectorAll(".tile").forEach(el => el.classList.remove("filter-hidden"));
+  if(val === "all"){
+    w.classList.add("only-obj");
+  } else if(val){
+    w.classList.add("filter-active");
+    w.querySelectorAll(".tile").forEach(el => {
+      const prof = el.getAttribute("data-obj-profile");
+      if(prof !== val) el.classList.add("filter-hidden");
+    });
+  }
+}
+const PROFILE_EMOJIS = {"Viajeros solos / tránsito":"🧳","Parejas de tránsito":"💑","Business":"💼","Familias":"👨‍👩‍👧","Parejas city-break":"❤️"};
+function populateObjDropdown(){
+  const sel = document.getElementById("objFilter");
+  if(typeof HP_PROFILES !== "undefined"){
+    HP_PROFILES.forEach(p => {
+      const o = document.createElement("option");
+      o.value = p.name;
+      o.textContent = `${PROFILE_EMOJIS[p.name]||"👤"} ${p.name}`;
+      sel.appendChild(o);
+    });
+  }
 }
 document.getElementById("sizeToggle").addEventListener("click", e => {
   const btn = e.target.closest("button[data-size]");
@@ -4705,7 +4897,7 @@ const INI_DATA = [
     desc:"Llama al huésped 24h antes de la llegada para confirmar hora, preguntar preferencias y anticipar necesidades. Transforma el check-in en una experiencia personalizada.",
     impact:"alto", diff:2,
     profiles:["Business","Familias","Parejas city-break"],
-    validated:"9 hoteles ClassOne", tagName:"LLAMADA CHECK-IN"
+    validated:"9 hoteles ClassOne", tagName:"LLAMADA CHECK-IN", coste:"0€"
   },
   {
     id:2, cat:"personal", title:"Carta de bienvenida personalizada",
@@ -4713,7 +4905,7 @@ const INI_DATA = [
     desc:"Una nota manuscrita con el nombre del huésped y recomendaciones locales. Especialmente efectiva con parejas y viajeros que buscan experiencias únicas.",
     impact:"alto", diff:1,
     profiles:["Parejas city-break","Viajeros solos / tránsito"],
-    validated:"9 hoteles ClassOne", tagName:"CARTA BIENVENIDA"
+    validated:"9 hoteles ClassOne", tagName:"CARTA BIENVENIDA", coste:"0,15€"
   },
   {
     id:3, cat:"personal", title:"Programa de reconocimiento de repetidores",
@@ -4721,7 +4913,7 @@ const INI_DATA = [
     desc:"Identifica huéspedes que repiten y ofréceles un detalle especial (upgrade, amenity, nota). Refuerza la sensación de ser reconocido y valorado.",
     impact:"alto", diff:2,
     profiles:["Business","Parejas city-break","Parejas de tránsito"],
-    validated:"14 hoteles ClassOne", tagName:"RECONOCER REPETIDORES"
+    validated:"14 hoteles ClassOne", tagName:"RECONOCER REPETIDORES", coste:"0€"
   },
   {
     id:4, cat:"personal", title:"Encuesta de satisfacción durante la estancia",
@@ -4729,7 +4921,7 @@ const INI_DATA = [
     desc:"Envía una encuesta breve por WhatsApp al segundo día de estancia. Detecta problemas a tiempo y permite corregir antes del check-out.",
     impact:"medio", diff:2,
     profiles:["Business","Viajeros solos / tránsito"],
-    validated:"7 hoteles similares", tagName:"ENCUESTA ESTANCIA"
+    validated:"7 hoteles similares", tagName:"ENCUESTA ESTANCIA", coste:"0,50€"
   },
   {
     id:5, cat:"instalaciones", title:"Renovación de baños con grifo termostático",
@@ -4737,7 +4929,7 @@ const INI_DATA = [
     desc:"Instala grifería termostática en duchas. Elimina la queja recurrente de presión y temperatura de agua, una de las más mencionadas en reseñas negativas.",
     impact:"alto", diff:3,
     profiles:["Parejas city-break","Familias","Business"],
-    validated:"11 hoteles similares", tagName:"GRIFO TERMOSTÁTICO"
+    validated:"11 hoteles similares", tagName:"GRIFO TERMOSTÁTICO", coste:"2,80€"
   },
   {
     id:6, cat:"instalaciones", title:"Enchufes USB junto a la cama",
@@ -4745,7 +4937,7 @@ const INI_DATA = [
     desc:"Añade puertos USB-A y USB-C integrados en las mesillas de noche. Elimina la necesidad de adaptadores y es muy valorado por business.",
     impact:"medio", diff:2,
     profiles:["Business","Viajeros solos / tránsito","Parejas city-break"],
-    validated:"18 hoteles similares", tagName:"USB MESILLA"
+    validated:"18 hoteles similares", tagName:"USB MESILLA", coste:"0,40€"
   },
   {
     id:7, cat:"instalaciones", title:"Insonorización de habitaciones con pasillo",
@@ -4753,7 +4945,7 @@ const INI_DATA = [
     desc:"Mejora el aislamiento acústico de las habitaciones que dan al pasillo. El ruido nocturno es la queja más frecuente del segmento tránsito.",
     impact:"alto", diff:3,
     profiles:["Viajeros solos / tránsito","Parejas de tránsito","Business"],
-    validated:"8 hoteles ClassOne", tagName:"INSONORIZACIÓN"
+    validated:"8 hoteles ClassOne", tagName:"INSONORIZACIÓN", coste:"1,50€"
   },
   {
     id:8, cat:"limpieza", title:"Protocolo de limpieza visible",
@@ -4761,7 +4953,7 @@ const INI_DATA = [
     desc:"Coloca un sello de limpieza verificada en la puerta y un checklist visible en el baño. Aumenta la percepción de higiene sin coste operativo adicional.",
     impact:"alto", diff:1,
     profiles:["Familias","Parejas city-break","Business","Viajeros solos / tránsito"],
-    validated:"22 hoteles similares", tagName:"SELLO LIMPIEZA"
+    validated:"22 hoteles similares", tagName:"SELLO LIMPIEZA", coste:"0,20€"
   },
   {
     id:9, cat:"limpieza", title:"Kit de aromaterapia en la habitación",
@@ -4769,7 +4961,7 @@ const INI_DATA = [
     desc:"Difusor con aceites esenciales de lavanda o eucalipto. Mejora la percepción de limpieza y frescura sin intervención del personal.",
     impact:"medio", diff:1,
     profiles:["Parejas city-break","Business"],
-    validated:"8 hoteles ClassOne", tagName:"AROMATERAPIA"
+    validated:"8 hoteles ClassOne", tagName:"AROMATERAPIA", coste:"0,80€"
   },
   {
     id:10, cat:"limpieza", title:"Limpieza exprés a petición",
@@ -4777,7 +4969,7 @@ const INI_DATA = [
     desc:"Ofrece servicio de limpieza rápida (15 min) bajo demanda vía WhatsApp o tablet en habitación. Muy valorado por estancias largas y familias.",
     impact:"medio", diff:2,
     profiles:["Familias","Business"],
-    validated:"6 hoteles ClassOne", tagName:"LIMPIEZA EXPRÉS"
+    validated:"6 hoteles ClassOne", tagName:"LIMPIEZA EXPRÉS", coste:"3,50€"
   },
   {
     id:11, cat:"confort", title:"Almohadas a la carta",
@@ -4785,7 +4977,7 @@ const INI_DATA = [
     desc:"Ofrece menú de almohadas (viscoelástica, pluma, hipoalergénica) que el huésped elige al reservar o al llegar. Reduce la queja más frecuente sobre la cama.",
     impact:"alto", diff:2,
     profiles:["Business","Parejas city-break","Viajeros solos / tránsito"],
-    validated:"14 hoteles similares", tagName:"ALMOHADAS CARTA"
+    validated:"14 hoteles similares", tagName:"ALMOHADAS CARTA", coste:"1,20€"
   },
   {
     id:12, cat:"confort", title:"Upgrade gratuito según disponibilidad",
@@ -4793,7 +4985,7 @@ const INI_DATA = [
     desc:"Ofrece upgrade a habitación superior cuando hay disponibilidad. Bajo coste real y alto impacto en la percepción de valor.",
     impact:"alto", diff:1,
     profiles:["Business","Parejas city-break","Viajeros solos / tránsito"],
-    validated:"19 hoteles similares", tagName:"FREE UPGRADE"
+    validated:"19 hoteles similares", tagName:"FREE UPGRADE", coste:"0€"
   },
   {
     id:13, cat:"confort", title:"Late check-out flexible",
@@ -4801,7 +4993,7 @@ const INI_DATA = [
     desc:"Ofrece late check-out gratuito cuando la ocupación lo permite. Elimina una de las quejas más frecuentes sin coste real.",
     impact:"alto", diff:1,
     profiles:["Parejas city-break","Familias","Business"],
-    validated:"16 hoteles similares", tagName:"LATE CHECKOUT"
+    validated:"16 hoteles similares", tagName:"LATE CHECKOUT", coste:"0€"
   },
   {
     id:14, cat:"calidad", title:"Bombones artesanales en la habitación",
@@ -4809,7 +5001,7 @@ const INI_DATA = [
     desc:"Coloca bombones de un obrador local en la almohada antes de la llegada. Coste bajo, impacto alto en la primera impresión y percepción de valor.",
     impact:"alto", diff:1,
     profiles:["Parejas city-break","Familias","Business"],
-    validated:"12 hoteles ClassOne", tagName:"BOMBONES HABITACIÓN"
+    validated:"12 hoteles ClassOne", tagName:"BOMBONES HABITACIÓN", coste:"0,60€"
   },
   {
     id:15, cat:"calidad", title:"Botella de agua y snack de cortesía",
@@ -4817,7 +5009,7 @@ const INI_DATA = [
     desc:"Botella de agua y una barrita energética en la habitación. Detalle mínimo que genera menciones positivas en reseñas sobre relación calidad-precio.",
     impact:"medio", diff:1,
     profiles:["Business","Viajeros solos / tránsito","Familias"],
-    validated:"18 hoteles similares", tagName:"AGUA Y SNACK"
+    validated:"18 hoteles similares", tagName:"AGUA Y SNACK", coste:"1,50€"
   },
   {
     id:16, cat:"calidad", title:"Desayuno con productos locales",
@@ -4825,7 +5017,7 @@ const INI_DATA = [
     desc:"Incorpora pan de un obrador cercano, mermeladas artesanales y quesos de la zona. El desayuno es el aspecto más mencionado en reseñas positivas.",
     impact:"alto", diff:2,
     profiles:["Parejas city-break","Familias","Business"],
-    validated:"22 hoteles similares", tagName:"DESAYUNO LOCAL"
+    validated:"22 hoteles similares", tagName:"DESAYUNO LOCAL", coste:"2,50€"
   },
   {
     id:17, cat:"ubicacion", title:"Mapa de rutas locales personalizado",
@@ -4833,7 +5025,7 @@ const INI_DATA = [
     desc:"Crea un mapa impreso con rutas a pie, restaurantes recomendados y secretos del barrio. Compensa la percepción de lejanía al centro.",
     impact:"medio", diff:1,
     profiles:["Parejas city-break","Viajeros solos / tránsito","Familias"],
-    validated:"13 hoteles similares", tagName:"MAPA LOCAL"
+    validated:"13 hoteles similares", tagName:"MAPA LOCAL", coste:"0,35€"
   },
   {
     id:18, cat:"ubicacion", title:"Guía de transporte público desde el hotel",
@@ -4841,7 +5033,7 @@ const INI_DATA = [
     desc:"Tarjeta plastificada con las rutas de transporte más útiles desde el hotel. Reduce la queja de ubicación al mostrar la buena conectividad.",
     impact:"medio", diff:1,
     profiles:["Viajeros solos / tránsito","Parejas de tránsito","Parejas city-break"],
-    validated:"10 hoteles similares", tagName:"GUÍA TRANSPORTE"
+    validated:"10 hoteles similares", tagName:"GUÍA TRANSPORTE", coste:"0,30€"
   },
   {
     id:19, cat:"wifi", title:"Upgrade de ancho de banda WiFi",
@@ -4849,7 +5041,7 @@ const INI_DATA = [
     desc:"Aumenta el ancho de banda a 300 Mbps simétricos y añade repetidores en cada planta. El WiFi lento es la queja nº 1 del segmento Business.",
     impact:"alto", diff:3,
     profiles:["Business","Viajeros solos / tránsito","Parejas city-break"],
-    validated:"15 hoteles similares", tagName:"UPGRADE WIFI"
+    validated:"15 hoteles similares", tagName:"UPGRADE WIFI", coste:"150€"
   },
   {
     id:20, cat:"wifi", title:"QR de conexión directa en la mesilla",
@@ -4857,7 +5049,7 @@ const INI_DATA = [
     desc:"Código QR en la mesilla que conecta automáticamente al WiFi sin contraseña. Elimina la fricción del login y mejora la percepción de tecnología.",
     impact:"medio", diff:1,
     profiles:["Business","Viajeros solos / tránsito","Parejas city-break","Familias"],
-    validated:"11 hoteles ClassOne", tagName:"QR WIFI"
+    validated:"11 hoteles ClassOne", tagName:"QR WIFI", coste:"0,10€"
   }
 ];
 let iniFavs = new Set();
@@ -4885,23 +5077,27 @@ function toggleIniFav(id, ev){
   renderIniciativas();
   toast(iniFavs.has(id) ? "Añadida a favoritos" : "Eliminada de favoritos");
 }
-function iniCreateTag(tagName, ev){
+function iniCreateTag(tagName, emoji, profiles, ev){
   ev.stopPropagation();
-  openTagModal();
+  openTagModal(profiles);
   setTimeout(() => {
     const nameInput = document.getElementById("tagName");
     if (nameInput) { nameInput.value = tagName; nameInput.dispatchEvent(new Event("input")); }
+    if (emoji) { tagSelectedIcon = emoji; renderTagIcons(); }
   }, 100);
   toast('Creando etiqueta "' + tagName + '"');
 }
 function renderIniciativas(){
   const profile = document.getElementById("iniProfileFilter").value;
-  const impact = document.getElementById("iniImpactFilter").value;
-  let items = INI_DATA;
+  const sortBy = document.getElementById("iniSortBy").value;
+  let items = [...INI_DATA];
   if (iniCatFilter !== "all") items = items.filter(i => i.cat === iniCatFilter);
   if (profile !== "all") items = items.filter(i => i.profiles.includes(profile));
-  if (impact !== "all") items = items.filter(i => i.impact === impact);
   if (iniFavFilter) items = items.filter(i => iniFavs.has(i.id));
+  const impactOrder = {alto:0, medio:1, bajo:2};
+  if (sortBy === "impacto") items.sort((a,b) => impactOrder[a.impact] - impactOrder[b.impact]);
+  else if (sortBy === "coste") items.sort((a,b) => parseFloat((a.coste||"0").replace(",",".").replace("€","")) - parseFloat((b.coste||"0").replace(",",".").replace("€","")));
+  else if (sortBy === "dificultad") items.sort((a,b) => a.diff - b.diff);
   if (items.length === 0){
     document.getElementById("iniGrid").innerHTML = '<div class="ini-empty">No hay iniciativas que coincidan con los filtros seleccionados.</div>';
     return;
@@ -4928,6 +5124,7 @@ function renderIniciativas(){
         </div>
         <div class="ini-meta">
           <span class="ini-impact ${i.impact}">${i.impact === "alto" ? "Alto impacto" : i.impact === "medio" ? "Impacto medio" : "Bajo impacto"}</span>
+          <span class="ini-coste">${i.coste}/ud</span>
           <span class="ini-diff">
             Dificultad
             <span class="ini-diff-dots">${diffDots}</span>
@@ -4936,7 +5133,7 @@ function renderIniciativas(){
             <button class="ini-btn${isFav ? " is-fav" : ""}" onclick="toggleIniFav(${i.id}, event)" title="${isFav ? "Quitar de favoritos" : "Añadir a favoritos"}" aria-label="Favorito">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/></svg>
             </button>
-            <button class="ini-btn" onclick="iniCreateTag('${i.tagName}', event)" title="Crear etiqueta" aria-label="Crear etiqueta">
+            <button class="ini-btn" data-profiles='${JSON.stringify(i.profiles)}' onclick="iniCreateTag('${i.tagName}','${i.emoji}',JSON.parse(this.dataset.profiles),event)" title="Crear etiqueta" aria-label="Crear etiqueta">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
             </button>
           </div>
@@ -4961,6 +5158,38 @@ function initIniciativas(){
   });
   renderIniCats();
   renderIniciativas();
+}
+function sendIniChat(){
+  const input = document.getElementById("iniChatInput");
+  const q = input.value.trim();
+  if (!q) return;
+  input.value = "";
+  const msgs = document.getElementById("iniChatMsgs");
+  const empty = msgs.querySelector(".ini-chat-empty");
+  if (empty) empty.remove();
+  msgs.innerHTML += `<div class="ini-chat-msg is-user">${q}</div>`;
+  msgs.scrollTop = msgs.scrollHeight;
+
+  setTimeout(() => {
+    const lower = q.toLowerCase();
+    let matches = INI_DATA.filter(i => {
+      const txt = (i.title + " " + i.desc + " " + i.profiles.join(" ") + " " + i.cat).toLowerCase();
+      return lower.split(/\s+/).some(w => w.length > 2 && txt.includes(w));
+    }).slice(0, 3);
+    if (!matches.length) matches = INI_DATA.sort(() => Math.random() - .5).slice(0, 2);
+
+    let resp = `<strong>Basándome en tu consulta, te recomiendo:</strong><br><br>`;
+    matches.forEach(m => {
+      const catObj = INI_CATS.find(c => c.id === m.cat);
+      resp += `<strong>${m.emoji} ${m.title}</strong> <span style="font-size:.6rem;background:${catObj.color}15;color:${catObj.color};padding:2px 7px;border-radius:6px">${catObj.label}</span><br>`;
+      resp += `${m.desc}<br>`;
+      resp += `<span style="font-size:.65rem;color:var(--ink-faint)">Impacto: ${m.impact} · Coste: ${m.coste}/ud · Validada en ${m.validated}</span><br><br>`;
+    });
+    resp += `<span style="font-size:.65rem;color:var(--ink-faint)">¿Quieres que profundice en alguna de estas iniciativas?</span>`;
+
+    msgs.innerHTML += `<div class="ini-chat-msg is-bot">${resp}</div>`;
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 800);
 }
 
 /* ═══════════ Administrar encuestas ═══════════ */
@@ -5433,7 +5662,10 @@ const TAG_STATS = {
   "PLATO FRUTA":                {res:3,   pct:0,     punt:null, imp:null, on:false}
 };
 let tagPanelState = {};
+const tagProfileMap = {};
 RM_TAGS.forEach(([name]) => { tagPanelState[name] = TAG_STATS[name] ? TAG_STATS[name].on : true; });
+function getTagProfile(name){ return tagProfileMap[name] || ""; }
+function setTagProfile(name, val){ tagProfileMap[name] = val; }
 function toggleTagState(name){
   tagPanelState[name] = !tagPanelState[name];
   renderTagPanel();
@@ -5471,6 +5703,12 @@ function renderTagPanel(){
           </span>
         </span>
         <span class="tag-cell">
+          <select class="tag-profile-sel" onchange="setTagProfile('${name.replace(/'/g,"\\'")}',this.value)" aria-label="Perfil de cliente">
+            <option value="">Sin perfil</option>
+            ${(()=>{try{return HP_PROFILES.map(p=>`<option value="${p.name}"${getTagProfile(name)===p.name?" selected":""}>${p.name}</option>`).join("")}catch(e){return ""}})()}
+          </select>
+        </span>
+        <span class="tag-cell">
           <button class="tag-state ${on ? "on" : "off"}" onclick="toggleTagState('${name.replace(/'/g,"\\'")}')">
             <span class="dot"></span>${on ? "Activa" : "Inactiva"}
           </button>
@@ -5484,6 +5722,7 @@ function renderTagPanel(){
   document.getElementById("tagGrid").innerHTML = `
     <div class="tag-head-row">
       <span class="tag-hcell">Etiqueta</span>
+      <span class="tag-hcell">Perfil</span>
       <span class="tag-hcell">Estado</span>
       <span class="tag-hcell">Reservas</span>
       <span class="tag-hcell">% con reseña</span>
@@ -5493,6 +5732,7 @@ function renderTagPanel(){
     ${rowsHtml}
     <div class="tag-foot-row">
       <span class="tag-cell">Total</span>
+      <span class="tag-cell"></span>
       <span class="tag-cell"></span>
       <span class="tag-cell"><b>${totRes.toLocaleString("es-ES")}</b></span>
       <span class="tag-cell"></span>
@@ -5537,9 +5777,10 @@ function openRoomModal(i){
   document.getElementById("roomModalBody").innerHTML = `
     <div class="rm-head">
       <div class="rm-tile t-${t.st}">
-        <div class="tile-status">${habIsObjetivo(t, i) ? "Cliente objetivo" : ""}</div>
+        <div class="tile-status"></div>
         <div class="rm-tile-body">
           <div class="rm-tile-num">${t.n}</div>
+          ${habIsObjetivo(t, i) ? (()=>{const p=getObjProfile(t,i);return `<span class="tile-profile" style="background:${p.bg}" title="${p.name}"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg></span>`;})() : ""}
           <div class="rm-tile-code">${530000 + (t.n % 1000)}</div>
         </div>
       </div>
@@ -5737,8 +5978,74 @@ function customHexInput(){
     applyTagColor();
   }
 }
-function openTagModal(){
+const TAG_MODAL_ICONS = ["🍫","✉️","💧","🥂","🥐","🎂","🛏️","🌿","📱","📞","🧹","⬆️","🕐","🚿","🔌","📶","🗺️","🧘","🎮","🍩","🍓","🧀"];
+let tagSelectedIcon = "";
+let tagAssignedProfiles = [];
+
+function renderTagIcons(){
+  document.getElementById("tagIconGrid").innerHTML = TAG_MODAL_ICONS.map(ic =>
+    `<button type="button" class="tag-icon-opt${ic === tagSelectedIcon ? " selected" : ""}" onclick="selectTagIcon('${ic}')">${ic}</button>`
+  ).join("");
+  const preview = document.getElementById("tagIconPreview");
+  if (tagSelectedIcon) {
+    preview.innerHTML = `<span class="has-icon">${tagSelectedIcon}</span>`;
+  } else {
+    preview.textContent = "Icono";
+  }
+}
+function selectTagIcon(ic){
+  tagSelectedIcon = ic;
+  renderTagIcons();
+  document.getElementById("tagIconDrop").hidden = true;
+}
+function toggleTagIconDrop(){
+  const drop = document.getElementById("tagIconDrop");
+  drop.hidden = !drop.hidden;
+}
+function toggleTagColor(){
+  const body = document.getElementById("tagColorBody");
+  const arrow = document.getElementById("tagColorArrow");
+  body.hidden = !body.hidden;
+  arrow.classList.toggle("open", !body.hidden);
+}
+function renderTagAssign(){
+  const chips = document.getElementById("tagAssignChips");
+  const profColor = {};
+  if (typeof HP_PROFILES !== 'undefined') HP_PROFILES.forEach(p => profColor[p.name] = p.bg);
+  chips.innerHTML = tagAssignedProfiles.map((p, idx) =>
+    `<span class="tag-assign-chip"><span class="ta-dot" style="background:${profColor[p] || '#999'}"></span>${p}<span class="tag-chip-x" onclick="removeTagProfile(${idx})"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span></span>`
+  ).join("");
+}
+function addTagProfile(name){
+  if (!name || tagAssignedProfiles.includes(name)) return;
+  tagAssignedProfiles.push(name);
+  renderTagAssign();
+}
+function removeTagProfile(idx){
+  tagAssignedProfiles.splice(idx, 1);
+  renderTagAssign();
+}
+function openTagModal(prefillProfiles){
+  tagSelectedIcon = "";
+  tagAssignedProfiles = prefillProfiles ? [...prefillProfiles] : [];
   document.getElementById("tagModal").hidden = false;
+  document.getElementById("tagIconDrop").hidden = true;
+  document.getElementById("tagColorBody").hidden = true;
+  document.getElementById("tagColorArrow").classList.remove("open");
+  const dot = document.getElementById("tagColorDot");
+  if (dot) dot.style.background = "#f4c014";
+  renderTagIcons();
+  renderTagAssign();
+  const addSel = document.getElementById("tagAssignAdd");
+  if (addSel && typeof HP_PROFILES !== 'undefined') {
+    addSel.innerHTML = '<option value="">+ Añadir perfil</option>';
+    HP_PROFILES.forEach(p => {
+      const opt = document.createElement("option");
+      opt.value = p.name;
+      opt.textContent = p.name;
+      addSel.appendChild(opt);
+    });
+  }
   document.getElementById("tagName").focus();
 }
 function closeTagModal(){ document.getElementById("tagModal").hidden = true; }
@@ -6364,6 +6671,9 @@ const HP_PROFILES = [
    score:"8,6", scoreLbl:"Bueno", scoreBg:"var(--mid-bg)", scoreInk:"var(--mid)", n_res:"612"}
 ];
 initIniciativas();
+populateObjDropdown();
+renderTiles();
+renderTagPanel();
 const HP_ARROW_UP = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>`;
 const HP_ARROW_DOWN = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12l7 7 7-7"/></svg>`;
 document.getElementById("hpProfilesRows").innerHTML = HP_PROFILES.map((p, i) => {
