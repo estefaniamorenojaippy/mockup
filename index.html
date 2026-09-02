@@ -1004,6 +1004,12 @@ svg{display:block}
 .tag-color-body{padding-top:8px}
 
 /* ─── Vista Iniciativas ─── */
+.ini-bar-row{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  margin-bottom:20px;border-bottom:2px solid var(--line);
+}
+.ini-bar-row .ini-bar{margin-bottom:0;flex:1;min-width:200px;border-bottom:none}
+.ini-bar-row .btn-ini-new{margin-bottom:9px}
 .ini-bar{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--line)}
 .ini-bar-btn{
   padding:10px 22px;font-size:.85rem;font-weight:600;color:var(--ink-soft);
@@ -2380,10 +2386,16 @@ svg{display:block}
 }
 
 /* Tabla de "Mis iniciativas" */
-.tag-panel{margin-top:24px;padding:20px 22px 24px}
-.tag-panel-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:30px}
+.tag-panel{margin-top:0;padding:18px 22px 24px}
+.tag-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.tag-hint{
+  display:flex;align-items:center;gap:8px;font-size:.76rem;color:var(--ink-faint);
+  background:rgba(255,255,255,.55);border:1px solid var(--line);border-radius:999px;padding:7px 15px;
+}
+.tag-hint svg{flex-shrink:0;opacity:.7}
+.tag-hint b{font-weight:700;color:var(--ink-soft)}
 .tag-table-scroll{overflow-x:auto;padding-bottom:2px}
-.tag-grid{display:grid;grid-template-columns:minmax(230px,1.6fr) 150px 110px 130px 122px 118px;min-width:980px}
+.tag-grid{display:grid;grid-template-columns:minmax(220px,1.5fr) 150px 112px 172px 122px 114px;min-width:1010px}
 .tag-name-cell{gap:10px}
 .tag-actions{display:inline-flex;gap:2px;opacity:0;transition:opacity .15s;margin-left:auto}
 .tag-row:hover .tag-actions{opacity:1}
@@ -2433,24 +2445,53 @@ svg{display:block}
 .tag-state:hover{filter:brightness(.97)}
 .tag-filter-tabs{display:flex;gap:6px;flex-wrap:wrap}
 .tag-filter-tab{
+  position:relative;
   font-size:.75rem;font-weight:600;padding:7px 16px;border-radius:999px;cursor:pointer;
   transition:all .15s;border:1px solid var(--line);background:#fff;color:var(--ink-soft);
 }
 .tag-filter-tab.active{background:var(--midnight);color:#fff;border-color:var(--midnight)}
 .tag-filter-tab:hover:not(.active){background:var(--ivory);color:var(--midnight)}
+/* Progreso de "En prueba" en la tabla: solo el contador y la barrita */
 .tag-state.en-prueba .tag-tooltip{
   display:none;position:absolute;bottom:calc(100% + 9px);left:50%;transform:translateX(-50%);
   background:var(--midnight);color:#fff;font-size:.68rem;font-weight:600;padding:7px 12px;
-  border-radius:9px;white-space:nowrap;z-index:20;pointer-events:none;text-align:center;
-  box-shadow:0 4px 14px rgba(25,25,25,.18);
+  border-radius:9px;white-space:nowrap;text-align:center;
+  z-index:40;pointer-events:none;box-shadow:0 4px 14px rgba(25,25,25,.18);
 }
 .tag-state.en-prueba .tag-tooltip::after{
   content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
   border:5px solid transparent;border-top-color:var(--midnight);
 }
 .tag-state.en-prueba:hover .tag-tooltip{display:block}
+/* Las dos primeras filas no tienen hueco arriba: se abren hacia abajo */
+.tag-head-row + .tag-row .tag-state.en-prueba .tag-tooltip,
+.tag-head-row + .tag-row + .tag-row .tag-state.en-prueba .tag-tooltip{top:calc(100% + 9px);bottom:auto}
+.tag-head-row + .tag-row .tag-state.en-prueba .tag-tooltip::after,
+.tag-head-row + .tag-row + .tag-row .tag-state.en-prueba .tag-tooltip::after{
+  top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:var(--midnight);
+}
 .tag-tooltip-bar{height:4px;background:rgba(255,255,255,.22);border-radius:2px;margin-top:5px;overflow:hidden;min-width:92px}
 .tag-tooltip-fill{height:100%;background:linear-gradient(90deg,#FFA13B,#FFD03B);border-radius:2px}
+
+/* Tooltip explicativo: cabeceras de columna y pills de filtro */
+.tip{position:relative;cursor:help;border-bottom:1px dashed rgba(25,25,25,.25)}
+.tip-box{
+  display:none;position:absolute;top:calc(100% + 9px);left:50%;transform:translateX(-50%);
+  background:var(--midnight);color:#fff;font-size:.68rem;font-weight:500;line-height:1.45;
+  letter-spacing:0;text-transform:none;padding:8px 12px;border-radius:9px;width:196px;
+  white-space:normal;text-align:left;z-index:40;pointer-events:none;
+  box-shadow:0 4px 14px rgba(25,25,25,.18);
+}
+.tip-box::after{
+  content:"";position:absolute;bottom:100%;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-bottom-color:var(--midnight);
+}
+.tip:hover .tip-box,
+.tag-filter-tab:hover .tip-box{display:block}
+.tip-box.tip-end{left:auto;right:-6px;transform:none}
+.tip-box.tip-end::after{left:auto;right:14px;transform:none}
+.tip-box.tip-start{left:-6px;right:auto;transform:none}
+.tip-box.tip-start::after{left:14px;transform:none}
 .btn-ini-new{
   display:inline-flex;align-items:center;gap:7px;flex-shrink:0;
   background:var(--amber);color:var(--midnight);border-radius:999px;padding:9px 18px 9px 15px;
@@ -2939,25 +2980,31 @@ svg{display:block}
     </div>
   </div>
 
-  <div class="ini-bar">
-    <button class="ini-bar-btn active" data-ini-tab="mis" onclick="switchIniTab('mis',this)">Mis iniciativas</button>
-    <button class="ini-bar-btn" data-ini-tab="rec" onclick="switchIniTab('rec',this)">Recomendadas</button>
+  <div class="ini-bar-row">
+    <div class="ini-bar">
+      <button class="ini-bar-btn active" data-ini-tab="mis" onclick="switchIniTab('mis',this)">Mis iniciativas</button>
+      <button class="ini-bar-btn" data-ini-tab="rec" onclick="switchIniTab('rec',this)">Recomendadas</button>
+    </div>
+    <button class="btn-ini-new" onclick="editingTagName=null;openTagModal()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      Nueva iniciativa
+    </button>
   </div>
 
   <div id="iniTabMis">
-    <section class="card tag-panel">
-      <div class="tag-panel-head">
-        <div class="tag-filter-tabs" id="tagFilterTabs">
-          <button class="tag-filter-tab active" data-filter="all" onclick="setTagFilter('all',this)">Todas</button>
-          <button class="tag-filter-tab" data-filter="en-prueba" onclick="setTagFilter('en-prueba',this)">En prueba</button>
-          <button class="tag-filter-tab" data-filter="validada" onclick="setTagFilter('validada',this)">Validadas</button>
-          <button class="tag-filter-tab" data-filter="descartada" onclick="setTagFilter('descartada',this)">Descartadas</button>
-        </div>
-        <button class="btn-ini-new" onclick="editingTagName=null;openTagModal()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-          Nueva iniciativa
-        </button>
+    <div class="tag-toolbar">
+      <p class="tag-hint">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        Cada iniciativa necesita al menos <b>25 huéspedes</b> para ser validada.
+      </p>
+      <div class="tag-filter-tabs" id="tagFilterTabs">
+        <button class="tag-filter-tab active" data-filter="all" onclick="setTagFilter('all',this)">Todas</button>
+        <button class="tag-filter-tab" data-filter="en-prueba" onclick="setTagFilter('en-prueba',this)">En prueba<span class="tip-box">Todavía no hay suficientes huéspedes para confirmar el resultado.</span></button>
+        <button class="tag-filter-tab" data-filter="validada" onclick="setTagFilter('validada',this)">Validadas<span class="tip-box">Tienen suficientes huéspedes y el resultado es fiable.</span></button>
+        <button class="tag-filter-tab" data-filter="descartada" onclick="setTagFilter('descartada',this)">Descartadas<span class="tip-box tip-end">No han funcionado y ya no se aplican a nuevos huéspedes.</span></button>
       </div>
+    </div>
+    <section class="card tag-panel">
       <div class="tag-table-scroll">
         <div class="tag-grid" id="tagGrid"></div>
       </div>
@@ -5752,7 +5799,7 @@ function renderTagPanel(){
     const pctCls = s.pct ? vsRef(s.pct, HOTEL_PCT) : "flat";
     const puntCls = s.punt !== null ? vsRef(s.punt, HOTEL_PUNT) : "flat";
     const tooltipHtml = state === "en-prueba" ? `
-      <span class="tag-tooltip">${s.res}/${VALIDATION_THRESHOLD} reservas
+      <span class="tag-tooltip">${s.res}/${VALIDATION_THRESHOLD} huéspedes
         <div class="tag-tooltip-bar"><div class="tag-tooltip-fill" style="width:${Math.min(100, (s.res / VALIDATION_THRESHOLD) * 100)}%"></div></div>
       </span>` : "";
     const esc = name.replace(/'/g,"\\'");
@@ -5784,11 +5831,11 @@ function renderTagPanel(){
   document.getElementById("tagGrid").innerHTML = `
     <div class="tag-head-row">
       <span class="tag-hcell">Iniciativa</span>
-      <span class="tag-hcell">Estado</span>
-      <span class="tag-hcell">Reservas</span>
-      <span class="tag-hcell">% con reseña</span>
-      <span class="tag-hcell">Nota media</span>
-      <span class="tag-hcell">Impacto</span>
+      <span class="tag-hcell"><span class="tip">Estado<span class="tip-box">En prueba, validada o descartada. Haz clic en el estado para cambiarlo.</span></span></span>
+      <span class="tag-hcell"><span class="tip">Huéspedes<span class="tip-box">Personas que recibieron la iniciativa.</span></span></span>
+      <span class="tag-hcell"><span class="tip">Conversión a reseña<span class="tip-box">% de esos huéspedes que dejaron una reseña en Booking.</span></span></span>
+      <span class="tag-hcell"><span class="tip">Nota media<span class="tip-box">Puntuación media de esas reseñas.</span></span></span>
+      <span class="tag-hcell"><span class="tip">Impacto<span class="tip-box tip-end">Diferencia en nota media frente a los huéspedes que no recibieron la iniciativa.</span></span></span>
     </div>
     ${rowsHtml || `<div class="tag-empty">No hay iniciativas en este estado.</div>`}
     <div class="tag-foot-row">
