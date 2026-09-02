@@ -789,12 +789,15 @@ svg{display:block}
 /* Tarjetas inferiores */
 .bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:22px}
 .emp-chart{margin-top:16px}
-.emp-row{display:grid;grid-template-columns:96px 1fr;align-items:center;gap:10px;margin-bottom:4px}
-.emp-name{font-size:.62rem;color:var(--charcoal);text-align:right;white-space:nowrap}
+.emp-row{display:grid;grid-template-columns:132px 1fr;align-items:center;gap:10px;margin-bottom:5px}
+.emp-name{
+  font-size:.64rem;color:var(--charcoal);text-align:right;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
 .emp-bar{position:relative;height:19px;background:#F0F0F0;border-radius:2px}
 .emp-fill{position:absolute;inset:0 auto 0 0;background:var(--amber);border-radius:2px}
 .emp-val{position:absolute;top:50%;transform:translateY(-50%);font-size:.6rem;font-weight:600}
-.emp-axis{display:grid;grid-template-columns:96px 1fr;gap:10px;margin-top:4px}
+.emp-axis{display:grid;grid-template-columns:132px 1fr;gap:10px;margin-top:4px}
 .emp-ticks{position:relative;height:14px;font-size:.6rem;color:var(--olive)}
 .emp-ticks span{position:absolute;transform:translateX(-50%)}
 .chart-legend{display:flex;align-items:center;justify-content:center;gap:6px;font-size:.62rem;color:var(--charcoal);margin-top:6px}
@@ -1799,9 +1802,28 @@ svg{display:block}
 }
 .m-close:hover{background:#F0F0F0}
 
-/* ─── Modal "Administrar empleados" ─── */
-.emp-modal{width:660px;padding:24px 26px 18px;display:flex;flex-direction:column;max-height:88vh}
-.emp-modal .modal-head{margin-bottom:20px}
+/* ─── Vista "Administrar empleados" ─── */
+.emp-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:18px;margin-bottom:18px}
+@media (max-width:1040px){.emp-layout{grid-template-columns:1fr}}
+.emp-admin{padding:22px 24px 14px}
+.emp-admin .blk-title{margin-bottom:16px}
+.emp-admin .emp-scroll{margin:0;padding:0;overflow-y:visible;flex:none}
+.emp-new{margin-left:auto}
+/* Barras clicables del top de menciones */
+.emp-bar{width:100%;display:block;padding:0;cursor:pointer}
+.emp-bar:hover .emp-fill{background:var(--saffron)}
+.emp-bar.is-sel{outline:2px solid var(--midnight);outline-offset:2px}
+.emp-bar.is-sel .emp-fill{background:var(--saffron)}
+/* Reseñas del empleado seleccionado */
+.empr-list{display:flex;flex-direction:column;gap:11px;margin-top:14px;max-height:430px;overflow-y:auto}
+.empr-item{border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+.empr-head{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.empr-who{flex:1;min-width:0}
+.empr-name{display:block;font-size:.82rem;font-weight:700;color:var(--midnight)}
+.empr-meta{font-size:.69rem;color:var(--ink-faint)}
+.empr-title{font-size:.79rem;font-weight:600;color:var(--charcoal);margin-bottom:4px}
+.empr-text{font-size:.77rem;color:var(--ink-soft);line-height:1.5}
+
 .emp-filters{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
 .emp-search{
   display:flex;align-items:center;gap:8px;flex:1;min-width:180px;
@@ -2571,7 +2593,7 @@ svg{display:block}
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16"/><path d="M2 21h20"/><path d="M8 7h2M14 7h2M8 11h2M14 11h2M8 15h2M14 15h2"/></svg>
           Gestionar hoteles
         </button>
-        <button class="um-item" onclick="openEmpModal()">
+        <button class="um-item" onclick="openEmpleados()">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 19a4.5 4.5 0 0 0-9 0"/><circle cx="6.5" cy="10" r="3"/><path d="M22 19a4.5 4.5 0 0 0-7.5-3.3"/><circle cx="16.5" cy="10" r="3"/></svg>
           Administrar empleados
         </button>
@@ -3404,45 +3426,34 @@ svg{display:block}
     </article>
   </section>
 
-  <!-- Dos tarjetas inferiores -->
-  <div class="bottom-grid">
-    <section class="card pad">
-      <h2 class="blk-title big">Top empleados mencionados</h2>
-      <div id="empChart" class="emp-chart"></div>
-    </section>
-    <section class="card pad">
-      <h2 class="blk-title big">Evolución del número de menciones</h2>
-      <p class="blk-sub">En un rango acumulativo de 365 días atrás</p>
-      <div id="mentionsChart"></div>
-      <p class="chart-legend"><span class="lg-dot"></span> Todos</p>
-    </section>
-  </div>
 
 </main>
 
-<!-- ═══════════ MODAL: CONFIRMACIÓN ═══════════ -->
-<!-- ═══════════ MODAL: EVOLUCIÓN DE LA NOTA ═══════════ -->
-<div class="modal-overlay" id="evolModal" hidden onclick="closeEvolModal()">
-  <div class="modal evol-modal" role="dialog" aria-labelledby="evolModalTitle" onclick="event.stopPropagation()">
-    <div class="modal-head">
-      <h3 id="evolModalTitle">Evolución de la nota de Booking</h3>
-      <button class="m-close" onclick="closeEvolModal()" aria-label="Cerrar">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-      </button>
+<!-- ═══════════ VISTA: ADMINISTRAR EMPLEADOS ═══════════ -->
+<main class="wrap view" id="view-empleados" hidden>
+  <div class="page-head">
+    <div>
+      <h1>Administrar empleados</h1>
+      <p class="review-count">Consulta a quién mencionan tus huéspedes en las reseñas y gestiona la plantilla del hotel.</p>
     </div>
-    <div id="evolChart"></div>
   </div>
-</div>
 
-<!-- ═══════════ MODAL: ADMINISTRAR EMPLEADOS ═══════════ -->
-<div class="modal-overlay" id="empModal" hidden onclick="closeEmpModal()">
-  <div class="modal emp-modal" role="dialog" aria-labelledby="empModalTitle" onclick="event.stopPropagation()">
-    <div class="modal-head">
-      <h3 id="empModalTitle">Administrar empleados</h3>
-      <button class="m-close" onclick="closeEmpModal()" aria-label="Cerrar">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-      </button>
-    </div>
+  <div class="emp-layout">
+    <section class="card pad">
+      <h2 class="blk-title big">Top empleados mencionados</h2>
+      <p class="blk-sub">Haz clic en una barra para ver las reseñas donde se le menciona.</p>
+      <div id="empChart" class="emp-chart"></div>
+    </section>
+
+    <section class="card pad">
+      <h2 class="blk-title big" id="empMentionsTitle">Reseñas con menciones</h2>
+      <p class="blk-sub" id="empMentionsSub">Selecciona un empleado en el gráfico.</p>
+      <div id="empMentionsList" class="empr-list"></div>
+    </section>
+  </div>
+
+  <section class="card emp-admin">
+    <h2 class="blk-title big">Plantilla</h2>
 
     <div class="emp-filters">
       <label class="emp-search">
@@ -3461,6 +3472,10 @@ svg{display:block}
         <input type="checkbox" id="empHideInactive" onchange="renderEmps()">
         Ocultar empleados inactivos
       </label>
+      <button class="btn-ini-new emp-new" onclick="openNewEmpModal()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        Nuevo empleado
+      </button>
     </div>
 
     <div class="emp-scroll">
@@ -3499,14 +3514,20 @@ svg{display:block}
         </button>
       </span>
     </div>
+  </section>
+</main>
 
-    <div class="emp-foot">
-      <button onclick="closeEmpModal()">Cerrar</button>
-      <button onclick="openNewEmpModal()">
-        Nuevo empleado
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+<!-- ═══════════ MODAL: CONFIRMACIÓN ═══════════ -->
+<!-- ═══════════ MODAL: EVOLUCIÓN DE LA NOTA ═══════════ -->
+<div class="modal-overlay" id="evolModal" hidden onclick="closeEvolModal()">
+  <div class="modal evol-modal" role="dialog" aria-labelledby="evolModalTitle" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <h3 id="evolModalTitle">Evolución de la nota de Booking</h3>
+      <button class="m-close" onclick="closeEvolModal()" aria-label="Cerrar">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
     </div>
+    <div id="evolChart"></div>
   </div>
 </div>
 
@@ -6452,13 +6473,14 @@ function renderEmps(){
   document.getElementById("empLast").disabled  = empPage === pages;
 }
 function empGoPage(p){ empPage = p; renderEmps(); }
-function openEmpModal(){
+function openEmpleados(){
   document.getElementById("userWrap").classList.remove("open");
-  document.getElementById("empModal").hidden = false;
+  showView("empleados");
   empPage = 1;
   renderEmps();
+  renderEmpChart();
+  if (empSelected === null) showEmpMentions(0);
 }
-function closeEmpModal(){ document.getElementById("empModal").hidden = true; }
 
 function openNewEmpModal(){
   document.getElementById("newEmpModal").hidden = false;
@@ -6605,56 +6627,71 @@ document.querySelectorAll(".mini-chart").forEach(el => {
     </svg>`;
 });
 
-// Top empleados mencionados
-const EMP = [
-  ["M****** N**…",67],["A******* D*…",54],["T****** D**…",22],["M**** M****…",14],["S***** L***…",11],
-  ["A***** E***…",9],["E**** G****…",5],["M**** P****…",4],["J*** C*****…",4],["M*** T*****",3]
+/* Top empleados mencionados. Se apoyan en la plantilla real para que el nombre
+   enmascarado del gráfico coincida con el de la tabla de abajo. */
+const EMP_MENTIONS = [
+  {e:25, n:67}, {e:0,  n:54}, {e:35, n:22}, {e:24, n:14}, {e:33, n:11},
+  {e:5,  n:9},  {e:13, n:5},  {e:9,  n:4},  {e:19, n:4},  {e:36, n:3}
 ];
 const EMP_MAX = 80;
-document.getElementById("empChart").innerHTML =
-  EMP.map(([n,v]) => `
-    <div class="emp-row">
-      <span class="emp-name">${n}</span>
-      <span class="emp-bar">
-        <span class="emp-fill" style="width:${v/EMP_MAX*100}%"></span>
-        <span class="emp-val" style="left:calc(${v/EMP_MAX*100}% + 6px)">${v}</span>
-      </span>
-    </div>`).join("") +
+let empSelected = null;
+
+function renderEmpChart(){
+  const el = document.getElementById("empChart");
+  if (!el) return;
+  el.innerHTML = EMP_MENTIONS.map((m, i) => {
+    const emp = EMPLOYEES[m.e];
+    const pct = m.n / EMP_MAX * 100;
+    return `
+      <div class="emp-row">
+        <span class="emp-name" title="${emp.name}">${emp.name}</span>
+        <button class="emp-bar${empSelected === i ? " is-sel" : ""}" onclick="showEmpMentions(${i})"
+                title="Ver las reseñas que mencionan a ${emp.name}">
+          <span class="emp-fill" style="width:${pct}%"></span>
+          <span class="emp-val" style="left:calc(${pct}% + 6px)">${m.n}</span>
+        </button>
+      </div>`;
+  }).join("") +
   `<div class="emp-axis"><span></span><span class="emp-ticks">${
     [0,20,40,60,80].map(t => `<span style="left:${t/EMP_MAX*100}%">${t}</span>`).join("")
   }</span></div>`;
+}
 
-// Evolución del número de menciones (línea)
-const MENTIONS = [1560,1545,1530,1522,1520,1515,1498,1512,1508,1478,1462,1470,1455,1420,1408,1372,1345,1330,1288,1262,1268,1232];
-const MLABELS = ["11/08/25","11/09/25","12/10/25","12/11/25","13/12/25","13/01/26","13/02/26","16/03/26","16/04/26","17/05/26","17/06/26","18/07/26"];
-(() => {
-  const W = 470, H = 220, padL = 42, padR = 12, padT = 12, padB = 62;
-  const plotW = W - padL - padR, plotH = H - padT - padB, max = 1800;
-  let grid = "", ticks = "";
-  for (let v = 0; v <= max; v += 300){
-    const y = padT + plotH * (1 - v/max);
-    grid += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#EFEFEF" stroke-width="1"/>`;
-    ticks += `<text x="${padL-7}" y="${y+3}" text-anchor="end" font-size="7.5" fill="#9A9A9A">${v.toLocaleString("en-US")}</text>`;
+/* Reparto determinista de reseñas por empleado: en el mockup no hay relación
+   real entre reseña y empleado, así que se elige un subconjunto estable. */
+function empReviews(m){
+  const stride = 1 + (m.e % 4);
+  const out = [];
+  for (let k = 0; k < REVIEWS.length && out.length < Math.min(m.n, 6); k++){
+    const r = REVIEWS[(m.e + k * stride) % REVIEWS.length];
+    if (!out.includes(r)) out.push(r);
   }
-  const pts = MENTIONS.map((v,i) => [
-    padL + plotW * i/(MENTIONS.length-1),
-    padT + plotH * (1 - v/max)
-  ]);
-  const line = pts.map(([x,y],i) => `${i ? "L" : "M"}${x.toFixed(1)} ${y.toFixed(1)}`).join(" ");
-  const dots = pts.map(([x,y]) => `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2" fill="#FF9915"/>`).join("");
-  const xl = MLABELS.map((t,i) => {
-    const x = padL + plotW * (i/(MLABELS.length-1)) * ((MENTIONS.length-1)/(MENTIONS.length-1));
-    return `<text x="${x.toFixed(1)}" y="${padT+plotH+12}" font-size="7.5" fill="#8A8683"
-              transform="rotate(-45 ${x.toFixed(1)} ${padT+plotH+12})" text-anchor="end">${t}</text>`;
-  }).join("");
-  document.getElementById("mentionsChart").innerHTML = `
-    <svg viewBox="0 0 ${W} ${H}" width="100%" role="img">
-      ${grid}${ticks}
-      <line x1="${padL}" y1="${padT+plotH}" x2="${W-padR}" y2="${padT+plotH}" stroke="#D9D9D9"/>
-      <path d="${line}" fill="none" stroke="#FF9915" stroke-width="1.6"/>
-      ${dots}${xl}
-    </svg>`;
-})();
+  return out;
+}
+
+function showEmpMentions(i){
+  empSelected = i;
+  const m = EMP_MENTIONS[i];
+  const emp = EMPLOYEES[m.e];
+  const list = empReviews(m);
+  document.getElementById("empMentionsTitle").textContent = `Reseñas que mencionan a ${emp.name}`;
+  document.getElementById("empMentionsSub").textContent =
+    `${m.n} menciones en total · se muestran las ${list.length} más recientes`;
+  document.getElementById("empMentionsList").innerHTML = list.map(r => `
+    <article class="empr-item">
+      <div class="empr-head">
+        <span class="src-avatar ${r.source.toLowerCase()}">${r.source === "Booking" ? SRC_BOOKING : SRC_GOOGLE}</span>
+        <span class="empr-who">
+          <span class="empr-name">${r.name}</span>
+          <span class="empr-meta">${r.source === "Booking" ? "Booking · Habitación " + r.room : "Google"} · ${fmtDate(r.date)}</span>
+        </span>
+        <span class="chip ${scoreClass(r)}">${r.score} / ${maxScore(r)}</span>
+      </div>
+      <p class="empr-title">${r.title}</p>
+      <p class="empr-text">${r.text}</p>
+    </article>`).join("");
+  renderEmpChart();
+}
 
 /* ═══════════ Procedencia de los huéspedes (vista Analíticas) ═══════════
    pp = variación en puntos porcentuales frente al periodo anterior. */
