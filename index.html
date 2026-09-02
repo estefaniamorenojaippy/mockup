@@ -1015,7 +1015,7 @@ svg{display:block}
 .ini-bar-row .btn-ini-new{margin-bottom:12px}
 .ini-bar{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--line)}
 .ini-bar-btn{
-  padding:10px 22px;font-size:.85rem;font-weight:600;color:var(--ink-soft);
+  padding:11px 24px;font-size:1.02rem;font-weight:600;color:var(--ink-soft);
   border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;
   transition:all .15s;cursor:pointer;
 }
@@ -1803,8 +1803,6 @@ svg{display:block}
 .m-close:hover{background:#F0F0F0}
 
 /* ─── Vista "Administrar empleados" ─── */
-/* Sin h1 en esta vista, las pestañas hacen de encabezado */
-#view-empleados .ini-bar-btn{font-size:1.02rem;padding:11px 24px}
 .emp-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:18px;margin-bottom:18px}
 @media (max-width:1040px){.emp-layout{grid-template-columns:1fr}}
 .emp-admin{padding:22px 24px 14px}
@@ -2413,7 +2411,7 @@ svg{display:block}
 .tag-panel{margin-top:0;padding:18px 22px 24px}
 .tag-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
 .tag-table-scroll{overflow-x:auto;padding-bottom:2px}
-.tag-grid{display:grid;grid-template-columns:minmax(220px,1.5fr) 150px 112px 172px 122px 114px;min-width:1010px}
+.tag-grid{display:grid;grid-template-columns:minmax(200px,1.4fr) 122px 150px 106px 168px 116px 108px;min-width:1120px}
 .tag-name-cell{gap:10px}
 .tag-actions{display:inline-flex;gap:2px;opacity:0;transition:opacity .15s;margin-left:auto}
 .tag-row:hover .tag-actions{opacity:1}
@@ -2458,8 +2456,8 @@ svg{display:block}
 .tag-state.en-prueba .dot{background:#E8940C}
 .tag-state.validada{background:var(--good-bg);color:var(--good);border-color:#CBE0C4}
 .tag-state.validada .dot{background:var(--good)}
-.tag-state.descartada{background:#F2EFEB;color:var(--ink-faint);border-color:#E3DED7}
-.tag-state.descartada .dot{background:#B8B2AA}
+.tag-state.descartada{background:var(--bad-bg);color:var(--bad);border-color:#F0CFC3}
+.tag-state.descartada .dot{background:var(--bad)}
 .tag-state:hover{filter:brightness(.97)}
 .tag-filter-tabs{display:flex;gap:6px;flex-wrap:wrap}
 .tag-filter-tab{
@@ -2521,6 +2519,7 @@ svg{display:block}
 .tag-cell b{font-weight:700}
 .tag-cell small{font-size:.7rem;color:var(--ink-faint);margin-left:2px}
 .tag-num{font-weight:700;color:var(--midnight)}
+.tag-date{font-size:.78rem;color:var(--ink-soft);white-space:nowrap}
 .tag-impact{font-weight:700}
 .tag-impact.up{color:var(--good)}
 .tag-impact.down{color:var(--bad)}
@@ -5762,22 +5761,22 @@ function getTagIcon(name){ return TAG_ICON_MAP[name] || "🏷️"; }
    Reutiliza las cifras de "Evolución de iniciativas" (Informes) para las
    etiquetas que aparecen en ambos sitios; el resto son plausibles y menores. */
 const TAG_STATS = {
-  "todo bien":                  {res:578, pct:36.33, punt:9.2,  imp:0.10, on:true},
-  "Queso idiazabal":            {res:54,  pct:53.7,  punt:9.2,  imp:0.19, on:true},
-  "LLAMADA IN":                 {res:53,  pct:33.96, punt:9.3,  imp:0.09, on:true},
-  "chocolate":                  {res:43,  pct:30.23, punt:9.5,  imp:0.19, on:true},
-  "FREE UPGRADE":               {res:25,  pct:28,    punt:8.1,  imp:-1.01,on:true},
-  "TARTA CUMPLE EN DESAYUNOS":  {res:12,  pct:33.33, punt:9.0,  imp:-0.19,on:true},
-  "PILATES":                    {res:6,   pct:16.67, punt:9.0,  imp:-0.11,on:true},
-  "Donuts":                     {res:4,   pct:25,    punt:7.0,  imp:-2.11,on:true},
-  "SANGRIA":                    {res:4,   pct:25,    punt:8.0,  imp:-1.11,on:true},
-  "yoga":                       {res:3,   pct:33.33, punt:9.0,  imp:-0.11,on:true},
-  "GELES":                      {res:3,   pct:33.33, punt:8.0,  imp:-1.11,on:true},
-  "TARTA CUMPLE EN HABITACION": {res:2,   pct:0,     punt:null, imp:null, on:true},
-  "rituals":                    {res:1,   pct:0,     punt:null, imp:null, on:false},
-  "BOTELLA NEGRA SPIRIT":       {res:1,   pct:0,     punt:null, imp:null, on:false},
-  "SUGERENCIAS LOBBY":          {res:7,   pct:0,     punt:null, imp:null, on:true},
-  "PLATO FRUTA":                {res:3,   pct:0,     punt:null, imp:null, on:false}
+  "todo bien":                  {res:578, pct:36.33, punt:9.2,  imp:0.10, on:true,  desde:"2025-03-10"},
+  "Queso idiazabal":            {res:54,  pct:53.7,  punt:9.2,  imp:0.19, on:true,  desde:"2025-10-02"},
+  "LLAMADA IN":                 {res:53,  pct:33.96, punt:9.3,  imp:0.09, on:true,  desde:"2025-11-18"},
+  "chocolate":                  {res:43,  pct:30.23, punt:9.5,  imp:0.19, on:true,  desde:"2026-01-15"},
+  "FREE UPGRADE":               {res:25,  pct:28,    punt:8.1,  imp:-1.01,on:true,  desde:"2026-02-20"},
+  "TARTA CUMPLE EN DESAYUNOS":  {res:12,  pct:33.33, punt:9.0,  imp:-0.19,on:true,  desde:"2026-04-08"},
+  "PILATES":                    {res:6,   pct:16.67, punt:9.0,  imp:-0.11,on:true,  desde:"2026-05-22"},
+  "Donuts":                     {res:4,   pct:25,    punt:7.0,  imp:-2.11,on:true,  desde:"2026-06-11"},
+  "SANGRIA":                    {res:4,   pct:25,    punt:8.0,  imp:-1.11,on:true,  desde:"2026-06-25"},
+  "yoga":                       {res:3,   pct:33.33, punt:9.0,  imp:-0.11,on:true,  desde:"2026-07-01"},
+  "GELES":                      {res:3,   pct:33.33, punt:8.0,  imp:-1.11,on:true,  desde:"2026-07-09"},
+  "TARTA CUMPLE EN HABITACION": {res:2,   pct:0,     punt:null, imp:null, on:true,  desde:"2026-07-20"},
+  "rituals":                    {res:1,   pct:0,     punt:null, imp:null, on:false, desde:"2026-07-28"},
+  "BOTELLA NEGRA SPIRIT":       {res:1,   pct:0,     punt:null, imp:null, on:false, desde:"2026-08-01"},
+  "SUGERENCIAS LOBBY":          {res:7,   pct:0,     punt:null, imp:null, on:true,  desde:"2026-05-05"},
+  "PLATO FRUTA":                {res:3,   pct:0,     punt:null, imp:null, on:false, desde:"2026-06-30"}
 };
 let tagPanelState = {};
 let tagFilterMode = "all";
@@ -5873,6 +5872,7 @@ function renderTagPanel(){
             </button>
           </span>
         </span>
+        <span class="tag-cell tag-date">${s.desde ? fmtDate(s.desde) : "—"}</span>
         <span class="tag-cell">
           <button class="tag-state ${state}" onclick="cycleTagState('${esc}')">
             <span class="dot"></span>${stateLabels[state]}${tooltipHtml}
@@ -5887,6 +5887,7 @@ function renderTagPanel(){
   document.getElementById("tagGrid").innerHTML = `
     <div class="tag-head-row">
       <span class="tag-hcell">Iniciativa</span>
+      <span class="tag-hcell"><span class="tip">Fecha inicio<span class="tip-box">Día en que empezaste a aplicar la iniciativa.</span></span></span>
       <span class="tag-hcell"><span class="tip">Estado<span class="tip-box">En prueba, validada o descartada. Haz clic en el estado para cambiarlo.</span></span></span>
       <span class="tag-hcell"><span class="tip">Huéspedes<span class="tip-box">Personas que recibieron la iniciativa.</span></span></span>
       <span class="tag-hcell"><span class="tip">Conversión a reseña<span class="tip-box">% de esos huéspedes que dejaron una reseña en Booking.</span></span></span>
@@ -5896,6 +5897,7 @@ function renderTagPanel(){
     ${rowsHtml || `<div class="tag-empty">No hay iniciativas en este estado.</div>`}
     <div class="tag-foot-row">
       <span class="tag-cell">Total</span>
+      <span class="tag-cell"></span>
       <span class="tag-cell"></span>
       <span class="tag-cell"><span class="tag-num">${totRes.toLocaleString("es-ES")}</span></span>
       <span class="tag-cell"></span>
@@ -6238,7 +6240,7 @@ function saveTag(){
   toast(name ? `Iniciativa "${name}" creada` : "Iniciativa creada");
 }
 document.addEventListener("keydown", e => {
-  if (e.key === "Escape"){ closeTagModal(); closeQrModal(); closeRoomModal(); closeConfirm(); closeNotifModal(); closeEvolModal(); closeEmpModal(); closeIniModal(); closeTestModal(); }
+  if (e.key === "Escape"){ closeTagModal(); closeQrModal(); closeRoomModal(); closeConfirm(); closeNotifModal(); closeEvolModal(); closeNewEmpModal(); closeIniModal(); closeTestModal(); }
 });
 
 /* ═══════════ Datos y render de INFORMES ═══════════ */
