@@ -2381,9 +2381,9 @@ svg{display:block}
 
 /* Tabla de "Mis iniciativas" */
 .tag-panel{margin-top:24px;padding:20px 22px 24px}
-.tag-panel-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.tag-panel-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:30px}
 .tag-table-scroll{overflow-x:auto;padding-bottom:2px}
-.tag-grid{display:grid;grid-template-columns:minmax(230px,1.7fr) 132px 88px 112px 104px 100px;min-width:880px}
+.tag-grid{display:grid;grid-template-columns:minmax(230px,1.6fr) 150px 110px 130px 122px 118px;min-width:980px}
 .tag-name-cell{gap:10px}
 .tag-actions{display:inline-flex;gap:2px;opacity:0;transition:opacity .15s;margin-left:auto}
 .tag-row:hover .tag-actions{opacity:1}
@@ -2397,16 +2397,18 @@ svg{display:block}
 .tag-head-row{padding:0 10px}
 .tag-hcell{
   font-size:.63rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  color:#A5A09A;padding:0 10px 11px 0;border-bottom:1px solid var(--line);white-space:nowrap;
+  color:#A5A09A;padding:0 8px 13px;border-bottom:1px solid var(--line);white-space:nowrap;
 }
-.tag-hcell:not(:first-child){text-align:right}
+.tag-hcell:first-child{padding-left:0;text-align:left}
+.tag-hcell:not(:first-child){text-align:center}
 .tag-row{padding:0 10px;border-radius:10px;transition:background .12s;position:relative}
 .tag-row:not(:last-of-type)::after{
   content:"";position:absolute;left:10px;right:10px;bottom:0;height:1px;background:var(--line);
 }
 .tag-row:hover{background:#FDFBF8}
-.tag-cell{display:flex;align-items:center;padding:13px 10px 13px 0;font-size:.84rem;color:var(--charcoal);min-width:0}
-.tag-cell:not(:first-child){justify-content:flex-end;text-align:right}
+.tag-cell{display:flex;align-items:center;padding:13px 8px;font-size:.84rem;color:var(--charcoal);min-width:0}
+.tag-cell:first-child{padding-left:0}
+.tag-cell:not(:first-child){justify-content:center;text-align:center}
 .tag-icon{
   width:30px;height:30px;border-radius:9px;flex-shrink:0;font-size:.95rem;
   display:flex;align-items:center;justify-content:center;line-height:1;
@@ -2468,7 +2470,8 @@ svg{display:block}
   padding:14px 10px 0;font-size:.78rem;font-weight:700;color:var(--midnight);
   border-top:1px solid var(--line-strong);margin-top:6px;
 }
-.tag-foot-row .tag-cell{padding:0 10px 0 0}
+.tag-foot-row .tag-cell{padding:0 8px}
+.tag-foot-row .tag-cell:first-child{padding-left:0}
 .tag-empty{
   grid-column:1 / -1;padding:36px 10px;text-align:center;
   font-size:.82rem;color:var(--ink-faint);
@@ -2948,6 +2951,7 @@ svg{display:block}
           <button class="tag-filter-tab active" data-filter="all" onclick="setTagFilter('all',this)">Todas</button>
           <button class="tag-filter-tab" data-filter="en-prueba" onclick="setTagFilter('en-prueba',this)">En prueba</button>
           <button class="tag-filter-tab" data-filter="validada" onclick="setTagFilter('validada',this)">Validadas</button>
+          <button class="tag-filter-tab" data-filter="descartada" onclick="setTagFilter('descartada',this)">Descartadas</button>
         </div>
         <button class="btn-ini-new" onclick="editingTagName=null;openTagModal()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
