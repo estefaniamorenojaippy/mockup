@@ -2383,7 +2383,7 @@ svg{display:block}
 .tag-panel{margin-top:24px;padding:22px 24px}
 .tag-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
 .tag-table-scroll{overflow-x:auto;padding-bottom:2px}
-.tag-grid{display:grid;grid-template-columns:1.6fr 140px 118px 96px 108px 108px 116px;min-width:960px}
+.tag-grid{display:grid;grid-template-columns:1.6fr 140px 150px 96px 108px 108px 116px;min-width:960px}
 .tag-name-cell{gap:8px}
 .tag-actions{display:inline-flex;gap:2px}
 .tag-act{
@@ -2414,10 +2414,24 @@ svg{display:block}
 }
 .tag-state .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .tag-profile-sel{font-size:.65rem;padding:3px 4px;border-radius:6px;border:1px solid #ddd;font-family:inherit;max-width:130px;cursor:pointer;background:#fff}
-.tag-state.on{background:var(--good-bg);color:var(--good)}
-.tag-state.on .dot{background:var(--good)}
-.tag-state.off{background:#F0EDE8;color:var(--ink-faint)}
-.tag-state.off .dot{background:#C4BFB8}
+.tag-state.en-prueba{background:#FFF3E0;color:#E67E22}
+.tag-state.en-prueba .dot{background:#E67E22}
+.tag-state.validada{background:var(--good-bg);color:var(--good)}
+.tag-state.validada .dot{background:var(--good)}
+.tag-state.descartada{background:#F0EDE8;color:var(--ink-faint)}
+.tag-state.descartada .dot{background:#C4BFB8}
+.tag-filter-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tag-filter-tab{font-size:.76rem;font-weight:600;padding:6px 16px;border-radius:999px;cursor:pointer;transition:all .15s;border:1px solid var(--line);background:#fff;color:var(--ink-soft)}
+.tag-filter-tab.active{background:var(--midnight);color:#fff;border-color:var(--midnight)}
+.tag-filter-tab:hover:not(.active){background:var(--ivory)}
+.tag-state.en-prueba{position:relative}
+.tag-state.en-prueba .tag-tooltip{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--midnight);color:#fff;font-size:.68rem;font-weight:600;padding:6px 12px;border-radius:8px;white-space:nowrap;z-index:20;pointer-events:none}
+.tag-state.en-prueba .tag-tooltip::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--midnight)}
+.tag-state.en-prueba:hover .tag-tooltip{display:block}
+.tag-tooltip-bar{height:4px;background:#E8E5E0;border-radius:2px;margin-top:4px;overflow:hidden;min-width:80px}
+.tag-tooltip-fill{height:100%;background:linear-gradient(90deg,#E67E22,#F5A623);border-radius:2px}
+.btn-ini-round{width:36px;height:36px;border-radius:50%;border:1px solid var(--line-strong);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0}
+.btn-ini-round:hover{border-color:var(--midnight);background:#FAF7F3}
 .tag-cell b{font-weight:700}
 .tag-cell small{font-size:.7rem;color:var(--ink-faint);margin-left:2px}
 .tag-impact{font-weight:700}
@@ -2883,8 +2897,8 @@ svg{display:block}
 <main class="wrap view" id="view-iniciativas" hidden>
   <div class="page-head" style="margin-bottom:20px">
     <div>
-      <h1 class="section-title" style="font-size:1.5rem;font-weight:700;color:var(--midnight);margin-bottom:4px">Iniciativas</h1>
-      <p style="font-size:.82rem;color:var(--ink-faint)">Gestiona y descubre iniciativas para mejorar tu reputación online.</p>
+      <h1 class="section-title" style="font-size:1.5rem;font-weight:700;color:var(--midnight);margin-bottom:4px">Tus iniciativas</h1>
+      <p style="font-size:.82rem;color:var(--ink-faint)">Gestiona y descubre iniciativas para mejorar la satisfacción de tus huéspedes.</p>
     </div>
   </div>
 
@@ -2896,21 +2910,14 @@ svg{display:block}
   <div id="iniTabMis">
     <section class="card tag-panel">
       <div class="tag-panel-head">
-        <div>
-          <p class="enc-sub">Iniciativas activas en tu hotel. Clic en el estado para activar u ocultar.</p>
+        <div class="tag-filter-tabs" id="tagFilterTabs">
+          <button class="tag-filter-tab active" data-filter="all" onclick="setTagFilter('all',this)">Todas</button>
+          <button class="tag-filter-tab" data-filter="en-prueba" onclick="setTagFilter('en-prueba',this)">En prueba</button>
+          <button class="tag-filter-tab" data-filter="validada" onclick="setTagFilter('validada',this)">Validadas</button>
         </div>
-        <div class="controls">
-          <div class="select-pill">
-            <select id="tagPanelFilter" onchange="renderTagPanel()" aria-label="Filtrar etiquetas">
-              <option value="all">Todas las etiquetas</option>
-              <option value="active">Solo activas</option>
-            </select>
-          </div>
-          <button class="btn-tag" onclick="editingTagName=null;openTagModal()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-            ETIQUETA
-          </button>
-        </div>
+        <button class="btn-ini-round" onclick="editingTagName=null;openTagModal()" title="Nueva iniciativa" aria-label="Nueva iniciativa">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
       </div>
       <div class="tag-table-scroll">
         <div class="tag-grid" id="tagGrid"></div>
@@ -2941,7 +2948,7 @@ svg{display:block}
         </div>
       </div>
     </section>
-    <p style="font-size:.78rem;color:var(--ink-faint);margin-bottom:16px">Validadas en hoteles similares al tuyo. Añádelas a favoritos o crea una etiqueta para implementarlas.</p>
+    <p style="font-size:.78rem;color:var(--ink-faint);margin-bottom:16px">Lo que funciona en hoteles similares al tuyo por categoría, ubicación y perfil de huésped.</p>
     <div class="ini-grid" id="iniGrid"></div>
     <div class="ini-chat" id="iniChat">
       <div class="ini-chat-header">
@@ -5642,33 +5649,63 @@ const TAG_STATS = {
   "PLATO FRUTA":                {res:3,   pct:0,     punt:null, imp:null, on:false}
 };
 let tagPanelState = {};
+let tagFilterMode = "all";
+const VALIDATION_THRESHOLD = 25;
 const tagProfileMap = {};
-RM_TAGS.forEach(([name]) => { tagPanelState[name] = TAG_STATS[name] ? TAG_STATS[name].on : true; });
+function getTagState(name){
+  const s = TAG_STATS[name];
+  if (!s) return "en-prueba";
+  if (s.res < VALIDATION_THRESHOLD) return "en-prueba";
+  if (tagPanelState[name] === "descartada") return "descartada";
+  if (tagPanelState[name] === "validada") return "validada";
+  return tagPanelState[name] || "validada";
+}
+RM_TAGS.forEach(([name]) => {
+  const s = TAG_STATS[name];
+  if (!s || s.res < VALIDATION_THRESHOLD) tagPanelState[name] = "en-prueba";
+  else tagPanelState[name] = s.on ? "validada" : "descartada";
+});
 function getTagProfile(name){ return tagProfileMap[name] || ""; }
 function setTagProfile(name, val){ tagProfileMap[name] = val; }
-function toggleTagState(name){
-  tagPanelState[name] = !tagPanelState[name];
+function cycleTagState(name){
+  const s = TAG_STATS[name];
+  if (s && s.res < VALIDATION_THRESHOLD) { toast("Necesita al menos " + VALIDATION_THRESHOLD + " reservas para cambiar de estado"); return; }
+  const order = ["en-prueba","validada","descartada"];
+  const cur = getTagState(name);
+  tagPanelState[name] = order[(order.indexOf(cur) + 1) % order.length];
+  renderTagPanel();
+}
+function setTagFilter(mode, btn){
+  tagFilterMode = mode;
+  document.querySelectorAll(".tag-filter-tab").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
   renderTagPanel();
 }
 function renderTagPanel(){
-  const onlyActive = document.getElementById("tagPanelFilter").value === "active";
-  const rows = RM_TAGS.filter(([name]) => !onlyActive || tagPanelState[name]);
+  const rows = RM_TAGS.filter(([name]) => {
+    if (tagFilterMode === "all") return true;
+    return getTagState(name) === tagFilterMode;
+  });
   let totRes = 0, totRev = 0, weighted = 0;
   RM_TAGS.forEach(([name]) => {
     const s = TAG_STATS[name] || {res:0, pct:0, punt:null};
     totRes += s.res;
     if (s.punt !== null){ weighted += s.punt * s.res; totRev += s.res; }
   });
-  // Referencias del hotel (mismas cifras que la barra superior): 8,7 de nota y 26,18% de reseñas
   const HOTEL_PUNT = 8.7, HOTEL_PCT = 26.18;
   const vsRef = (v, ref) => v === null ? "flat" : v > ref ? "up" : v < ref ? "down" : "flat";
+  const stateLabels = {"en-prueba":"En prueba","validada":"Validada","descartada":"Descartada"};
   const rowsHtml = rows.map(([name, color]) => {
     const s = TAG_STATS[name] || {res:0, pct:0, punt:null, imp:null};
-    const on = tagPanelState[name];
+    const state = getTagState(name);
     const impCls = s.imp === null ? "flat" : s.imp > 0 ? "up" : s.imp < 0 ? "down" : "flat";
     const impTxt = s.imp === null ? "—" : `${s.imp > 0 ? "+" : ""}${fmtNum(s.imp)} pts`;
     const pctCls = s.pct ? vsRef(s.pct, HOTEL_PCT) : "flat";
     const puntCls = s.punt !== null ? vsRef(s.punt, HOTEL_PUNT) : "flat";
+    const tooltipHtml = state === "en-prueba" ? `
+      <span class="tag-tooltip">${s.res}/${VALIDATION_THRESHOLD} reservas
+        <div class="tag-tooltip-bar"><div class="tag-tooltip-fill" style="width:${Math.min(100, (s.res / VALIDATION_THRESHOLD) * 100)}%"></div></div>
+      </span>` : "";
     return `
       <div class="tag-row">
         <span class="tag-cell tag-name-cell">
@@ -5689,8 +5726,8 @@ function renderTagPanel(){
           </select>
         </span>
         <span class="tag-cell">
-          <button class="tag-state ${on ? "on" : "off"}" onclick="toggleTagState('${name.replace(/'/g,"\\'")}')">
-            <span class="dot"></span>${on ? "Activa" : "Inactiva"}
+          <button class="tag-state ${state}" onclick="cycleTagState('${name.replace(/'/g,"\\'")}')">
+            <span class="dot"></span>${stateLabels[state]}${tooltipHtml}
           </button>
         </span>
         <span class="tag-cell"><b>${s.res}</b></span>
