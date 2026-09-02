@@ -1055,7 +1055,7 @@ svg{display:block}
   background:var(--ivory);color:var(--ink-soft);
 }
 .ini-profile-chip .ini-p-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.ini-meta{display:flex;align-items:center;gap:10px;padding-top:10px;border-top:1px solid var(--line)}
+.ini-meta{display:flex;align-items:center;gap:10px;padding-top:10px;border-top:1px solid var(--line);flex-wrap:wrap}
 .ini-impact{
   font-size:.58rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
   padding:3px 9px;border-radius:6px;
@@ -1069,9 +1069,9 @@ svg{display:block}
 .ini-diff-dot.filled{background:var(--amber)}
 .ini-actions{display:flex;gap:6px;margin-left:auto}
 .ini-btn{
-  width:30px;height:30px;border-radius:8px;border:1px solid var(--line);
-  display:flex;align-items:center;justify-content:center;color:var(--ink-faint);
-  background:#fff;transition:all .12s;
+  width:30px;height:30px;min-width:30px;border-radius:8px;border:1px solid var(--line);
+  display:inline-flex;align-items:center;justify-content:center;color:var(--ink-faint);
+  background:#fff;transition:all .12s;cursor:pointer;padding:0;flex-shrink:0;
 }
 .ini-btn:hover{border-color:var(--ink-soft);color:var(--midnight)}
 .ini-btn.is-fav{border-color:#E25555;color:#E25555;background:#FDF2F2}
@@ -2453,33 +2453,6 @@ svg{display:block}
   </div>
 
   <div class="topbar-right">
-    <div class="kpi-chip" title="Índice Jaippy">
-      <img class="k-mark" src="data:image/png;base64,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" alt="">
-      <span>
-        <span class="k-val">8,7</span>
-        <span class="k-delta flat">0%
-          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13"/><path d="m13 7 5 5-5 5"/></svg>
-        </span>
-      </span>
-    </div>
-    <div class="kpi-chip" title="Conversión">
-      <svg class="k-icon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="14" height="14" rx="2.5"/><path d="M4 7v13a1 1 0 0 0 1 1h12"/><path d="m14 7.6.9 1.9 2 .2-1.5 1.3.4 2-1.8-1.1-1.8 1.1.4-2L11 9.7l2-.2z"/></svg>
-      <span>
-        <span class="k-val">26,18<small>%</small></span>
-        <span class="k-delta down">−4,7%
-          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7l10 10"/><path d="M17 10v7h-7"/></svg>
-        </span>
-      </span>
-    </div>
-    <div class="kpi-chip" title="Consistencia">
-      <svg class="k-icon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="14" height="14" rx="2.5"/><path d="M4 7v13a1 1 0 0 0 1 1h12"/><text x="14" y="12.6" text-anchor="middle" font-size="7" font-weight="700" fill="currentColor" stroke="none">10</text></svg>
-      <span>
-        <span class="k-val">46,39<small>%</small></span>
-        <span class="k-delta down">−0,1%
-          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7l10 10"/><path d="M17 10v7h-7"/></svg>
-        </span>
-      </span>
-    </div>
     <div class="score-badge" title="Nota global del hotel (Booking, sobre 10)">8,7</div>
     <div class="score-badge-google" title="Nota media en Google (sobre 5)">
       <svg viewBox="0 0 18 18" width="16" height="16" aria-hidden="true">
@@ -5077,16 +5050,22 @@ function toggleIniFav(id, ev){
   renderIniciativas();
   toast(iniFavs.has(id) ? "Añadida a favoritos" : "Eliminada de favoritos");
 }
-function iniCreateTag(tagName, emoji, profiles, ev){
+function iniCreateTag(iniId, ev){
   ev.stopPropagation();
+  const ini = INI_DATA.find(x => x.id === iniId);
+  if (!ini) return;
   editingTagName = null;
-  openTagModal(profiles);
+  openTagModal(ini.profiles);
   setTimeout(() => {
     const nameInput = document.getElementById("tagName");
-    if (nameInput) { nameInput.value = tagName; nameInput.dispatchEvent(new Event("input")); }
-    if (emoji) { tagSelectedIcon = emoji; renderTagIcons(); }
+    if (nameInput) { nameInput.value = ini.tagName; nameInput.dispatchEvent(new Event("input")); }
+    const descInput = document.getElementById("tagDesc");
+    if (descInput) descInput.value = ini.desc || "";
+    const costInput = document.getElementById("tagCost");
+    if (costInput) costInput.value = ini.coste || "";
+    if (ini.emoji) { tagSelectedIcon = ini.emoji; renderTagIcons(); }
   }, 100);
-  toast('Creando etiqueta "' + tagName + '"');
+  toast('Creando etiqueta "' + ini.tagName + '"');
 }
 function renderIniciativas(){
   const profile = document.getElementById("iniProfileFilter").value;
@@ -5134,7 +5113,7 @@ function renderIniciativas(){
             <button class="ini-btn${isFav ? " is-fav" : ""}" onclick="toggleIniFav(${i.id}, event)" title="${isFav ? "Quitar de favoritos" : "Añadir a favoritos"}" aria-label="Favorito">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/></svg>
             </button>
-            <button class="ini-btn" data-profiles='${JSON.stringify(i.profiles)}' onclick="iniCreateTag('${i.tagName}','${i.emoji}',JSON.parse(this.dataset.profiles),event)" title="Crear etiqueta" aria-label="Crear etiqueta">
+            <button class="ini-btn" onclick="iniCreateTag(${i.id},event)" title="Crear etiqueta" aria-label="Crear etiqueta">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
             </button>
           </div>
