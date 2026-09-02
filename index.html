@@ -2379,66 +2379,100 @@ svg{display:block}
   font-size:.8rem;font-weight:700;font-family:inherit;letter-spacing:.04em;
 }
 
-/* Panel de etiquetas, al fondo de Habitaciones */
-.tag-panel{margin-top:24px;padding:22px 24px}
-.tag-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+/* Tabla de "Mis iniciativas" */
+.tag-panel{margin-top:24px;padding:20px 22px 24px}
+.tag-panel-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
 .tag-table-scroll{overflow-x:auto;padding-bottom:2px}
-.tag-grid{display:grid;grid-template-columns:1.6fr 140px 150px 96px 108px 108px 116px;min-width:960px}
-.tag-name-cell{gap:8px}
-.tag-actions{display:inline-flex;gap:2px}
+.tag-grid{display:grid;grid-template-columns:minmax(230px,1.7fr) 132px 88px 112px 104px 100px;min-width:880px}
+.tag-name-cell{gap:10px}
+.tag-actions{display:inline-flex;gap:2px;opacity:0;transition:opacity .15s;margin-left:auto}
+.tag-row:hover .tag-actions{opacity:1}
 .tag-act{
   width:28px;height:28px;border-radius:8px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;color:var(--ink-soft);
+  display:flex;align-items:center;justify-content:center;color:var(--ink-faint);transition:all .12s;
 }
 .tag-act:hover{background:var(--ivory);color:var(--midnight)}
 .tag-act.danger:hover{background:var(--bad-bg);color:var(--bad)}
 .tag-head-row,.tag-row,.tag-foot-row{display:grid;grid-column:1 / -1;grid-template-columns:subgrid}
-.tag-head-row{padding:0 4px}
+.tag-head-row{padding:0 10px}
 .tag-hcell{
-  font-size:.66rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
-  color:#9A9A9E;padding:0 8px 10px 0;border-bottom:1px solid var(--line);
+  font-size:.63rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:#A5A09A;padding:0 10px 11px 0;border-bottom:1px solid var(--line);white-space:nowrap;
 }
 .tag-hcell:not(:first-child){text-align:right}
-.tag-row{padding:0 4px;border-bottom:1px solid var(--line)}
-.tag-row:last-of-type{border-bottom:none}
-.tag-cell{display:flex;align-items:center;padding:11px 8px 11px 0;font-size:.84rem;color:var(--charcoal);min-width:0}
+.tag-row{padding:0 10px;border-radius:10px;transition:background .12s;position:relative}
+.tag-row:not(:last-of-type)::after{
+  content:"";position:absolute;left:10px;right:10px;bottom:0;height:1px;background:var(--line);
+}
+.tag-row:hover{background:#FDFBF8}
+.tag-cell{display:flex;align-items:center;padding:13px 10px 13px 0;font-size:.84rem;color:var(--charcoal);min-width:0}
 .tag-cell:not(:first-child){justify-content:flex-end;text-align:right}
-.tag-chip{
-  display:inline-block;font-size:.68rem;font-weight:700;
-  padding:4px 11px;border-radius:999px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
+.tag-icon{
+  width:30px;height:30px;border-radius:9px;flex-shrink:0;font-size:.95rem;
+  display:flex;align-items:center;justify-content:center;line-height:1;
+}
+.tag-label{
+  font-size:.82rem;font-weight:600;color:var(--midnight);letter-spacing:-.005em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;
 }
 .tag-state{
-  display:inline-flex;align-items:center;gap:6px;
-  font-size:.72rem;font-weight:600;padding:4px 10px 4px 8px;border-radius:999px;
-  cursor:pointer;transition:all .15s;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  font-size:.71rem;font-weight:600;padding:5px 12px;border-radius:999px;
+  cursor:pointer;transition:all .15s;min-width:104px;position:relative;
+  border:1px solid transparent;
 }
-.tag-state .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.tag-profile-sel{font-size:.65rem;padding:3px 4px;border-radius:6px;border:1px solid #ddd;font-family:inherit;max-width:130px;cursor:pointer;background:#fff}
-.tag-state.en-prueba{background:#FFF3E0;color:#E67E22}
-.tag-state.en-prueba .dot{background:#E67E22}
-.tag-state.validada{background:var(--good-bg);color:var(--good)}
+.tag-state .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.tag-state.en-prueba{background:#FFF4E3;color:#B87309;border-color:#FFE2B8}
+.tag-state.en-prueba .dot{background:#E8940C}
+.tag-state.validada{background:var(--good-bg);color:var(--good);border-color:#CBE0C4}
 .tag-state.validada .dot{background:var(--good)}
-.tag-state.descartada{background:#F0EDE8;color:var(--ink-faint)}
-.tag-state.descartada .dot{background:#C4BFB8}
+.tag-state.descartada{background:#F2EFEB;color:var(--ink-faint);border-color:#E3DED7}
+.tag-state.descartada .dot{background:#B8B2AA}
+.tag-state:hover{filter:brightness(.97)}
 .tag-filter-tabs{display:flex;gap:6px;flex-wrap:wrap}
-.tag-filter-tab{font-size:.76rem;font-weight:600;padding:6px 16px;border-radius:999px;cursor:pointer;transition:all .15s;border:1px solid var(--line);background:#fff;color:var(--ink-soft)}
+.tag-filter-tab{
+  font-size:.75rem;font-weight:600;padding:7px 16px;border-radius:999px;cursor:pointer;
+  transition:all .15s;border:1px solid var(--line);background:#fff;color:var(--ink-soft);
+}
 .tag-filter-tab.active{background:var(--midnight);color:#fff;border-color:var(--midnight)}
-.tag-filter-tab:hover:not(.active){background:var(--ivory)}
-.tag-state.en-prueba{position:relative}
-.tag-state.en-prueba .tag-tooltip{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--midnight);color:#fff;font-size:.68rem;font-weight:600;padding:6px 12px;border-radius:8px;white-space:nowrap;z-index:20;pointer-events:none}
-.tag-state.en-prueba .tag-tooltip::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--midnight)}
+.tag-filter-tab:hover:not(.active){background:var(--ivory);color:var(--midnight)}
+.tag-state.en-prueba .tag-tooltip{
+  display:none;position:absolute;bottom:calc(100% + 9px);left:50%;transform:translateX(-50%);
+  background:var(--midnight);color:#fff;font-size:.68rem;font-weight:600;padding:7px 12px;
+  border-radius:9px;white-space:nowrap;z-index:20;pointer-events:none;text-align:center;
+  box-shadow:0 4px 14px rgba(25,25,25,.18);
+}
+.tag-state.en-prueba .tag-tooltip::after{
+  content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:var(--midnight);
+}
 .tag-state.en-prueba:hover .tag-tooltip{display:block}
-.tag-tooltip-bar{height:4px;background:#E8E5E0;border-radius:2px;margin-top:4px;overflow:hidden;min-width:80px}
-.tag-tooltip-fill{height:100%;background:linear-gradient(90deg,#E67E22,#F5A623);border-radius:2px}
-.btn-ini-round{width:36px;height:36px;border-radius:50%;border:1px solid var(--line-strong);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0}
-.btn-ini-round:hover{border-color:var(--midnight);background:#FAF7F3}
+.tag-tooltip-bar{height:4px;background:rgba(255,255,255,.22);border-radius:2px;margin-top:5px;overflow:hidden;min-width:92px}
+.tag-tooltip-fill{height:100%;background:linear-gradient(90deg,#FFA13B,#FFD03B);border-radius:2px}
+.btn-ini-new{
+  display:inline-flex;align-items:center;gap:7px;flex-shrink:0;
+  background:var(--amber);color:var(--midnight);border-radius:999px;padding:9px 18px 9px 15px;
+  font-size:.79rem;font-weight:600;cursor:pointer;transition:all .15s;
+  box-shadow:0 1px 2px rgba(25,25,25,.06);
+}
+.btn-ini-new:hover{background:var(--sunflower);box-shadow:0 2px 8px rgba(255,188,39,.35)}
+.btn-ini-new svg{flex-shrink:0}
 .tag-cell b{font-weight:700}
 .tag-cell small{font-size:.7rem;color:var(--ink-faint);margin-left:2px}
+.tag-num{font-weight:700;color:var(--midnight)}
 .tag-impact{font-weight:700}
 .tag-impact.up{color:var(--good)}
 .tag-impact.down{color:var(--bad)}
-.tag-impact.flat{color:var(--ink-faint)}
-.tag-foot-row{padding:12px 4px 0;font-weight:700;color:var(--midnight);border-top:1px solid var(--line-strong);margin-top:2px}
+.tag-impact.flat{color:#B5AFA7}
+.tag-foot-row{
+  padding:14px 10px 0;font-size:.78rem;font-weight:700;color:var(--midnight);
+  border-top:1px solid var(--line-strong);margin-top:6px;
+}
+.tag-foot-row .tag-cell{padding:0 10px 0 0}
+.tag-empty{
+  grid-column:1 / -1;padding:36px 10px;text-align:center;
+  font-size:.82rem;color:var(--ink-faint);
+}
 .tag-foot-row .tag-cell{color:var(--midnight)}
 </style>
 </head>
@@ -2915,8 +2949,9 @@ svg{display:block}
           <button class="tag-filter-tab" data-filter="en-prueba" onclick="setTagFilter('en-prueba',this)">En prueba</button>
           <button class="tag-filter-tab" data-filter="validada" onclick="setTagFilter('validada',this)">Validadas</button>
         </div>
-        <button class="btn-ini-round" onclick="editingTagName=null;openTagModal()" title="Nueva iniciativa" aria-label="Nueva iniciativa">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        <button class="btn-ini-new" onclick="editingTagName=null;openTagModal()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Nueva iniciativa
         </button>
       </div>
       <div class="tag-table-scroll">
@@ -3542,7 +3577,7 @@ svg{display:block}
 <div class="modal-overlay" id="tagModal" hidden onclick="closeTagModal()">
   <div class="modal" role="dialog" aria-labelledby="tagModalTitle" onclick="event.stopPropagation()">
     <div class="modal-head">
-      <h3 id="tagModalTitle">Crear etiqueta</h3>
+      <h3 id="tagModalTitle">Crear iniciativa</h3>
       <button class="m-close" onclick="closeTagModal()" aria-label="Cerrar">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
@@ -5072,7 +5107,7 @@ function iniCreateTag(iniId, ev){
     if (costInput) costInput.value = ini.coste || "";
     if (ini.emoji) { tagSelectedIcon = ini.emoji; renderTagIcons(); }
   }, 100);
-  toast('Creando etiqueta "' + ini.tagName + '"');
+  toast('Creando iniciativa "' + ini.tagName + '"');
 }
 function renderIniciativas(){
   const profile = document.getElementById("iniProfileFilter").value;
@@ -5627,6 +5662,16 @@ const RM_TAGS = [
   ["TARTA CUMPLE EN HABITACION","#2743A6"],["todo bien","#2E9E5B"],["yoga","#A855C8"]
 ];
 
+/* Icono de cada iniciativa (se elige al crearla en el modal) */
+const TAG_ICON_MAP = {
+  "BOTELLA NEGRA SPIRIT":"🍾", "chocolate":"🍫", "Donuts":"🍩", "FREE UPGRADE":"⬆️",
+  "GELES":"🧴", "LLAMADA IN":"📞", "PILATES":"🤸", "PLATO FRUTA":"🍓",
+  "Queso idiazabal":"🧀", "rituals":"🌿", "SANGRIA":"🍷", "SUGERENCIAS LOBBY":"🗺️",
+  "TARTA CUMPLE EN DESAYUNOS":"🎂", "TARTA CUMPLE EN HABITACION":"🎂",
+  "todo bien":"✅", "yoga":"🧘"
+};
+function getTagIcon(name){ return TAG_ICON_MAP[name] || "🏷️"; }
+
 /* ═══════════ Panel de etiquetas (fondo de Habitaciones) ═══════════
    Reutiliza las cifras de "Evolución de iniciativas" (Informes) para las
    etiquetas que aparecen en ambos sitios; el resto son plausibles y menores. */
@@ -5706,31 +5751,27 @@ function renderTagPanel(){
       <span class="tag-tooltip">${s.res}/${VALIDATION_THRESHOLD} reservas
         <div class="tag-tooltip-bar"><div class="tag-tooltip-fill" style="width:${Math.min(100, (s.res / VALIDATION_THRESHOLD) * 100)}%"></div></div>
       </span>` : "";
+    const esc = name.replace(/'/g,"\\'");
     return `
       <div class="tag-row">
         <span class="tag-cell tag-name-cell">
-          <span class="tag-chip" style="background:${color}22;color:${color}">${name}</span>
+          <span class="tag-icon" style="background:${color}1a">${getTagIcon(name)}</span>
+          <span class="tag-label" title="${name}">${name}</span>
           <span class="tag-actions">
-            <button class="tag-act" onclick="editTag('${name.replace(/'/g,"\\'")}')" aria-label="Editar etiqueta" title="Editar">
+            <button class="tag-act" onclick="editTag('${esc}')" aria-label="Editar iniciativa" title="Editar">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
             </button>
-            <button class="tag-act danger" onclick="deleteTag('${name.replace(/'/g,"\\'")}')" aria-label="Eliminar etiqueta" title="Eliminar">
+            <button class="tag-act danger" onclick="deleteTag('${esc}')" aria-label="Eliminar iniciativa" title="Eliminar">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6M14 11v6"/></svg>
             </button>
           </span>
         </span>
         <span class="tag-cell">
-          <select class="tag-profile-sel" onchange="setTagProfile('${name.replace(/'/g,"\\'")}',this.value)" aria-label="Perfil de cliente">
-            <option value="">Sin perfil</option>
-            ${(()=>{try{return HP_PROFILES.map(p=>`<option value="${p.name}"${getTagProfile(name)===p.name?" selected":""}>${p.name}</option>`).join("")}catch(e){return ""}})()}
-          </select>
-        </span>
-        <span class="tag-cell">
-          <button class="tag-state ${state}" onclick="cycleTagState('${name.replace(/'/g,"\\'")}')">
+          <button class="tag-state ${state}" onclick="cycleTagState('${esc}')">
             <span class="dot"></span>${stateLabels[state]}${tooltipHtml}
           </button>
         </span>
-        <span class="tag-cell"><b>${s.res}</b></span>
+        <span class="tag-cell"><span class="tag-num">${s.res}</span></span>
         <span class="tag-cell tag-impact ${pctCls}">${s.pct ? fmtNum(s.pct) + "%" : "—"}</span>
         <span class="tag-cell tag-impact ${puntCls}">${s.punt !== null ? fmtNum(s.punt) : "—"}</span>
         <span class="tag-cell tag-impact ${impCls}">${impTxt}</span>
@@ -5738,20 +5779,18 @@ function renderTagPanel(){
   }).join("");
   document.getElementById("tagGrid").innerHTML = `
     <div class="tag-head-row">
-      <span class="tag-hcell">Etiqueta</span>
-      <span class="tag-hcell">Perfil</span>
+      <span class="tag-hcell">Iniciativa</span>
       <span class="tag-hcell">Estado</span>
       <span class="tag-hcell">Reservas</span>
       <span class="tag-hcell">% con reseña</span>
-      <span class="tag-hcell">Puntuación media</span>
-      <span class="tag-hcell">Impacto vs resto</span>
+      <span class="tag-hcell">Nota media</span>
+      <span class="tag-hcell">Impacto</span>
     </div>
-    ${rowsHtml}
+    ${rowsHtml || `<div class="tag-empty">No hay iniciativas en este estado.</div>`}
     <div class="tag-foot-row">
       <span class="tag-cell">Total</span>
       <span class="tag-cell"></span>
-      <span class="tag-cell"></span>
-      <span class="tag-cell"><b>${totRes.toLocaleString("es-ES")}</b></span>
+      <span class="tag-cell"><span class="tag-num">${totRes.toLocaleString("es-ES")}</span></span>
       <span class="tag-cell"></span>
       <span class="tag-cell">${totRev ? fmtNum(weighted/totRev) : "—"}</span>
       <span class="tag-cell"></span>
@@ -5763,7 +5802,7 @@ function editTag(name){
   const color = RM_TAGS.find(([n])=>n===name)?.[1] || "#f4c014";
   const profile = getTagProfile(name);
   openTagModal(profile ? [profile] : []);
-  document.getElementById("tagModalTitle").textContent = "Editar etiqueta";
+  document.getElementById("tagModalTitle").textContent = "Editar iniciativa";
   document.getElementById("tagName").value = name;
   document.getElementById("tagDesc").value = "";
   document.getElementById("tagCost").value = "";
@@ -5772,13 +5811,13 @@ function editTag(name){
   tagColor = color;
 }
 function deleteTag(name){
-  askConfirm(`Se eliminará la etiqueta "${name}" de todas las habitaciones. Esta acción no se puede deshacer.`, () => {
+  askConfirm(`Se eliminará la iniciativa "${name}" de todas las habitaciones. Esta acción no se puede deshacer.`, () => {
     delete tagPanelState[name];
     delete TAG_STATS[name];
     const i = RM_TAGS.findIndex(([n]) => n === name);
     if (i >= 0) RM_TAGS.splice(i, 1);
     renderTagPanel();
-    toast(`Etiqueta "${name}" eliminada`);
+    toast(`Iniciativa "${name}" eliminada`);
   });
 }
 renderTagPanel();
@@ -6059,7 +6098,7 @@ function openTagModal(prefillProfiles){
   if(typeof editingTagName==="undefined"||editingTagName===null) editingTagName = null;
   tagSelectedIcon = "";
   tagAssignedProfiles = prefillProfiles ? [...prefillProfiles] : [];
-  document.getElementById("tagModalTitle").textContent = editingTagName ? "Editar etiqueta" : "Crear etiqueta";
+  document.getElementById("tagModalTitle").textContent = editingTagName ? "Editar iniciativa" : "Crear iniciativa";
   document.getElementById("tagModal").hidden = false;
   if(!editingTagName){
     document.getElementById("tagName").value = "";
@@ -6089,7 +6128,7 @@ function closeTagModal(){ document.getElementById("tagModal").hidden = true; }
 function saveTag(){
   const name = document.getElementById("tagName").value.trim();
   closeTagModal();
-  toast(name ? `Etiqueta "${name}" creada` : "Etiqueta creada");
+  toast(name ? `Iniciativa "${name}" creada` : "Iniciativa creada");
 }
 document.addEventListener("keydown", e => {
   if (e.key === "Escape"){ closeTagModal(); closeQrModal(); closeRoomModal(); closeConfirm(); closeNotifModal(); closeEvolModal(); closeEmpModal(); closeIniModal(); closeTestModal(); }
