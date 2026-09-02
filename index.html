@@ -1803,6 +1803,8 @@ svg{display:block}
 .m-close:hover{background:#F0F0F0}
 
 /* ─── Vista "Administrar empleados" ─── */
+/* Sin h1 en esta vista, las pestañas hacen de encabezado */
+#view-empleados .ini-bar-btn{font-size:1.02rem;padding:11px 24px}
 .emp-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:18px;margin-bottom:18px}
 @media (max-width:1040px){.emp-layout{grid-template-columns:1fr}}
 .emp-admin{padding:22px 24px 14px}
@@ -3433,28 +3435,39 @@ svg{display:block}
 <main class="wrap view" id="view-empleados" hidden>
   <div class="page-head">
     <div>
-      <h1>Administrar empleados</h1>
       <p class="review-count">Consulta a quién mencionan tus huéspedes en las reseñas y gestiona la plantilla del hotel.</p>
     </div>
   </div>
 
-  <div class="emp-layout">
-    <section class="card pad">
-      <h2 class="blk-title big">Top empleados mencionados</h2>
-      <p class="blk-sub">Haz clic en una barra para ver las reseñas donde se le menciona.</p>
-      <div id="empChart" class="emp-chart"></div>
-    </section>
-
-    <section class="card pad">
-      <h2 class="blk-title big" id="empMentionsTitle">Reseñas con menciones</h2>
-      <p class="blk-sub" id="empMentionsSub">Selecciona un empleado en el gráfico.</p>
-      <div id="empMentionsList" class="empr-list"></div>
-    </section>
+  <div class="ini-bar-row">
+    <div class="ini-bar">
+      <button class="ini-bar-btn active" data-emp-tab="admin" onclick="switchEmpTab('admin',this)">Administrar usuarios</button>
+      <button class="ini-bar-btn" data-emp-tab="menciones" onclick="switchEmpTab('menciones',this)">Top menciones</button>
+    </div>
+    <button class="btn-ini-new" onclick="openNewEmpModal()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      Nuevo empleado
+    </button>
   </div>
 
-  <section class="card emp-admin">
-    <h2 class="blk-title big">Plantilla</h2>
+  <div id="empTabMenciones" style="display:none">
+    <div class="emp-layout">
+      <section class="card pad">
+        <h2 class="blk-title big">Top empleados mencionados</h2>
+        <p class="blk-sub">Haz clic en una barra para ver las reseñas donde se le menciona.</p>
+        <div id="empChart" class="emp-chart"></div>
+      </section>
 
+      <section class="card pad">
+        <h2 class="blk-title big" id="empMentionsTitle">Reseñas con menciones</h2>
+        <p class="blk-sub" id="empMentionsSub">Selecciona un empleado en el gráfico.</p>
+        <div id="empMentionsList" class="empr-list"></div>
+      </section>
+    </div>
+  </div>
+
+  <div id="empTabAdmin">
+  <section class="card emp-admin">
     <div class="emp-filters">
       <label class="emp-search">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -3472,10 +3485,6 @@ svg{display:block}
         <input type="checkbox" id="empHideInactive" onchange="renderEmps()">
         Ocultar empleados inactivos
       </label>
-      <button class="btn-ini-new emp-new" onclick="openNewEmpModal()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-        Nuevo empleado
-      </button>
     </div>
 
     <div class="emp-scroll">
@@ -3515,6 +3524,7 @@ svg{display:block}
       </span>
     </div>
   </section>
+  </div>
 </main>
 
 <!-- ═══════════ MODAL: CONFIRMACIÓN ═══════════ -->
@@ -5232,10 +5242,16 @@ function renderIniciativas(){
     </article>`;
   }).join("");
 }
+/* Marca la pestaña activa solo dentro de su propia barra: hay varias vistas
+   que reutilizan .ini-bar-btn y no deben pisarse entre ellas. */
+function markBarTab(btn){
+  const bar = btn && btn.closest(".ini-bar");
+  if (bar) bar.querySelectorAll(".ini-bar-btn").forEach(b => b.classList.toggle("active", b === btn));
+}
 function switchIniTab(tab, btn){
   document.getElementById("iniTabMis").style.display = tab === "mis" ? "" : "none";
   document.getElementById("iniTabRec").style.display = tab === "rec" ? "" : "none";
-  document.querySelectorAll(".ini-bar-btn").forEach(b => b.classList.toggle("active", b === btn));
+  markBarTab(btn);
 }
 function initIniciativas(){
   const sel = document.getElementById("iniProfileFilter");
@@ -6473,6 +6489,11 @@ function renderEmps(){
   document.getElementById("empLast").disabled  = empPage === pages;
 }
 function empGoPage(p){ empPage = p; renderEmps(); }
+function switchEmpTab(tab, btn){
+  document.getElementById("empTabAdmin").style.display = tab === "admin" ? "" : "none";
+  document.getElementById("empTabMenciones").style.display = tab === "menciones" ? "" : "none";
+  markBarTab(btn);
+}
 function openEmpleados(){
   document.getElementById("userWrap").classList.remove("open");
   showView("empleados");
@@ -6480,6 +6501,7 @@ function openEmpleados(){
   renderEmps();
   renderEmpChart();
   if (empSelected === null) showEmpMentions(0);
+  switchEmpTab("admin", document.querySelector('[data-emp-tab="admin"]'));
 }
 
 function openNewEmpModal(){
