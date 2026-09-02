@@ -2388,6 +2388,7 @@ svg{display:block}
 /* Tabla de "Mis iniciativas" */
 .tag-panel{margin-top:0;padding:18px 22px 24px}
 .tag-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.tag-toolbar-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .tag-hint{
   display:flex;align-items:center;gap:8px;font-size:.76rem;color:var(--ink-faint);
   background:rgba(255,255,255,.55);border:1px solid var(--line);border-radius:999px;padding:7px 15px;
@@ -2975,7 +2976,6 @@ svg{display:block}
 <main class="wrap view" id="view-iniciativas" hidden>
   <div class="page-head" style="margin-bottom:20px">
     <div>
-      <h1 class="section-title" style="font-size:1.5rem;font-weight:700;color:var(--midnight);margin-bottom:4px">Tus iniciativas</h1>
       <p style="font-size:.82rem;color:var(--ink-faint)">Gestiona y descubre iniciativas para mejorar la satisfacción de tus huéspedes.</p>
     </div>
   </div>
@@ -2997,11 +2997,20 @@ svg{display:block}
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
         Cada iniciativa necesita al menos <b>25 huéspedes</b> para ser validada.
       </p>
+      <div class="tag-toolbar-right">
       <div class="tag-filter-tabs" id="tagFilterTabs">
         <button class="tag-filter-tab active" data-filter="all" onclick="setTagFilter('all',this)">Todas</button>
         <button class="tag-filter-tab" data-filter="en-prueba" onclick="setTagFilter('en-prueba',this)">En prueba<span class="tip-box">Todavía no hay suficientes huéspedes para confirmar el resultado.</span></button>
         <button class="tag-filter-tab" data-filter="validada" onclick="setTagFilter('validada',this)">Validadas<span class="tip-box">Tienen suficientes huéspedes y el resultado es fiable.</span></button>
         <button class="tag-filter-tab" data-filter="descartada" onclick="setTagFilter('descartada',this)">Descartadas<span class="tip-box tip-end">No han funcionado y ya no se aplican a nuevos huéspedes.</span></button>
+      </div>
+      <div class="select-pill">
+        <select id="tagSortBy" onchange="renderTagPanel()" aria-label="Ordenar iniciativas">
+          <option value="punt" selected>Ordenar: Nota media</option>
+          <option value="pct">Ordenar: Conversión</option>
+          <option value="imp">Ordenar: Impacto</option>
+        </select>
+      </div>
       </div>
     </div>
     <section class="card tag-panel">
@@ -5417,9 +5426,11 @@ function delEncQuestion(i){
 }
 /* Confirmación reutilizable */
 let confirmAction = null;
-function askConfirm(text, onOk){
+function askConfirm(text, onOk, opts){
   confirmAction = onOk;
   document.getElementById("confirmText").textContent = text;
+  document.getElementById("confirmTitle").textContent = (opts && opts.title) || "¿Seguro que quieres eliminarla?";
+  document.getElementById("confirmOk").textContent = (opts && opts.okLabel) || "Eliminar";
   document.getElementById("confirmModal").hidden = false;
 }
 function closeConfirm(){
@@ -5765,11 +5776,20 @@ function getTagProfile(name){ return tagProfileMap[name] || ""; }
 function setTagProfile(name, val){ tagProfileMap[name] = val; }
 function cycleTagState(name){
   const s = TAG_STATS[name];
-  if (s && s.res < VALIDATION_THRESHOLD) { toast("Necesita al menos " + VALIDATION_THRESHOLD + " reservas para cambiar de estado"); return; }
+  if (s && s.res < VALIDATION_THRESHOLD) { toast("Necesita al menos " + VALIDATION_THRESHOLD + " huéspedes para cambiar de estado"); return; }
   const order = ["en-prueba","validada","descartada"];
   const cur = getTagState(name);
-  tagPanelState[name] = order[(order.indexOf(cur) + 1) % order.length];
-  renderTagPanel();
+  const next = order[(order.indexOf(cur) + 1) % order.length];
+  const apply = () => { tagPanelState[name] = next; renderTagPanel(); };
+  if (next === "descartada"){
+    askConfirm(
+      `"${name}" dejará de aplicarse a nuevos huéspedes. Podrás reactivarla más adelante.`,
+      () => { apply(); toast(`Iniciativa "${name}" descartada`); },
+      {title:"¿Estás seguro de que quieres descartar esta iniciativa?", okLabel:"Descartar"}
+    );
+    return;
+  }
+  apply();
 }
 function setTagFilter(mode, btn){
   tagFilterMode = mode;
@@ -5778,9 +5798,21 @@ function setTagFilter(mode, btn){
   renderTagPanel();
 }
 function renderTagPanel(){
-  const rows = RM_TAGS.filter(([name]) => {
+  let rows = RM_TAGS.filter(([name]) => {
     if (tagFilterMode === "all") return true;
     return getTagState(name) === tagFilterMode;
+  });
+  // Orden: de mejor a peor, dejando las iniciativas sin dato al final
+  const sortKey = document.getElementById("tagSortBy")?.value || "punt";
+  rows = rows.slice().sort((a, b) => {
+    const va = (TAG_STATS[a[0]] || {})[sortKey];
+    const vb = (TAG_STATS[b[0]] || {})[sortKey];
+    const na = va === null || va === undefined;
+    const nb = vb === null || vb === undefined;
+    if (na && nb) return a[0].localeCompare(b[0], "es");
+    if (na) return 1;
+    if (nb) return -1;
+    return vb - va;
   });
   let totRes = 0, totRev = 0, weighted = 0;
   RM_TAGS.forEach(([name]) => {
