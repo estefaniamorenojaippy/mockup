@@ -3435,7 +3435,7 @@ svg{display:block}
 <main class="wrap view" id="view-empleados" hidden>
   <div class="page-head">
     <div>
-      <p class="review-count">Consulta a quién mencionan tus huéspedes en las reseñas y gestiona la plantilla del hotel.</p>
+      <p class="review-count">Gestiona la plantilla del hotel y consulta a quién mencionan tus huéspedes en las reseñas.</p>
     </div>
   </div>
 
@@ -3446,7 +3446,7 @@ svg{display:block}
     </div>
     <button class="btn-ini-new" onclick="openNewEmpModal()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-      Nuevo empleado
+      Nuevo usuario
     </button>
   </div>
 
@@ -3544,7 +3544,7 @@ svg{display:block}
 <div class="modal-overlay" id="newEmpModal" hidden onclick="closeNewEmpModal()">
   <div class="modal newemp-modal" role="dialog" aria-labelledby="newEmpTitle" onclick="event.stopPropagation()">
     <div class="modal-head">
-      <h3 id="newEmpTitle">Crear nuevo empleado</h3>
+      <h3 id="newEmpTitle">Crear nuevo usuario</h3>
       <button class="m-close" onclick="closeNewEmpModal()" aria-label="Cerrar">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
@@ -3558,7 +3558,7 @@ svg{display:block}
           <option value="jgarcia">Juan García</option>
           <option value="mlopez">María López</option>
         </select>
-        <span class="newemp-hint">Asocia este empleado a un usuario del sistema para que pueda acceder</span>
+        <span class="newemp-hint">Asócialo a una cuenta del sistema para que pueda acceder</span>
       </div>
       <div class="newemp-field">
         <input type="text" id="newEmpNombre" placeholder="Nombre" class="newemp-input">
@@ -3583,7 +3583,7 @@ svg{display:block}
 
     <div class="modal-foot" style="margin-top:24px">
       <button class="m-btn" onclick="closeNewEmpModal()">CANCELAR</button>
-      <button class="m-btn newemp-create" id="newEmpCreate" onclick="createNewEmp()">CREAR EMPLEADO</button>
+      <button class="m-btn newemp-create" id="newEmpCreate" onclick="createNewEmp()">CREAR USUARIO</button>
     </div>
   </div>
 </div>
@@ -6542,7 +6542,7 @@ function createNewEmp(){
   });
   closeNewEmpModal();
   renderEmps();
-  toast(`Empleado "${a}" creado`);
+  toast(`Usuario "${a}" creado`);
 }
 
 // Evolución de iniciativas
