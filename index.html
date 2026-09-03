@@ -1050,10 +1050,13 @@ svg{display:block}
   font-size:2.8rem;position:relative;
 }
 .ini-body{padding:14px 16px 16px;flex:1;display:flex;flex-direction:column}
+/* Categoría en la esquina superior izquierda de la imagen */
 .ini-cat-badge{
+  position:absolute;top:10px;left:10px;z-index:2;
   display:inline-flex;align-items:center;gap:4px;
   font-size:.56rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
-  padding:3px 9px;border-radius:999px;margin-bottom:8px;width:fit-content;
+  padding:4px 10px;border-radius:999px;width:fit-content;
+  background:rgba(255,255,255,.94);box-shadow:0 1px 3px rgba(25,25,25,.12);
 }
 .ini-title{font-size:.88rem;font-weight:700;color:var(--midnight);line-height:1.35;margin-bottom:6px}
 .ini-desc{font-size:.74rem;color:var(--ink-soft);line-height:1.5;margin-bottom:12px;flex:1}
@@ -1083,8 +1086,17 @@ svg{display:block}
   background:#fff;transition:all .12s;cursor:pointer;padding:0;flex-shrink:0;
 }
 .ini-btn:hover{border-color:var(--ink-soft);color:var(--midnight)}
-.ini-btn.is-fav{border-color:#E25555;color:#E25555;background:#FDF2F2}
-.ini-btn.is-fav svg{fill:#E25555}
+/* Favorito: solo la silueta del corazón, que se rellena de rojo al activarlo */
+.ini-fav{
+  width:30px;height:30px;min-width:30px;padding:0;flex-shrink:0;
+  border:none;background:none;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  color:var(--ink-faint);transition:color .12s,transform .12s;
+}
+.ini-fav svg{fill:none}
+.ini-fav:hover{color:#E25555;transform:scale(1.1)}
+.ini-fav.is-fav{color:#E25555}
+.ini-fav.is-fav svg{fill:#E25555}
 .ini-validated{font-size:.56rem;color:var(--ink-faint);display:flex;align-items:center;gap:4px;margin-top:8px}
 .ini-validated svg{color:var(--good)}
 .ini-empty{text-align:center;padding:40px;color:var(--ink-faint);font-size:.85rem}
@@ -1612,6 +1624,8 @@ svg{display:block}
 /* El tile apila ilustración sobre texto y anula el layout horizontal de arriba */
 .ini-card{flex-direction:column;align-items:stretch;cursor:pointer;text-align:left;width:100%}
 .ini-card:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+/* Recomendadas: tarjetas de esquina recta */
+#iniGrid .ini-card,#iniGrid .ini-img{border-radius:0}
 .ini-art{width:100%;flex-shrink:0;aspect-ratio:3/2;background:var(--ivory)}
 .ini-art svg{width:100%;height:100%;display:block}
 .ini-b{padding:7px 9px;display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
@@ -1801,6 +1815,211 @@ svg{display:block}
   display:flex;align-items:center;justify-content:center;
 }
 .m-close:hover{background:#F0F0F0}
+
+/* ─── Competencia: set competitivo elegido por el hotel ─── */
+.comp-add{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:18px 22px;margin-bottom:16px}
+.comp-add-lbl{font-size:.82rem;font-weight:600;color:var(--midnight);margin-right:2px}
+.comp-sel{
+  flex:1;min-width:220px;height:38px;padding:0 11px;background:#fff;
+  border:1px solid var(--line-strong);border-radius:9px;
+  font-family:inherit;font-size:.82rem;color:var(--charcoal);cursor:pointer;outline:none;
+}
+.comp-sel:focus{border-color:var(--amber)}
+.comp-empty{padding:44px 30px;text-align:center}
+.comp-empty h3{font-size:1rem;font-weight:700;color:var(--midnight);margin-bottom:8px}
+.comp-empty p{font-size:.82rem;color:var(--ink-faint);line-height:1.6;max-width:520px;margin:0 auto}
+.comp-summary{
+  display:flex;flex-wrap:wrap;gap:0 34px;padding:15px 22px;margin-bottom:16px;
+  background:var(--cotton);
+}
+.comp-sum-lbl{font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A5A09A;margin-bottom:4px}
+.comp-sum-val{font-size:.9rem;font-weight:700;color:var(--midnight)}
+.comp-list{padding:0;overflow:hidden}
+.comp-head{
+  display:grid;grid-template-columns:34px minmax(180px,1fr) 92px 120px 108px 38px;
+  gap:10px;align-items:center;padding:12px 20px;background:#FDFBF7;
+  border-bottom:1px solid var(--line);
+  font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A5A09A;
+}
+.comp-head span:nth-child(n+3){text-align:center}
+.comp-row{
+  display:grid;grid-template-columns:34px minmax(180px,1fr) 92px 120px 108px 38px;
+  gap:10px;align-items:center;padding:13px 20px;border-bottom:1px solid var(--line);
+  font-size:.84rem;transition:background .12s;
+}
+.comp-row:last-child{border-bottom:none}
+.comp-row:hover{background:#FDFBF8}
+.comp-row.is-mine{background:#FFFBF0;font-weight:700}
+.comp-row.is-mine:hover{background:#FFF8E6}
+.comp-rank{font-size:.78rem;color:var(--ink-faint);font-variant-numeric:tabular-nums}
+.comp-row.is-mine .comp-rank{color:var(--midnight)}
+.comp-name{min-width:0}
+.comp-hotel{display:block;color:var(--midnight);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.comp-city{font-size:.7rem;font-weight:400;color:var(--ink-faint)}
+.comp-score{text-align:center;font-weight:700;color:var(--midnight);font-variant-numeric:tabular-nums}
+.comp-trend{display:flex;align-items:center;justify-content:center;gap:5px;font-size:.76rem;font-weight:700}
+.comp-trend.up{color:var(--good)}
+.comp-trend.down{color:var(--bad)}
+.comp-trend.flat{color:var(--ink-faint)}
+.comp-trend svg{flex-shrink:0}
+.comp-inis-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:5px;margin:0 auto;
+  font-size:.76rem;font-weight:600;color:var(--ink-soft);
+  border:1px solid var(--line);border-radius:999px;padding:4px 11px;background:#fff;
+  cursor:pointer;transition:all .12s;
+}
+.comp-inis-btn:hover{border-color:var(--line-strong);color:var(--midnight)}
+.comp-inis-btn svg{transition:transform .15s}
+.comp-inis-btn.is-open svg{transform:rotate(180deg)}
+.comp-del{
+  width:28px;height:28px;border-radius:8px;margin:0 auto;color:var(--ink-faint);
+  display:flex;align-items:center;justify-content:center;transition:all .12s;
+}
+.comp-del:hover{background:var(--bad-bg);color:var(--bad)}
+.comp-panel{padding:2px 20px 18px 64px;border-bottom:1px solid var(--line);background:#FDFBF8}
+.comp-panel-lbl{font-size:.7rem;color:var(--ink-faint);margin-bottom:9px}
+.comp-chips{display:flex;flex-wrap:wrap;gap:6px}
+.comp-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.74rem;font-weight:600;color:var(--charcoal);
+  background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 12px;
+  cursor:pointer;transition:all .12s;
+}
+.comp-chip:hover{border-color:var(--amber);color:var(--midnight)}
+
+/* ─── Ficha de iniciativa ─── */
+.idet-back{
+  display:inline-flex;align-items:center;gap:6px;margin-bottom:18px;
+  font-size:.8rem;font-weight:600;color:var(--ink-soft);
+  padding:7px 14px 7px 10px;border-radius:999px;border:1px solid var(--line);background:#fff;
+  transition:all .15s;
+}
+.idet-back:hover{color:var(--midnight);border-color:var(--line-strong)}
+/* Cabecera tipo publicación de foro: título, resumen y datos en la misma caja */
+.idet-hero{padding:24px 26px 0;margin-bottom:16px;overflow:hidden}
+.idet-hero-top{display:flex;align-items:flex-start;gap:20px;padding-bottom:20px}
+.idet-emoji{
+  width:88px;height:88px;flex-shrink:0;font-size:2.7rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.idet-hero-txt{flex:1;min-width:0}
+.idet-cat{
+  display:inline-flex;font-size:.58rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  padding:4px 11px;border-radius:999px;margin-bottom:9px;
+}
+.idet-title{font-size:1.4rem;font-weight:700;color:var(--midnight);line-height:1.25;margin-bottom:8px}
+.idet-lead{font-size:.86rem;color:var(--ink-soft);line-height:1.55;max-width:760px}
+.idet-byline{
+  display:flex;align-items:center;gap:7px;margin-top:11px;
+  font-size:.72rem;color:var(--ink-faint);
+}
+.idet-byline svg{color:var(--good);flex-shrink:0}
+/* Datos dentro de la misma caja, separados por una franja */
+.idet-facts{
+  display:flex;flex-wrap:wrap;gap:0 34px;
+  margin:0 -26px;padding:14px 26px;
+  border-top:1px solid var(--line);background:#FDFBF7;
+}
+.idet-fact{padding:4px 0}
+.idet-fact-lbl{
+  font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:#A5A09A;margin-bottom:4px;
+}
+.idet-fact-val{font-size:.84rem;font-weight:700;color:var(--midnight);display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.idet-card{padding:22px 26px;margin-bottom:16px}
+.idet-h{font-size:1rem;font-weight:700;color:var(--midnight);margin-bottom:6px}
+.idet-sub{font-size:.76rem;color:var(--ink-faint);margin-bottom:16px}
+.idet-body{font-size:.84rem;color:var(--charcoal);line-height:1.65}
+.idet-steps{list-style:none;counter-reset:s;margin-top:4px}
+.idet-step{
+  counter-increment:s;position:relative;padding:0 0 16px 42px;
+  font-size:.84rem;color:var(--charcoal);line-height:1.6;
+}
+.idet-step:last-child{padding-bottom:0}
+.idet-step::before{
+  content:counter(s);position:absolute;left:0;top:-1px;
+  width:27px;height:27px;border-radius:50%;background:var(--amber);color:var(--midnight);
+  display:flex;align-items:center;justify-content:center;font-size:.76rem;font-weight:700;
+}
+.idet-step:not(:last-child)::after{
+  content:"";position:absolute;left:13px;top:31px;bottom:5px;width:1px;background:var(--line-strong);
+}
+.idet-measure{
+  display:flex;gap:11px;background:var(--good-bg);border-radius:12px;padding:14px 16px;margin-top:20px;
+}
+.idet-measure svg{flex-shrink:0;color:var(--good);margin-top:1px}
+.idet-measure p{font-size:.79rem;color:var(--charcoal);line-height:1.55}
+.idet-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.idet-fav{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 17px;border-radius:999px;border:1px solid var(--line-strong);background:#fff;
+  font-size:.79rem;font-weight:600;color:var(--ink-soft);cursor:pointer;transition:all .15s;
+}
+.idet-fav svg{fill:none}
+.idet-fav:hover{border-color:#E25555;color:#E25555}
+.idet-fav.is-fav{border-color:#E25555;color:#E25555}
+.idet-fav.is-fav svg{fill:#E25555}
+
+/* ─── Hilo de comentarios entre hoteles de Jaippy (estilo foro) ─── */
+.idet-thread{padding:0;overflow:hidden}
+.idet-thread-head{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  padding:16px 26px;border-bottom:1px solid var(--line);background:#FDFBF7;
+}
+.idet-thread-h{font-size:.95rem;font-weight:700;color:var(--midnight);display:flex;align-items:center;gap:8px}
+.idet-thread-h svg{color:var(--ink-faint)}
+.idet-thread-n{font-weight:600;color:var(--ink-faint)}
+.idet-sort{
+  font-size:.72rem;font-weight:600;color:var(--ink-soft);background:#fff;cursor:pointer;
+  border:1px solid var(--line-strong);border-radius:999px;padding:5px 10px;font-family:inherit;outline:none;
+}
+.idet-warn{display:flex;gap:10px;background:var(--mid-bg);padding:13px 26px;border-bottom:1px solid var(--line)}
+.idet-warn svg{flex-shrink:0;color:var(--mid);margin-top:1px}
+.idet-warn p{font-size:.76rem;color:#6B4A00;line-height:1.5}
+.idet-warn b{font-weight:700}
+/* Caja de respuesta */
+.idet-composer{display:flex;gap:12px;padding:18px 26px;border-bottom:1px solid var(--line)}
+.idet-composer .idet-c-av{width:36px;height:36px;font-size:.74rem}
+.idet-composer-in{flex:1;min-width:0}
+.idet-ta{
+  width:100%;min-height:82px;resize:vertical;padding:11px 13px;
+  border:1px solid var(--line-strong);border-radius:10px;background:#fff;
+  font-family:inherit;font-size:.82rem;color:var(--charcoal);line-height:1.5;outline:none;
+}
+.idet-ta:focus{border-color:var(--amber)}
+.idet-send-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:10px}
+.idet-send-note{font-size:.7rem;color:var(--ink-faint);display:flex;align-items:center;gap:5px}
+/* Respuestas del hilo */
+.idet-comments{display:flex;flex-direction:column}
+.idet-comment{display:flex;gap:12px;padding:18px 26px;border-bottom:1px solid var(--line)}
+.idet-comment:last-child{border-bottom:none}
+.idet-comment:hover{background:#FDFBF8}
+.idet-c-mine{background:#FFFBF0}
+.idet-c-mine:hover{background:#FFF8E6}
+.idet-c-av{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.74rem;font-weight:700;color:#fff;
+}
+.idet-c-in{flex:1;min-width:0}
+.idet-c-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:5px}
+.idet-c-hotel{font-size:.82rem;font-weight:700;color:var(--midnight)}
+.idet-c-meta{font-size:.7rem;color:var(--ink-faint)}
+.idet-c-tag{
+  font-size:.58rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;
+  background:var(--amber);color:var(--midnight);padding:2px 8px;border-radius:999px;
+}
+.idet-c-txt{font-size:.82rem;color:var(--charcoal);line-height:1.6;margin-bottom:9px}
+.idet-c-foot{display:flex;align-items:center;gap:4px}
+.idet-c-act{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.7rem;font-weight:600;color:var(--ink-faint);
+  padding:4px 9px;border-radius:999px;background:none;border:none;cursor:pointer;transition:all .12s;
+}
+.idet-c-act:hover{background:var(--ivory);color:var(--midnight)}
+.idet-c-act.is-on{color:var(--good);background:var(--good-bg)}
+.idet-c-act.is-on svg{fill:currentColor}
+.idet-c-act svg{fill:none;flex-shrink:0}
 
 /* ─── Vista "Administrar empleados" ─── */
 .emp-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:18px;margin-bottom:18px}
@@ -3061,9 +3280,9 @@ svg{display:block}
 
 <!-- ═══════════ VISTA: INICIATIVAS ═══════════ -->
 <main class="wrap view" id="view-iniciativas" hidden>
-  <div class="page-head" style="margin-bottom:30px">
-    <div>
-      <p style="font-size:.82rem;color:var(--ink-faint);line-height:1.55;max-width:780px">Una iniciativa es cualquier acción que realizas para mejorar la satisfacción del huésped: bombones, mensajes en el espejo, upgrades... Empieza añadiendo las que ya haces en tu hotel.</p>
+  <div class="page-head" style="margin-bottom:30px;justify-content:center">
+    <div style="width:100%">
+      <p style="font-size:.82rem;color:var(--ink-faint);line-height:1.55;max-width:640px;margin:0 auto;text-align:center">Una iniciativa es cualquier acción que realizas para mejorar la satisfacción del huésped: bombones, mensajes en el espejo, upgrades...</p>
     </div>
   </div>
 
@@ -3071,6 +3290,7 @@ svg{display:block}
     <div class="ini-bar">
       <button class="ini-bar-btn active" data-ini-tab="mis" onclick="switchIniTab('mis',this)">Mis iniciativas</button>
       <button class="ini-bar-btn" data-ini-tab="rec" onclick="switchIniTab('rec',this)">Recomendadas</button>
+      <button class="ini-bar-btn" data-ini-tab="comp" onclick="switchIniTab('comp',this)">Competencia</button>
     </div>
     <button class="btn-ini-new" onclick="editingTagName=null;openTagModal()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -3079,6 +3299,7 @@ svg{display:block}
   </div>
 
   <div id="iniTabMis">
+    <p style="font-size:.78rem;color:var(--ink-faint);margin-bottom:16px;text-align:center">Empieza añadiendo las iniciativas que ya realizáis en tu hotel.</p>
     <div class="tag-toolbar">
       <div class="tag-filter-tabs" id="tagFilterTabs">
         <button class="tag-filter-tab active" data-filter="all" onclick="setTagFilter('all',this)">Todas</button>
@@ -3124,7 +3345,7 @@ svg{display:block}
         </div>
       </div>
     </section>
-    <p style="font-size:.78rem;color:var(--ink-faint);margin-bottom:16px">Lo que funciona en hoteles similares al tuyo por categoría, ubicación y perfil de huésped.</p>
+    <p style="font-size:.78rem;color:var(--ink-faint);margin-bottom:16px;text-align:center">Lo que funciona en hoteles similares al tuyo por categoría, ubicación y perfil de huésped.</p>
     <div class="ini-grid" id="iniGrid"></div>
     <div class="ini-chat" id="iniChat">
       <div class="ini-chat-header">
@@ -3141,6 +3362,11 @@ svg{display:block}
         </button>
       </div>
     </div>
+  </div>
+
+  <div id="iniTabComp" style="display:none">
+    <p style="font-size:.78rem;color:var(--ink-faint);margin-bottom:16px;text-align:center">Elige los hoteles con los que te comparas y descubre qué iniciativas están aplicando.</p>
+    <div id="compPanel"></div>
   </div>
 </main>
 
@@ -3523,6 +3749,15 @@ svg{display:block}
   </section>
 
 
+</main>
+
+<!-- ═══════════ VISTA: FICHA DE INICIATIVA ═══════════ -->
+<main class="wrap view" id="view-ini-detalle" hidden>
+  <button class="idet-back" onclick="closeIniDetalle()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    Volver a recomendadas
+  </button>
+  <div id="iniDetalle"></div>
 </main>
 
 <!-- ═══════════ VISTA: ADMINISTRAR EMPLEADOS ═══════════ -->
@@ -5081,6 +5316,76 @@ const INI_CATS = [
   {id:"ubicacion", label:"Ubicación", color:"#AD1457"},
   {id:"wifi", label:"WiFi", color:"#00838F"}
 ];
+/* Ficha en profundidad de cada iniciativa: en qué consiste, pasos y cómo
+   medirla. Va en un mapa aparte para no engordar INI_DATA. */
+const INI_DETAIL = {
+  1:{how:"Una llamada corta, de dos o tres minutos, el día antes de la llegada. No es una llamada comercial: sirve para confirmar la hora de entrada, detectar si vienen con niños o necesidades especiales y avisar de obras o incidencias antes de que las descubran al llegar. El huésped llega sintiendo que le esperaban.",
+     steps:["Saca cada mañana el listado de llegadas del día siguiente con teléfono y canal de reserva.","Llama entre las 11:00 y las 13:00, que es cuando más se contesta. Si no responden, manda un WhatsApp con el mismo mensaje.","Pregunta hora prevista de llegada, motivo del viaje y si necesitan cuna, cama extra o planta baja.","Anota lo que te digan en la reserva del PMS para que recepción lo tenga a la vista al hacer el check-in."],
+     measure:"Compara la nota del apartado Personal entre los huéspedes a los que llamaste y el resto. Si funciona, verás la diferencia en 3-4 semanas."},
+  2:{how:"Una nota escrita a mano que espera en la habitación, con el nombre del huésped y dos o tres recomendaciones concretas del barrio. Lo que la hace funcionar no es el papel, es que sea específica: un bar por su nombre, a qué hora ir y por qué.",
+     steps:["Prepara una plantilla con hueco para el nombre y tres recomendaciones. Papel bueno, sobre cerrado.","Haz una lista de 10 sitios cercanos que de verdad recomendarías, con horario y qué pedir.","Cada mañana escribe las notas de las llegadas del día, eligiendo recomendaciones según el perfil de cada reserva.","Déjala sobre la almohada o el escritorio antes de que entren, nunca en recepción."],
+     measure:"Cuenta cuántas reseñas mencionan la nota o alguna de las recomendaciones. Es una de las iniciativas que más se citan de forma espontánea."},
+  3:{how:"Detectar a quien ya se ha alojado antes y reconocerlo de forma visible. No hace falta un programa de puntos: basta con que recepción lo sepa, lo diga en voz alta al recibirlo y haya un detalle acorde al número de estancias.",
+     steps:["Cruza el listado de llegadas con el histórico del PMS por email o documento para marcar repetidores.","Define tres niveles: 2ª estancia, 3ª a 5ª, y más de 5. Asigna un detalle distinto a cada uno.","Añade un aviso en la ficha de la reserva para que recepción lo mencione al dar la bienvenida.","Revisa cada mes cuántos repetidores has tenido y si el detalle asignado se entregó."],
+     measure:"Mira la nota media de los repetidores frente a los que vienen por primera vez, y si crece el porcentaje de repetidores sobre el total."},
+  4:{how:"Preguntar en mitad de la estancia, no al final. Una pregunta única y sencilla enviada la mañana del segundo día permite arreglar el problema mientras el huésped sigue en el hotel, que es la única forma de evitar la reseña negativa.",
+     steps:["Manda un mensaje corto la mañana del segundo día con una sola pregunta: ¿está todo a tu gusto?","Deja una vía de respuesta sin fricción: responder al propio WhatsApp o pulsar una carita.","Fija quién revisa las respuestas y con qué margen: toda queja debe atenderse antes de 2 horas.","Cierra el círculo: cuando resuelvas algo, vuelve a escribir al huésped para contárselo."],
+     measure:"Cuenta las incidencias resueltas durante la estancia y compara la nota de quienes respondieron con la del resto."},
+  5:{how:"Cambiar la grifería por termostática con limitador de temperatura. Ataca una de las quejas más repetidas y difíciles de justificar: el agua que sale fría o quema y obliga a estar regulando durante la ducha.",
+     steps:["Repasa las reseñas del último año y localiza las habitaciones donde se menciona el agua.","Pide presupuesto de grifo termostático para esas habitaciones primero, no para todas.","Programa el cambio en temporada baja, planta por planta, para no bloquear inventario en punta.","Prueba cada grifo tras la instalación con el agua de la mañana, que es el momento crítico."],
+     measure:"Sigue las menciones al agua y a la ducha en las reseñas de esas habitaciones. Debería caer a cero."},
+  6:{how:"Añadir enchufes y puertos USB a ambos lados de la cama. Es una queja silenciosa: casi nadie la escribe en la reseña, pero condiciona la comodidad de toda la estancia, sobre todo en viajeros de trabajo.",
+     steps:["Cuenta cuántas tomas hay hoy a menos de un metro de cada lado de la cama.","Elige un modelo con dos enchufes y dos USB-C, y compra todos iguales para que el repuesto sea sencillo.","Instala primero en las habitaciones de uso business y de estancias largas.","Retira los cargadores sueltos de los cajones: ya no hacen falta y se pierden."],
+     measure:"Pregunta por la comodidad de la habitación en la encuesta de estancia y vigila la nota del apartado Habitación en el segmento business."},
+  7:{how:"Mejorar el aislamiento acústico de las habitaciones que dan al pasillo. El ruido nocturno es la queja que más puntos resta porque afecta al descanso, y suele concentrarse en unas pocas habitaciones identificables.",
+     steps:["Identifica las habitaciones con más menciones de ruido: casi siempre las contiguas al ascensor y a la máquina de hielo.","Empieza por lo barato: burlete en la puerta y cierrapuertas hidráulico. Resuelve buena parte del problema.","Si persiste, valora doble junta perimetral o cambio de puerta en esas habitaciones concretas.","Mientras se arregla, evita asignarlas a estancias de más de dos noches y a familias con niños pequeños."],
+     measure:"Cuenta las menciones a ruido por número de habitación antes y después. Es la métrica más clara de todas."},
+  8:{how:"Dejar una señal visible de que la habitación se ha limpiado y desinfectado después del último huésped. No cambia la limpieza, cambia la percepción: el huésped entra sin la duda de si alguien ha estado ahí antes.",
+     steps:["Elige una señal única y difícil de imitar: precinto en el mando, faja en el baño o tarjeta firmada por quien limpió.","Añade el paso al final del protocolo de limpieza, cuando la habitación ya está cerrada.","Forma al equipo en que la señal solo se coloca si el protocolo se completó, sin excepciones.","Haz una auditoría semanal por muestreo de habitaciones ya preparadas."],
+     measure:"Sigue la nota del apartado Limpieza y las menciones a que la habitación estaba impecable al entrar."},
+  9:{how:"Un difusor o unas sales con aroma suave en la habitación, con una nota que explique el aroma. Funciona porque el olor es lo primero que se percibe al abrir la puerta y casi ningún hotel lo trabaja de forma consciente.",
+     steps:["Elige un único aroma suave y neutro, y úsalo también en zonas comunes para que el hotel tenga una identidad olfativa.","Descarta aromas intensos y avisa en la nota, por las alergias.","Coloca el difusor lejos de la cama y de la climatización.","Ten una alternativa sin aroma lista para quien lo pida."],
+     measure:"Cuenta las menciones al olor de la habitación en las reseñas, que hoy serán prácticamente cero."},
+  10:{how:"Ofrecer un repaso rápido de la habitación a media estancia, a petición del huésped y en una franja acordada. Da sensación de control sobre el propio espacio, que es lo que buscan las estancias largas.",
+     steps:["Define qué incluye el repaso y cuánto dura: 15 minutos, papeleras, toallas, cama y baño.","Ofrécelo en el check-in de estancias de tres noches o más, con dos franjas horarias a elegir.","Reserva un hueco diario en el planning de pisos para atender estas peticiones.","Confirma por mensaje la franja elegida el día anterior."],
+     measure:"Sigue la nota de Limpieza en estancias largas y cuántos huéspedes usan el servicio cuando se les ofrece."},
+  11:{how:"Una carta de almohadas real, con tres o cuatro opciones distintas y disponibilidad garantizada. La almohada equivocada arruina el descanso y es de lo más fácil y barato de arreglar de todo el hotel.",
+     steps:["Elige cuatro tipos claramente distintos: firme, blanda, viscoelástica y antialérgica.","Calcula el stock por el 15% de las habitaciones y guárdalo en una planta accesible.","Enséñala en el check-in y déjala también en la habitación, no solo en recepción.","Anota en la ficha del huésped la que eligió para tenerla lista si vuelve."],
+     measure:"Vigila las menciones a la cama y al descanso, y el porcentaje de huéspedes que piden cambio."},
+  12:{how:"Subir de categoría gratis cuando hay disponibilidad, eligiendo bien a quién. Regalado sin criterio no cambia nada; dado a quien celebra algo o vuelve por tercera vez, se convierte en la reseña del mes.",
+     steps:["Fija la hora de corte diaria en la que sabes qué categorías superiores quedarán libres.","Prioriza repetidores, celebraciones y estancias largas, por ese orden.","Comunícalo en persona en el check-in explicando el motivo: es la mitad del valor del gesto.","Anótalo en la reserva para no repetir con el mismo huésped en dos estancias seguidas."],
+     measure:"Compara la nota media de los huéspedes que recibieron upgrade y cuántos lo mencionan en la reseña."},
+  13:{how:"Permitir salir más tarde sin coste cuando la ocupación del día lo consiente. El check-out es lo último que recuerda el huésped, y una salida con prisas contamina una estancia por lo demás buena.",
+     steps:["Revisa cada tarde las llegadas del día siguiente por tipo de habitación para saber dónde hay margen.","Ofrécelo de forma proactiva la noche anterior a quien tenga vuelo o tren de tarde.","Da una hora concreta, no un 'a ver si puede ser'.","Avisa a pisos de las salidas tardías para que reordenen el recorrido de limpieza."],
+     measure:"Sigue la nota del último día de estancia y las menciones a la salida y al check-out."},
+  14:{how:"Un par de bombones de obrador local en la habitación, con una tarjeta que diga de qué obrador son. El detalle vale poco; lo que funciona es que sea local y esté identificado, porque conecta con la ciudad.",
+     steps:["Busca un obrador de la ciudad y negocia formato individual con tu marca.","Pide una tarjeta pequeña con el nombre del obrador y su dirección.","Colócalos en la mesilla, no en el escritorio, y en la preparación de la habitación.","Controla la caducidad con una revisión semanal del stock en planta."],
+     measure:"Cuenta las menciones a los bombones o al detalle de bienvenida. Es de las iniciativas más citadas por su coste."},
+  15:{how:"Agua y un snack de cortesía en la habitación, gratis y sin letra pequeña. La botella de agua de pago junto a la de cortesía genera desconfianza; que sea claramente gratis es lo que hace que funcione.",
+     steps:["Elige el snack pensando en dietas: algo sin gluten y sin frutos secos evita problemas.","Etiqueta la cortesía de forma inequívoca y separa físicamente lo que se cobra.","Reponlo en cada preparación de habitación y también en estancias largas.","Revisa el coste por habitación ocupada al mes para tenerlo controlado."],
+     measure:"Vigila las menciones al minibar y a los extras, y que desaparezcan las quejas por cobros inesperados."},
+  16:{how:"Sustituir parte del bufé por producto local identificado con su procedencia. El desayuno es el servicio que más se menciona en las reseñas, y el producto local es lo que diferencia el tuyo de cualquier otro.",
+     steps:["Elige tres o cuatro productos de la zona: pan, queso, embutido, fruta de temporada.","Identifica cada uno con un cartel con el nombre del productor y de dónde viene.","Cuida las alternativas sin gluten y sin lactosa: es la queja más habitual del desayuno.","Rota el producto de temporada cada trimestre para que los repetidores lo noten."],
+     measure:"Sigue la nota del apartado Desayuno y las menciones al producto local o a los productores."},
+  17:{how:"Un mapa del barrio con rutas a pie marcadas y recomendaciones propias, adaptado al perfil de la reserva. Sustituye al folleto genérico que nadie coge, porque lleva el criterio del equipo del hotel.",
+     steps:["Dibuja tres rutas a pie desde la puerta: una corta, una de medio día y una gastronómica.","Marca en cada una los sitios que recomendáis de verdad, con horarios.","Imprime versiones por perfil: familias, parejas y viajeros solos priorizan cosas distintas.","Entrégalo en el check-in explicando una ruta en voz alta, no lo dejes en el mostrador."],
+     measure:"Cuenta las menciones a las recomendaciones o a la ubicación, y pregunta en recepción cuántos han seguido alguna ruta."},
+  18:{how:"Una guía clara de cómo llegar y moverse en transporte público desde la puerta del hotel. Es información que el huésped ya busca en el móvil; dársela resuelta ahorra la fricción del primer y del último día.",
+     steps:["Documenta las tres conexiones que más se preguntan: aeropuerto, estación y centro.","Incluye línea, frecuencia, precio, tiempo y dónde comprar el billete.","Añade un QR al horario oficial para que la información no se quede vieja.","Déjala en la habitación y en la web, y revisa los datos cada seis meses."],
+     measure:"Sigue las menciones a la ubicación y al transporte, y cuántas veces lo preguntan en recepción."},
+  19:{how:"Ampliar el ancho de banda y repartir mejor los puntos de acceso. El WiFi lento es la queja que más ha crecido y la que peor se tolera, porque el huésped la vive como un incumplimiento, no como una molestia.",
+     steps:["Mide la velocidad real en las habitaciones peores, normalmente las más alejadas del router y las de planta alta.","Amplía el caudal contratado y añade puntos de acceso en los pasillos con peor cobertura.","Separa la red de huéspedes de la de gestión para que el trabajo interno no consuma caudal.","Vuelve a medir habitación por habitación después del cambio."],
+     measure:"Sigue las menciones al WiFi y a la conexión, y guarda las mediciones antes y después por habitación."},
+  20:{how:"Un QR en la mesilla que conecta al WiFi sin teclear la contraseña. Elimina el momento de fricción más habitual del primer minuto en la habitación, y ahorra llamadas a recepción.",
+     steps:["Genera el QR de conexión con el estándar WiFi, no un enlace a una página.","Imprime una tarjeta pequeña y ponla en la mesilla y en el escritorio.","Prueba el QR con Android y con iPhone antes de repartirlo por las habitaciones.","Regenera las tarjetas cada vez que cambies la contraseña de la red."],
+     measure:"Cuenta las llamadas a recepción preguntando por el WiFi: deberían bajar casi a cero en la primera semana."}
+};
+const INI_DETAIL_FALLBACK = {
+  how:"Ficha en preparación. En cuanto haya suficientes hoteles aplicándola, aquí verás en qué consiste y los pasos concretos.",
+  steps:[], measure:""
+};
+const iniDetail = id => INI_DETAIL[id] || INI_DETAIL_FALLBACK;
+
 const INI_DATA = [
   {
     id:1, cat:"personal", title:"Llamada de check-in anticipada",
@@ -5268,6 +5573,362 @@ function toggleIniFav(id, ev){
   renderIniciativas();
   toast(iniFavs.has(id) ? "Añadida a favoritos" : "Eliminada de favoritos");
 }
+/* ═══════════ Competencia: set competitivo ═══════════
+   El hotel elige con quién se compara. Las notas van en la escala del Índice
+   Jaippy (la misma del informe) para que la comparación sea coherente. */
+const COMP_CATALOG = [
+  {id:1,  name:"ARTIEM Capri",                city:"Menorca",       stars:4, score:9.42, delta: 0.06, inis:[1,2,9,11,16]},
+  {id:2,  name:"ARTIEM Carlos - Adults Only", city:"Menorca",       stars:4, score:9.28, delta: 0.11, inis:[2,11,13,16]},
+  {id:3,  name:"ARTIEM Madrid",               city:"Madrid",        stars:4, score:9.05, delta:-0.04, inis:[1,6,19,20]},
+  {id:4,  name:"Buendía Corralejo Nohotel",   city:"Fuerteventura", stars:3, score:8.86, delta: 0.19, inis:[15,17,18]},
+  {id:5,  name:"Hotel Bécquer",               city:"Sevilla",       stars:4, score:9.16, delta: 0.03, inis:[2,12,14,16,17]},
+  {id:6,  name:"Hotel Casa 1800 Granada",     city:"Granada",       stars:4, score:9.38, delta:-0.07, inis:[2,9,14,17]},
+  {id:7,  name:"Hotel Casa 1800 Sevilla",     city:"Sevilla",       stars:4, score:9.31, delta: 0.02, inis:[2,14,16,17]},
+  {id:8,  name:"Hotel Gran Bilbao",           city:"Bilbao",        stars:4, score:8.74, delta:-0.12, inis:[1,6,19]},
+  {id:9,  name:"Hotel Kivir",                 city:"Sevilla",       stars:4, score:9.09, delta: 0.15, inis:[11,13,15,20]},
+  {id:10, name:"Hoteles Desconecta2",         city:"Cádiz",         stars:3, score:8.92, delta: 0.08, inis:[9,10,17]},
+  {id:11, name:"Marina Bayview Gran Canaria", city:"Gran Canaria",  stars:4, score:9.21, delta:-0.02, inis:[12,13,15,16]},
+  {id:12, name:"Vincci Sevilla Vintage",      city:"Sevilla",       stars:4, score:8.98, delta: 0.05, inis:[2,14,18]},
+  {id:13, name:"Petit Palace Puerta del Sol", city:"Madrid",        stars:3, score:8.68, delta:-0.09, inis:[6,19,20]},
+  {id:14, name:"Hotel Cristal Palace",        city:"Barcelona",     stars:4, score:9.12, delta: 0.04, inis:[1,11,12,16]}
+];
+const MY_HOTEL = {name:"Hotel Jaippy", city:"ClassOne", score:9.113, delta:-0.029, mine:true};
+const compSet = new Set();
+const compOpen = new Set();
+
+const COMP_ARROW = {
+  up:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>',
+  down:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></svg>',
+  flat:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14"/></svg>'
+};
+function compTrend(d){
+  const cls = d > 0.005 ? "up" : d < -0.005 ? "down" : "flat";
+  const txt = cls === "flat" ? "Estable"
+    : `${d > 0 ? "+" : "−"}${fmtNum(Math.abs(d), 2)}`;
+  return `<span class="comp-trend ${cls}">${COMP_ARROW[cls]}${txt}</span>`;
+}
+function compAddHotel(){
+  const sel = document.getElementById("compSelect");
+  const id = Number(sel.value);
+  if (!id){ toast("Elige un hotel de la lista"); return; }
+  compSet.add(id);
+  renderCompetencia();
+  toast(`"${COMP_CATALOG.find(h => h.id === id).name}" añadido a tu competencia`);
+}
+function compRemove(id){
+  const h = COMP_CATALOG.find(x => x.id === id);
+  askConfirm(`Dejarás de ver las iniciativas y la evolución de "${h.name}".`,
+    () => { compSet.delete(id); compOpen.delete(id); renderCompetencia(); toast(`"${h.name}" quitado de tu competencia`); },
+    {title:"¿Quitar este hotel de tu competencia?", okLabel:"Quitar"});
+}
+function compToggle(id){
+  compOpen.has(id) ? compOpen.delete(id) : compOpen.add(id);
+  renderCompetencia();
+}
+function renderCompetencia(){
+  const wrap = document.getElementById("compPanel");
+  if (!wrap) return;
+  const chosen = COMP_CATALOG.filter(h => compSet.has(h.id));
+  const free = COMP_CATALOG.filter(h => !compSet.has(h.id));
+
+  const adder = `
+    <section class="card comp-add">
+      <span class="comp-add-lbl">Añadir un hotel a tu competencia</span>
+      <select class="comp-sel" id="compSelect" ${free.length ? "" : "disabled"}>
+        <option value="">${free.length ? "Busca por nombre de establecimiento…" : "Ya has añadido todos los hoteles disponibles"}</option>
+        ${free.map(h => `<option value="${h.id}">${h.name} · ${h.city} ${h.stars}★</option>`).join("")}
+      </select>
+      <button class="btn-ini-new" onclick="compAddHotel()" ${free.length ? "" : "disabled"}>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        Añadir
+      </button>
+    </section>`;
+
+  if (chosen.length === 0){
+    wrap.innerHTML = adder + `
+      <section class="card comp-empty">
+        <h3>Todavía no has definido tu competencia</h3>
+        <p>Añade los hoteles con los que compites de verdad: los que se plantea tu huésped
+           antes de reservarte. Cuando tengas al menos uno verás su puntuación, si están
+           mejorando o empeorando, y qué iniciativas están aplicando.</p>
+      </section>`;
+    return;
+  }
+
+  // Ranking por nota, con tu hotel dentro para ver la posición real
+  const all = [...chosen, MY_HOTEL].sort((a,b) => b.score - a.score);
+  const avg = chosen.reduce((s,h) => s + h.score, 0) / chosen.length;
+  const myPos = all.findIndex(h => h.mine) + 1;
+  const mejores = chosen.filter(h => h.score > MY_HOTEL.score).length;
+  const subiendo = chosen.filter(h => h.delta > 0.005).length;
+
+  const rows = all.map((h, i) => {
+    if (h.mine) return `
+      <div class="comp-row is-mine">
+        <span class="comp-rank">${i + 1}.</span>
+        <span class="comp-name"><span class="comp-hotel">${h.name}</span><span class="comp-city">Tu hotel · ${h.city}</span></span>
+        <span class="comp-score">${fmtNum(h.score, 3)}</span>
+        ${compTrend(h.delta)}
+        <span></span><span></span>
+      </div>`;
+    const open = compOpen.has(h.id);
+    return `
+      <div class="comp-row">
+        <span class="comp-rank">${i + 1}.</span>
+        <span class="comp-name"><span class="comp-hotel">${h.name}</span><span class="comp-city">${h.city} · ${h.stars}★</span></span>
+        <span class="comp-score">${fmtNum(h.score, 2)}</span>
+        ${compTrend(h.delta)}
+        <button class="comp-inis-btn${open ? " is-open" : ""}" onclick="compToggle(${h.id})">
+          ${h.inis.length} iniciativas
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <button class="comp-del" onclick="compRemove(${h.id})" title="Quitar de mi competencia" aria-label="Quitar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+        </button>
+      </div>
+      ${open ? `
+        <div class="comp-panel">
+          <p class="comp-panel-lbl">Iniciativas que aplica. Pulsa una para ver la ficha completa.</p>
+          <div class="comp-chips">
+            ${h.inis.map(id => {
+              const ini = INI_DATA.find(x => x.id === id);
+              return ini ? `<button class="comp-chip" onclick="openIniDetalle(${id})">${ini.emoji} ${ini.title}</button>` : "";
+            }).join("")}
+          </div>
+        </div>` : ""}`;
+  }).join("");
+
+  wrap.innerHTML = adder + `
+    <section class="card comp-summary">
+      <div><p class="comp-sum-lbl">Tu posición</p><p class="comp-sum-val">${myPos}.º de ${all.length}</p></div>
+      <div><p class="comp-sum-lbl">Tu nota</p><p class="comp-sum-val">${fmtNum(MY_HOTEL.score, 3)}</p></div>
+      <div><p class="comp-sum-lbl">Media del set</p><p class="comp-sum-val">${fmtNum(avg, 2)}</p></div>
+      <div><p class="comp-sum-lbl">Por encima de ti</p><p class="comp-sum-val">${mejores} de ${chosen.length}</p></div>
+      <div><p class="comp-sum-lbl">Mejorando</p><p class="comp-sum-val">${subiendo} de ${chosen.length}</p></div>
+    </section>
+    <section class="card comp-list">
+      <div class="comp-head">
+        <span>#</span><span>Establecimiento</span><span>Nota</span><span>Tendencia</span><span>Iniciativas</span><span></span>
+      </div>
+      ${rows}
+    </section>`;
+}
+
+/* ═══════════ Ficha de iniciativa ═══════════
+   Los comentarios son visibles para todos los hoteles de Jaippy: el aviso
+   aparece antes de escribir y junto al botón de publicar. */
+const INI_COMMENT_POOL = [
+  {h:"Hotel Marina Blanca", c:"Alicante · 4★", d:"hace 3 días", u:14, t:"La aplicamos desde marzo. El truco está en no saltarse el último paso: si no lo anotas, el equipo del turno siguiente no se entera y se pierde todo el efecto."},
+  {h:"Gran Vía Suites", c:"Madrid · 4★", d:"hace 1 semana", u:9, t:"A nosotros nos funcionó mejor con los huéspedes de estancia larga que con los de una noche. Con una noche no hay tiempo material de que se note."},
+  {h:"Hotel Aitana", c:"Bilbao · 3★", d:"hace 2 semanas", u:21, t:"Cuidado con el coste si tenéis mucha ocupación. Nosotros lo limitamos a un perfil concreto y así sale a cuenta."},
+  {h:"Costa Serena Resort", c:"Málaga · 4★", d:"hace 3 semanas", u:6, t:"Llevamos dos temporadas. Subió la nota, pero lo que más nos sorprendió fue cuánto bajaron las llamadas a recepción."},
+  {h:"Hotel Puerta Vieja", c:"Sevilla · 3★", d:"hace 1 mes", u:17, t:"Nos costó arrancar porque el equipo lo veía como trabajo extra. Se resolvió metiéndolo en el checklist del turno, no como tarea aparte."},
+  {h:"Balcón del Cantábrico", c:"Santander · 4★", d:"hace 1 mes", u:4, t:"Muy recomendable en temporada baja, cuando hay margen para hacerlo bien. En agosto es imposible mantener el nivel."},
+  {h:"Hotel Sierra Alta", c:"Granada · 3★", d:"hace 2 meses", u:11, t:"Lo probamos tres meses y no vimos diferencia clara en la nota, aunque los comentarios sí eran mejores. Depende mucho del perfil de huésped."},
+  {h:"Atlántico Boutique", c:"A Coruña · 4★", d:"hace 2 meses", u:8, t:"Clave hacerlo en persona y explicando el motivo. Si se deja sin más, el huésped ni lo menciona en la reseña."}
+];
+const iniUseful = new Set();         // comentarios marcados como útiles en la sesión
+let iniCommentSort = "recientes";
+const INI_C_COLORS = ["#2743A6","#00695C","#E64A19","#8A6A3B","#4A54C4","#2E7D32","#A855C8","#B3402E"];
+const iniComments = {};              // comentarios añadidos en la sesión, por iniciativa
+let iniDetalleId = null;
+
+function iniPoolFor(id){
+  const n = 2 + (id % 2);            // 2 o 3 comentarios, estable por iniciativa
+  const out = [];
+  for (let k = 0; k < n; k++) out.push(INI_COMMENT_POOL[(id * 3 + k * 5) % INI_COMMENT_POOL.length]);
+  return out;
+}
+function iniInitials(name){
+  return name.split(" ").filter(w => /[A-Za-zÁÉÍÓÚÑ]/.test(w[0])).slice(0,2).map(w => w[0]).join("").toUpperCase();
+}
+function renderIniComments(){
+  const id = iniDetalleId;
+  const mine = (iniComments[id] || []).map((t,k) => ({h:"Hotel Jaippy", c:"ClassOne", d:"ahora", t, u:0, mine:true, k:"m"+k}));
+  const others = iniPoolFor(id).map((c,k) => ({...c, k:"p"+k}));
+  let list = [...mine, ...others];
+  if (iniCommentSort === "utiles"){
+    const score = c => c.u + (iniUseful.has(c.k) ? 1 : 0);
+    list = list.slice().sort((a,b) => score(b) - score(a));
+  }
+  document.getElementById("iniCommentList").innerHTML = list.map((c,i) => {
+    const on = iniUseful.has(c.k);
+    const n = c.u + (on ? 1 : 0);
+    return `
+    <article class="idet-comment${c.mine ? " idet-c-mine" : ""}">
+      <span class="idet-c-av" style="background:${c.mine ? "var(--saffron)" : INI_C_COLORS[i % INI_C_COLORS.length]}">${iniInitials(c.h)}</span>
+      <div class="idet-c-in">
+        <div class="idet-c-head">
+          <span class="idet-c-hotel">${c.h}</span>
+          <span class="idet-c-meta">${c.c} · ${c.d}</span>
+          ${c.mine ? `<span class="idet-c-tag">Tu hotel</span>` : ""}
+        </div>
+        <p class="idet-c-txt">${c.t}</p>
+        <div class="idet-c-foot">
+          <button class="idet-c-act${on ? " is-on" : ""}" onclick="toggleIniUseful('${c.k}')" aria-pressed="${on}">
+            <svg width="13" height="13" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 22V11l4-9a3 3 0 0 1 3 3v4h5a2 2 0 0 1 2 2.4l-1.5 7A2 2 0 0 1 17.5 22z"/><path d="M7 11H4a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h3"/></svg>
+            Útil${n ? " · " + n : ""}
+          </button>
+          <button class="idet-c-act" onclick="toast('Responder a ${c.h} (mockup)')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17l-5-5 5-5"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
+            Responder
+          </button>
+        </div>
+      </div>
+    </article>`;
+  }).join("");
+  document.getElementById("iniCommentCount").textContent = list.length;
+}
+function toggleIniUseful(k){
+  iniUseful.has(k) ? iniUseful.delete(k) : iniUseful.add(k);
+  renderIniComments();
+}
+function setIniCommentSort(v){ iniCommentSort = v; renderIniComments(); }
+function publishIniComment(){
+  const ta = document.getElementById("iniCommentText");
+  const txt = ta.value.trim();
+  if (!txt){ toast("Escribe un comentario antes de publicarlo"); return; }
+  askConfirm(
+    "Tu comentario se publicará junto al nombre de tu hotel y podrá leerlo cualquier hotel que use Jaippy.",
+    () => {
+      (iniComments[iniDetalleId] = iniComments[iniDetalleId] || []).unshift(txt);
+      ta.value = "";
+      renderIniComments();
+      toast("Comentario publicado");
+    },
+    {title:"¿Publicar este comentario?", okLabel:"Publicar"}
+  );
+}
+function openIniDetalle(id){
+  const i = INI_DATA.find(x => x.id === id);
+  if (!i) return;
+  iniDetalleId = id;
+  const d = iniDetail(id);
+  const cat = INI_CATS.find(c => c.id === i.cat);
+  const profColor = {};
+  HP_PROFILES.forEach(p => profColor[p.name] = p.bg);
+  const impTxt = i.impact === "alto" ? "Alto" : i.impact === "medio" ? "Medio" : "Bajo";
+  const diffTxt = ["", "Baja", "Media", "Alta"][i.diff] || "—";
+
+  document.getElementById("iniDetalle").innerHTML = `
+    <section class="card idet-hero">
+      <div class="idet-hero-top">
+        <div class="idet-emoji" style="background:${i.bg}">${i.emoji}</div>
+        <div class="idet-hero-txt">
+          <span class="idet-cat" style="background:${cat.color}18;color:${cat.color}">${cat.label}</span>
+          <h1 class="idet-title">${i.title}</h1>
+          <p class="idet-lead">${i.desc}</p>
+          <p class="idet-byline">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Recomendada por Jaippy · validada en ${i.validated}
+          </p>
+        </div>
+      </div>
+      <div class="idet-facts">
+        <div class="idet-fact"><p class="idet-fact-lbl">Impacto esperado</p><p class="idet-fact-val">${impTxt}</p></div>
+        <div class="idet-fact"><p class="idet-fact-lbl">Coste por unidad</p><p class="idet-fact-val">${i.coste || "—"}</p></div>
+        <div class="idet-fact"><p class="idet-fact-lbl">Dificultad</p><p class="idet-fact-val">${diffTxt}</p></div>
+        <div class="idet-fact"><p class="idet-fact-lbl">Validada en</p><p class="idet-fact-val">${i.validated}</p></div>
+        <div class="idet-fact">
+          <p class="idet-fact-lbl">Perfiles</p>
+          <p class="idet-fact-val">
+            ${i.profiles.map(p => `<span class="ini-profile-chip"><span class="ini-p-dot" style="background:${profColor[p] || "#999"}"></span>${p}</span>`).join("")}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div>
+      <section class="card idet-card">
+        <h2 class="idet-h">En qué consiste</h2>
+        <p class="idet-body">${d.how}</p>
+
+        ${d.steps.length ? `
+          <h2 class="idet-h" style="margin-top:26px">Pasos a seguir</h2>
+          <p class="idet-sub">En el orden en que lo han aplicado los hoteles donde funciona.</p>
+          <ol class="idet-steps">${d.steps.map(s => `<li class="idet-step">${s}</li>`).join("")}</ol>` : ""}
+
+        ${d.measure ? `
+          <div class="idet-measure">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <p><b>Cómo saber si funciona.</b> ${d.measure}</p>
+          </div>` : ""}
+
+        <div class="idet-actions">
+          <button class="btn-ini-new" onclick="iniDetalleToTag()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            Crear esta iniciativa
+          </button>
+          <button class="idet-fav${iniFavs.has(id) ? " is-fav" : ""}" id="iniDetalleFav" onclick="toggleIniDetalleFav()">
+            <svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/></svg>
+            ${iniFavs.has(id) ? "En favoritos" : "Añadir a favoritos"}
+          </button>
+        </div>
+      </section>
+
+      <section class="card idet-thread">
+        <div class="idet-thread-head">
+          <h2 class="idet-thread-h">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            La experiencia de otros hoteles
+            <span class="idet-thread-n">· <span id="iniCommentCount">0</span> comentarios</span>
+          </h2>
+          <select class="idet-sort" onchange="setIniCommentSort(this.value)" aria-label="Ordenar comentarios">
+            <option value="recientes">Más recientes</option>
+            <option value="utiles">Más útiles</option>
+          </select>
+        </div>
+
+        <div class="idet-warn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <p><b>Lo que escribas será público.</b> Tu comentario se publica junto al nombre de tu hotel y
+            podrá leerlo <b>cualquier hotel que use Jaippy</b>. No incluyas datos de huéspedes ni información confidencial.</p>
+        </div>
+
+        <div class="idet-composer">
+          <span class="idet-c-av" style="background:var(--saffron)">HJ</span>
+          <div class="idet-composer-in">
+            <textarea class="idet-ta" id="iniCommentText" placeholder="Cuenta cómo os ha funcionado, qué cambiaríais o qué hay que tener en cuenta…"></textarea>
+            <div class="idet-send-row">
+              <span class="idet-send-note">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+                Visible para todos los hoteles de Jaippy
+              </span>
+              <button class="btn-ini-new" onclick="publishIniComment()">Publicar comentario</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="idet-comments" id="iniCommentList"></div>
+      </section>
+    </div>`;
+
+  renderIniComments();
+  showView("ini-detalle");
+}
+function closeIniDetalle(){
+  showView("iniciativas");
+  document.querySelectorAll(".nav-tab").forEach(t => {
+    if (t.textContent.trim().startsWith("Iniciativas")) t.classList.add("active");
+  });
+  switchIniTab("rec", document.querySelector('[data-ini-tab="rec"]'));
+}
+function toggleIniDetalleFav(){
+  const id = iniDetalleId;
+  iniFavs.has(id) ? iniFavs.delete(id) : iniFavs.add(id);
+  const b = document.getElementById("iniDetalleFav");
+  const on = iniFavs.has(id);
+  b.classList.toggle("is-fav", on);
+  b.lastChild.textContent = on ? " En favoritos" : " Añadir a favoritos";
+  renderIniciativas();
+  toast(on ? "Añadida a favoritos" : "Eliminada de favoritos");
+}
+function iniDetalleToTag(){
+  const ini = INI_DATA.find(x => x.id === iniDetalleId);
+  if (!ini) return;
+  iniCreateTag(ini.id, {stopPropagation(){}});
+}
+
 function iniCreateTag(iniId, ev){
   ev.stopPropagation();
   const ini = INI_DATA.find(x => x.id === iniId);
@@ -5307,10 +5968,14 @@ function renderIniciativas(){
     const isFav = iniFavs.has(i.id);
     const diffDots = Array.from({length:3}, (_, j) => `<span class="ini-diff-dot${j < i.diff ? " filled" : ""}"></span>`).join("");
     return `
-    <article class="ini-card">
-      <div class="ini-img" style="background:${i.bg}">${i.emoji}</div>
+    <article class="ini-card" role="button" tabindex="0"
+             onclick="openIniDetalle(${i.id})"
+             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openIniDetalle(${i.id})}">
+      <div class="ini-img" style="background:${i.bg}">
+        <span class="ini-cat-badge" style="color:${catObj.color}">${catObj.label}</span>
+        ${i.emoji}
+      </div>
       <div class="ini-body">
-        <span class="ini-cat-badge" style="background:${catObj.color}15;color:${catObj.color}">${catObj.label}</span>
         <h3 class="ini-title">${i.title}</h3>
         <p class="ini-desc">${i.desc}</p>
         <div class="ini-profiles">
@@ -5328,8 +5993,8 @@ function renderIniciativas(){
             <span class="ini-diff-dots">${diffDots}</span>
           </span>
           <div class="ini-actions">
-            <button class="ini-btn${isFav ? " is-fav" : ""}" onclick="toggleIniFav(${i.id}, event)" title="${isFav ? "Quitar de favoritos" : "Añadir a favoritos"}" aria-label="Favorito">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/></svg>
+            <button class="ini-fav${isFav ? " is-fav" : ""}" onclick="toggleIniFav(${i.id}, event)" title="${isFav ? "Quitar de favoritos" : "Añadir a favoritos"}" aria-label="Favorito" aria-pressed="${isFav}">
+              <svg width="17" height="17" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7z"/></svg>
             </button>
             <button class="ini-btn" onclick="iniCreateTag(${i.id},event)" title="Crear etiqueta" aria-label="Crear etiqueta">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -5349,6 +6014,8 @@ function markBarTab(btn){
 function switchIniTab(tab, btn){
   document.getElementById("iniTabMis").style.display = tab === "mis" ? "" : "none";
   document.getElementById("iniTabRec").style.display = tab === "rec" ? "" : "none";
+  document.getElementById("iniTabComp").style.display = tab === "comp" ? "" : "none";
+  if (tab === "comp") renderCompetencia();
   markBarTab(btn);
 }
 function initIniciativas(){
@@ -5985,7 +6652,7 @@ function renderTagPanel(){
   }).join("");
   document.getElementById("tagGrid").innerHTML = `
     <div class="tag-head-row">
-      <span class="tag-hcell">Iniciativa</span>
+      <span class="tag-hcell"><span class="tip">Iniciativa<span class="tip-box tip-start">Acción que realizas para mejorar la satisfacción del huésped.</span></span></span>
       <span class="tag-hcell"><span class="tip">Fecha inicio<span class="tip-box">Día en que empezaste a aplicar la iniciativa.</span></span></span>
       <span class="tag-hcell"><span class="tip">Estado<span class="tip-box">En prueba, validada o descartada. Haz clic en el estado para cambiarlo.</span></span></span>
       <span class="tag-hcell"><span class="tip">Huéspedes<span class="tip-box">Personas que recibieron la iniciativa.</span></span></span>
