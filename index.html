@@ -5003,13 +5003,12 @@ function renderTiles(){
       const obj = habIsObjetivo(t, t.i);
       const inits = getRoomInitiatives(t, t.i);
       const initHtml = inits.length ? `<span class="tile-inits">${inits.map(ini => `<span class="tile-init${ini.done ? " done" : ""}" title="${ini.icon}">${ini.icon}</span>`).join("")}</span>` : "";
+      // El perfil no se pinta en el azulejo, solo en la tarjeta de la
+      // habitación; el dato queda en el atributo para el filtro por perfil.
       const prof = getRoomProfile(t, t.i);
-      const profHtml = prof.name
-        ? `<span class="tile-obj-icon" style="background:${prof.bg}" title="${prof.name}${obj ? " · cliente objetivo" : ""}"></span>`
-        : "";
       return `
       <div class="tile t-${t.st}${obj ? " is-obj" : ""}" data-obj-profile="${prof.name}" onclick="openRoomModal(${t.i})">
-        <div class="tile-status">${profHtml}${initHtml}</div>
+        <div class="tile-status">${initHtml}</div>
         <div class="tile-num">${t.n}</div>
         ${t.b ? `<button class="tile-badge tile-qr" onclick="event.stopPropagation();openQrModal(${t.n})" title="QR de valoración" aria-label="QR de valoración">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#2F53D7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5a2 2 0 0 1 2-2h3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M21 16v3a2 2 0 0 1-2 2h-3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><rect x="8.5" y="8.5" width="7" height="7" rx="1" fill="#2F53D7" stroke="none"/></svg>
