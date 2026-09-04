@@ -1774,20 +1774,44 @@ svg{display:block}
   font-size:.7rem;font-weight:600;cursor:pointer;background:#fff;color:var(--midnight);
   font-family:inherit;
 }
+/* Botón "Cliente objetivo": contorno negro sin relleno, icono y texto en negro */
 .sf-obj{
-  display:flex;align-items:center;gap:6px;height:35px;padding:0 13px;
-  border:1px solid var(--line-strong);border-radius:10px;background:#fff;
-  font-size:.72rem;font-weight:700;color:var(--ink-soft);white-space:nowrap;
-  transition:background .15s,border-color .15s,color .15s;
+  display:flex;align-items:center;gap:6px;height:32px;padding:0 11px;
+  border:1.5px solid var(--midnight);border-radius:9px;background:none;
+  font-size:.66rem;font-weight:700;letter-spacing:.03em;color:var(--midnight);white-space:nowrap;
+  transition:background .15s,color .15s;flex-shrink:0;
 }
-.sf-obj:hover{border-color:var(--midnight);color:var(--midnight)}
-.sf-obj.active{background:#2A2A2A;border-color:#2A2A2A;color:#fff}
-.sf-obj svg{flex-shrink:0}
+.sf-obj svg{width:13px;height:13px}
+.sf-obj svg{flex-shrink:0;color:var(--midnight)}
+.sf-obj .sf-count{font-weight:800;color:var(--midnight)}
+.sf-obj:hover{background:var(--ivory)}
+.sf-obj.active{background:var(--midnight);color:#fff}
+.sf-obj.active svg,.sf-obj.active .sf-count{color:#fff}
 .tile-qr{cursor:pointer;padding:2px 4px}
 .tile-qr:hover{box-shadow:0 1px 5px rgba(47,83,215,.4)}
 .tile-qr svg{display:block}
 
-.hab-board-head{display:flex;justify-content:flex-end;margin-bottom:16px}
+.hab-board-head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  max-width:978px;margin:0 auto 16px;
+}
+/* Menú desplegable de filtro por etiqueta, bajo el círculo de filtro */
+.tagf-wrap{position:relative}
+.tagf-menu{
+  display:none;position:absolute;top:calc(100% + 8px);left:0;width:236px;
+  background:#fff;border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 14px 38px rgba(25,25,25,.16);z-index:60;padding:6px;text-align:left;
+}
+.tagf-wrap.open .tagf-menu{display:block}
+.hab-circle.active{border-color:var(--midnight);background:var(--ivory);color:var(--midnight)}
+.tagf-menu-lbl{font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);padding:8px 10px 6px}
+.tagf-opt{
+  display:flex;align-items:center;gap:9px;width:100%;
+  padding:8px 10px;border-radius:8px;font-size:.82rem;color:var(--charcoal);text-align:left;
+}
+.tagf-opt:hover{background:var(--ivory)}
+.tagf-opt.active{background:#FFF7DF;color:var(--midnight);font-weight:700}
+.tagf-opt-ico{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
 .hab-search{
   display:flex;align-items:center;gap:8px;
   padding:0 14px;height:38px;border:1px solid var(--line-strong);border-radius:999px;
@@ -3211,9 +3235,12 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
 <main class="wrap view" id="view-habitaciones" hidden>
 
   <section class="card hab-toolbar">
-    <button class="hab-circle" onclick="toast('Marcadores (mockup)')" title="Marcadores" aria-label="Marcadores">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M10 3v7l2.5-1.8L15 10V3"/></svg>
-    </button>
+    <div class="tagf-wrap" id="tagfWrap">
+      <button class="hab-circle" id="tagFilterBtn" onclick="toggleTagFilterMenu(event)" title="Filtrar por etiqueta" aria-label="Filtrar por etiqueta" aria-haspopup="menu">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16"/><path d="M7 12h10"/><path d="M10 19h4"/></svg>
+      </button>
+      <div class="tagf-menu" id="tagfMenu" role="menu"></div>
+    </div>
     <div class="size-toggle" id="sizeToggle">
       <button data-size="m" class="active" style="font-size:.8rem">Aa</button>
       <button data-size="l" style="font-size:.95rem">AA</button>
@@ -3246,12 +3273,16 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
     </div>
     <select class="sf-obj-select" id="objFilter" onchange="filterByProfile(this.value)" aria-label="Filtrar por perfil de cliente">
       <option value="">Todos los perfiles</option>
-      <option value="all">Todos los objetivos</option>
     </select>
   </section>
 
   <section class="card hab-board">
     <div class="hab-board-head">
+      <button class="sf-obj" id="objToggleBtn" onclick="toggleObjOnly()" aria-pressed="false" title="Ver solo las habitaciones de cliente objetivo">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg>
+        CLIENTE OBJETIVO
+        <span class="sf-count" id="sfCountObj"></span>
+      </button>
       <div class="hab-search">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         <input id="roomSearch" type="text" inputmode="numeric" placeholder="Buscar habitación…" oninput="filterTiles()">
@@ -4501,6 +4532,7 @@ function selectHotel(btn, name){
 document.addEventListener("click", e => {
   if (!e.target.closest("#hotelWrap")) document.getElementById("hotelWrap").classList.remove("open");
   if (!e.target.closest("#userWrap")) document.getElementById("userWrap").classList.remove("open");
+  if (!e.target.closest("#tagfWrap")) document.getElementById("tagfWrap")?.classList.remove("open");
 });
 function setLang(btn, lang){
   document.querySelectorAll("#langToggle button").forEach(b => b.classList.remove("active"));
@@ -5275,8 +5307,9 @@ function renderTiles(){
       // El perfil no se pinta en el azulejo, solo en la tarjeta de la
       // habitación; el dato queda en el atributo para el filtro por perfil.
       const prof = getRoomProfile(t, t.i);
+      const tagIcons = inits.map(ini => ini.icon).join("");
       return `
-      <div class="tile t-${t.st}${obj ? " is-obj" : ""}" data-obj-profile="${prof.name}" onclick="openRoomModal(${t.i})">
+      <div class="tile t-${t.st}${obj ? " is-obj" : ""}" data-obj-profile="${prof.name}" data-tag-icons="${tagIcons}" onclick="openRoomModal(${t.i})">
         <div class="tile-status">${initHtml}</div>
         <div class="tile-num">${t.n}</div>
         ${t.b ? `<button class="tile-badge tile-qr" onclick="event.stopPropagation();openQrModal(${t.n})" title="QR de valoración" aria-label="QR de valoración">
@@ -5288,26 +5321,83 @@ function renderTiles(){
 }
 function updateSfCounts(){
   const counts = {pc:0,ci:0,es:0,co:0};
-  HAB_TILES.forEach(t => { if(counts[t.st] !== undefined) counts[t.st]++; });
+  let obj = 0;
+  HAB_TILES.forEach((t,i) => {
+    if(counts[t.st] !== undefined) counts[t.st]++;
+    if(habIsObjetivo(t,i)) obj++;
+  });
   ['pc','ci','es','co'].forEach(k => {
     const el = document.getElementById('sfCount' + k.charAt(0).toUpperCase() + k.slice(1));
     if(el) el.textContent = counts[k];
   });
+  const objEl = document.getElementById('sfCountObj');
+  if(objEl) objEl.textContent = obj;
 }
-function filterTiles(){ renderTiles(); }
-function filterByProfile(val){
+function filterTiles(){ renderTiles(); setRoomFilter(roomFilter); }
+
+/* Un único filtro de habitaciones a la vez: por perfil, solo cliente
+   objetivo, o por etiqueta. Activar uno desactiva y despinta los otros. */
+let roomFilter = null; // null | {type:"profile",value} | {type:"obj"} | {type:"tag",icon}
+
+function filterByProfile(val){ setRoomFilter(val ? {type:"profile", value:val} : null); }
+function toggleObjOnly(){ setRoomFilter(roomFilter && roomFilter.type === "obj" ? null : {type:"obj"}); }
+function toggleTagFilterMenu(ev){
+  if (ev) ev.stopPropagation();
+  document.getElementById("tagfWrap").classList.toggle("open");
+}
+function selectTagFilter(icon){
+  setRoomFilter(roomFilter && roomFilter.type === "tag" && roomFilter.icon === icon ? null : {type:"tag", icon});
+  document.getElementById("tagfWrap").classList.remove("open");
+}
+
+function setRoomFilter(filter){
+  roomFilter = filter;
+  document.getElementById("objFilter").value = (filter && filter.type === "profile") ? filter.value : "";
+
+  const objBtn = document.getElementById("objToggleBtn");
+  const objOn = !!(filter && filter.type === "obj");
+  objBtn.classList.toggle("active", objOn);
+  objBtn.setAttribute("aria-pressed", objOn);
+
+  const tagBtn = document.getElementById("tagFilterBtn");
+  const tagOn = !!(filter && filter.type === "tag");
+  tagBtn.classList.toggle("active", tagOn);
+  document.querySelectorAll(".tagf-opt").forEach(el =>
+    el.classList.toggle("active", tagOn && el.dataset.icon === filter.icon));
+
   const w = document.getElementById("tilesWrap");
   w.classList.remove("only-obj","filter-active");
   w.querySelectorAll(".tile").forEach(el => el.classList.remove("filter-hidden"));
-  if(val === "all"){
+  if (objOn){
     w.classList.add("only-obj");
-  } else if(val){
+  } else if (filter && filter.type === "profile"){
     w.classList.add("filter-active");
     w.querySelectorAll(".tile").forEach(el => {
-      const prof = el.getAttribute("data-obj-profile");
-      if(prof !== val) el.classList.add("filter-hidden");
+      if (el.getAttribute("data-obj-profile") !== filter.value) el.classList.add("filter-hidden");
+    });
+  } else if (tagOn){
+    w.classList.add("filter-active");
+    w.querySelectorAll(".tile").forEach(el => {
+      if (!(el.getAttribute("data-tag-icons") || "").includes(filter.icon)) el.classList.add("filter-hidden");
     });
   }
+}
+/* Etiquetas que hoy se pintan sobre los azulejos (getRoomInitiatives),
+   con el nombre de la iniciativa a la que corresponde cada icono. */
+const TAG_FILTER_OPTIONS = [
+  {icon:"🍫", label:"Bombones de bienvenida"},
+  {icon:"✉️", label:"Carta de bienvenida"},
+  {icon:"⬆️", label:"Upgrade gratuito"},
+  {icon:"📞", label:"Llamada de check-in"}
+];
+function populateTagFilterMenu(){
+  const box = document.getElementById("tagfMenu");
+  if (!box) return;
+  box.innerHTML = `<p class="tagf-menu-lbl">Filtrar por etiqueta</p>` +
+    TAG_FILTER_OPTIONS.map(o => `
+      <button class="tagf-opt" data-icon="${o.icon}" onclick="selectTagFilter('${o.icon}')" role="menuitemradio">
+        <span class="tagf-opt-ico">${o.icon}</span>${o.label}
+      </button>`).join("");
 }
 const PROFILE_EMOJIS = {"Viajeros solos / tránsito":"🧳","Parejas de tránsito":"💑","Business":"💼","Familias":"👨‍👩‍👧","Parejas city-break":"❤️"};
 function populateObjDropdown(){
@@ -7911,6 +8001,7 @@ const HP_PROFILES = [
 ];
 initIniciativas();
 populateObjDropdown();
+populateTagFilterMenu();
 renderTiles();
 renderTagPanel();
 const HP_ARROW_UP = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>`;
