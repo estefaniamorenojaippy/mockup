@@ -4,8 +4,9 @@
     {
       "name": "mockup",
       "runtimeExecutable": "py",
-      "runtimeArgs": ["-m", "http.server", "8080"],
-      "port": 8080
+      "runtimeArgs": ["-c", "import os,http.server,socketserver as s; port=int(os.environ.get('PORT','8080')); httpd=s.TCPServer(('0.0.0.0',port), http.server.SimpleHTTPRequestHandler); print('Serving on port', port); httpd.serve_forever()"],
+      "port": 8080,
+      "autoPort": true
     }
   ]
 }
