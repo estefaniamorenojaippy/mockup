@@ -44,6 +44,7 @@
   font-size:16px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 [hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{
@@ -1817,75 +1818,115 @@ svg{display:block}
 .m-close:hover{background:#F0F0F0}
 
 /* ─── Competencia: set competitivo elegido por el hotel ─── */
-.comp-add{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:18px 22px;margin-bottom:16px}
-.comp-add-lbl{font-size:.82rem;font-weight:600;color:var(--midnight);margin-right:2px}
-.comp-sel{
-  flex:1;min-width:220px;height:38px;padding:0 11px;background:#fff;
-  border:1px solid var(--line-strong);border-radius:9px;
-  font-family:inherit;font-size:.82rem;color:var(--charcoal);cursor:pointer;outline:none;
+/* Alta de hoteles: buscador real, replegado cuando el set ya está definido */
+.comp-add{padding:20px 22px;margin-bottom:16px}
+.comp-add-lbl{font-size:.88rem;font-weight:700;color:var(--midnight)}
+.comp-add-hint{font-size:.76rem;color:var(--ink-faint);margin:4px 0 13px}
+.comp-search{position:relative}
+.comp-search input{
+  width:100%;height:40px;padding:0 12px 0 36px;background:#fff;
+  border:1px solid var(--line-strong);border-radius:10px;
+  font-family:inherit;font-size:.84rem;color:var(--charcoal);outline:none;
 }
-.comp-sel:focus{border-color:var(--amber)}
+.comp-search input:focus{border-color:var(--amber)}
+.comp-search > svg{position:absolute;left:12px;top:12px;color:var(--ink-faint);pointer-events:none}
+.comp-results{max-height:236px;overflow-y:auto;margin-top:8px;display:flex;flex-direction:column}
+.comp-result{
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;text-align:left;
+  padding:9px 11px;border-radius:9px;background:none;border:none;cursor:pointer;transition:background .12s;
+}
+.comp-result:hover{background:var(--ivory)}
+.comp-result-name{font-size:.83rem;font-weight:600;color:var(--midnight)}
+.comp-result-meta{font-size:.72rem;color:var(--ink-faint);white-space:nowrap}
+.comp-noresult{padding:14px 11px;font-size:.8rem;color:var(--ink-faint)}
+.comp-list-head{padding:18px 20px 14px}
+.comp-list-n{font-size:.76rem;color:var(--olive)}
 .comp-empty{padding:44px 30px;text-align:center}
 .comp-empty h3{font-size:1rem;font-weight:700;color:var(--midnight);margin-bottom:8px}
 .comp-empty p{font-size:.82rem;color:var(--ink-faint);line-height:1.6;max-width:520px;margin:0 auto}
-.comp-summary{
-  display:flex;flex-wrap:wrap;gap:0 34px;padding:15px 22px;margin-bottom:16px;
-  background:var(--cotton);
-}
-.comp-sum-lbl{font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A5A09A;margin-bottom:4px}
-.comp-sum-val{font-size:.9rem;font-weight:700;color:var(--midnight)}
-.comp-list{padding:0;overflow:hidden}
+.comp-list{padding:0;overflow:visible}
+.comp-grid{--comp-cols:34px minmax(180px,1fr) 92px 124px 130px 38px}
+.comp-head,.comp-row{display:grid;grid-template-columns:var(--comp-cols);gap:10px;align-items:center}
 .comp-head{
-  display:grid;grid-template-columns:34px minmax(180px,1fr) 92px 120px 108px 38px;
-  gap:10px;align-items:center;padding:12px 20px;background:#FDFBF7;
-  border-bottom:1px solid var(--line);
-  font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A5A09A;
+  padding:12px 20px;background:var(--ivory);border-bottom:1px solid var(--line);
+  font-size:.63rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--olive);
 }
-.comp-head span:nth-child(n+3){text-align:center}
+.comp-head > span:nth-child(n+3){text-align:center}
 .comp-row{
-  display:grid;grid-template-columns:34px minmax(180px,1fr) 92px 120px 108px 38px;
-  gap:10px;align-items:center;padding:13px 20px;border-bottom:1px solid var(--line);
+  padding:13px 20px;border-bottom:1px solid var(--line);
   font-size:.84rem;transition:background .12s;
 }
 .comp-row:last-child{border-bottom:none}
 .comp-row:hover{background:#FDFBF8}
-.comp-row.is-mine{background:#FFFBF0;font-weight:700}
+/* Tu hotel se marca con el ámbar de la casa, no solo con un fondo */
+.comp-row.is-mine{background:#FFFBF0;font-weight:700;box-shadow:inset 3px 0 0 var(--amber)}
 .comp-row.is-mine:hover{background:#FFF8E6}
-.comp-rank{font-size:.78rem;color:var(--ink-faint);font-variant-numeric:tabular-nums}
+.comp-rank{font-size:.78rem;color:var(--olive);font-variant-numeric:tabular-nums}
 .comp-row.is-mine .comp-rank{color:var(--midnight)}
-.comp-name{min-width:0}
-.comp-hotel{display:block;color:var(--midnight);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Marca del hotel: mismo cuadrado redondeado que los iconos de iniciativa */
+.comp-name{display:flex;align-items:center;gap:10px;min-width:0}
+.comp-mark{
+  width:30px;height:30px;border-radius:9px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.66rem;font-weight:700;letter-spacing:.02em;
+}
+.comp-name-txt{min-width:0}
+.comp-hotel{
+  display:block;color:var(--midnight);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
 .comp-city{font-size:.7rem;font-weight:400;color:var(--ink-faint)}
+/* La nota con estrella es la de Google: se explica al pasar el cursor */
+span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
+.comp-google .tip-box{display:none;align-items:center;gap:7px;width:auto;white-space:nowrap}
+.comp-google:hover .tip-box{display:flex}
+.comp-google .tip-box svg{width:15px;height:15px;flex-shrink:0}
 .comp-score{text-align:center;font-weight:700;color:var(--midnight);font-variant-numeric:tabular-nums}
-.comp-trend{display:flex;align-items:center;justify-content:center;gap:5px;font-size:.76rem;font-weight:700}
+.comp-trend{display:flex;align-items:center;justify-content:center;gap:5px;font-size:.76rem;font-weight:700;font-variant-numeric:tabular-nums}
+.comp-trend-ico{flex-shrink:0}
 .comp-trend.up{color:var(--good)}
 .comp-trend.down{color:var(--bad)}
-.comp-trend.flat{color:var(--ink-faint)}
-.comp-trend svg{flex-shrink:0}
+.comp-trend.flat{color:#B5AFA7}
+/* Iniciativas: un solo botón que despliega el grupo completo debajo */
+.comp-inis{display:flex;align-items:center;justify-content:center}
 .comp-inis-btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:5px;margin:0 auto;
-  font-size:.76rem;font-weight:600;color:var(--ink-soft);
-  border:1px solid var(--line);border-radius:999px;padding:4px 11px;background:#fff;
-  cursor:pointer;transition:all .12s;
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.75rem;font-weight:600;color:var(--ink-soft);
+  border:1px solid var(--line);border-radius:999px;padding:5px 12px;background:#fff;
+  cursor:pointer;transition:all .12s;white-space:nowrap;
 }
-.comp-inis-btn:hover{border-color:var(--line-strong);color:var(--midnight)}
+.comp-inis-btn{margin:0 auto}
+.comp-inis-btn:hover{border-color:var(--amber);background:#FFFDF7;color:var(--midnight)}
 .comp-inis-btn svg{transition:transform .15s}
+.comp-inis-btn.is-open{border-color:var(--amber);background:#FFFDF7;color:var(--midnight)}
 .comp-inis-btn.is-open svg{transform:rotate(180deg)}
+.comp-chips{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.comp-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.68rem;font-weight:600;color:var(--charcoal);
+  background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 8px;
+  cursor:pointer;transition:all .12s;white-space:nowrap;
+}
+.comp-chip:hover{border-color:var(--amber);background:#FFFDF7}
+.comp-chip i{display:inline-flex;color:var(--amber);flex-shrink:0}
+/* Iniciativa que ya haces: se atenúa para que resalten las que te faltan */
+.comp-chip.is-doing{background:var(--ivory);border-color:transparent;color:var(--ink-faint)}
+.comp-chip.is-doing i{opacity:.55}
+.comp-chip.is-doing:hover{border-color:var(--line-strong);background:var(--ivory)}
+.comp-chip .chk{color:var(--good);flex-shrink:0}
 .comp-del{
-  width:28px;height:28px;border-radius:8px;margin:0 auto;color:var(--ink-faint);
+  width:28px;height:28px;border-radius:8px;margin:0 auto;color:#C4BEB6;
   display:flex;align-items:center;justify-content:center;transition:all .12s;
 }
+.comp-row:hover .comp-del{color:var(--ink-faint)}
 .comp-del:hover{background:var(--bad-bg);color:var(--bad)}
-.comp-panel{padding:2px 20px 18px 64px;border-bottom:1px solid var(--line);background:#FDFBF8}
-.comp-panel-lbl{font-size:.7rem;color:var(--ink-faint);margin-bottom:9px}
-.comp-chips{display:flex;flex-wrap:wrap;gap:6px}
-.comp-chip{
-  display:inline-flex;align-items:center;gap:6px;
-  font-size:.74rem;font-weight:600;color:var(--charcoal);
-  background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 12px;
-  cursor:pointer;transition:all .12s;
+/* Grupo completo de iniciativas, desplegado hacia abajo */
+/* Ámbar a la izquierda para atar el desplegable a su fila */
+.comp-panel{
+  padding:2px 20px 18px 64px;border-bottom:1px solid var(--line);
+  background:var(--cotton);box-shadow:inset 3px 0 0 var(--amber);
 }
-.comp-chip:hover{border-color:var(--amber);color:var(--midnight)}
+.comp-panel-lbl{font-size:.7rem;color:var(--olive);margin-bottom:9px}
 
 /* ─── Ficha de iniciativa ─── */
 .idet-back{
@@ -3280,19 +3321,13 @@ svg{display:block}
 
 <!-- ═══════════ VISTA: INICIATIVAS ═══════════ -->
 <main class="wrap view" id="view-iniciativas" hidden>
-  <div class="page-head" style="margin-bottom:30px;justify-content:center">
-    <div style="width:100%">
-      <p style="font-size:.82rem;color:var(--ink-faint);line-height:1.55;max-width:640px;margin:0 auto;text-align:center">Una iniciativa es cualquier acción que realizas para mejorar la satisfacción del huésped: bombones, mensajes en el espejo, upgrades...</p>
-    </div>
-  </div>
-
-  <div class="ini-bar-row">
+  <div class="ini-bar-row" style="margin-top:8px">
     <div class="ini-bar">
       <button class="ini-bar-btn active" data-ini-tab="mis" onclick="switchIniTab('mis',this)">Mis iniciativas</button>
       <button class="ini-bar-btn" data-ini-tab="rec" onclick="switchIniTab('rec',this)">Recomendadas</button>
       <button class="ini-bar-btn" data-ini-tab="comp" onclick="switchIniTab('comp',this)">Competencia</button>
     </div>
-    <button class="btn-ini-new" onclick="editingTagName=null;openTagModal()">
+    <button class="btn-ini-new" id="iniNewBtn" onclick="editingTagName=null;openTagModal()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
       Nueva iniciativa
     </button>
@@ -3365,7 +3400,6 @@ svg{display:block}
   </div>
 
   <div id="iniTabComp" style="display:none">
-    <p style="font-size:.78rem;color:var(--ink-faint);margin-bottom:16px;text-align:center">Elige los hoteles con los que te comparas y descubre qué iniciativas están aplicando.</p>
     <div id="compPanel"></div>
   </div>
 </main>
@@ -5577,41 +5611,120 @@ function toggleIniFav(id, ev){
    El hotel elige con quién se compara. Las notas van en la escala del Índice
    Jaippy (la misma del informe) para que la comparación sea coherente. */
 const COMP_CATALOG = [
-  {id:1,  name:"ARTIEM Capri",                city:"Menorca",       stars:4, score:9.42, delta: 0.06, inis:[1,2,9,11,16]},
-  {id:2,  name:"ARTIEM Carlos - Adults Only", city:"Menorca",       stars:4, score:9.28, delta: 0.11, inis:[2,11,13,16]},
-  {id:3,  name:"ARTIEM Madrid",               city:"Madrid",        stars:4, score:9.05, delta:-0.04, inis:[1,6,19,20]},
-  {id:4,  name:"Buendía Corralejo Nohotel",   city:"Fuerteventura", stars:3, score:8.86, delta: 0.19, inis:[15,17,18]},
-  {id:5,  name:"Hotel Bécquer",               city:"Sevilla",       stars:4, score:9.16, delta: 0.03, inis:[2,12,14,16,17]},
-  {id:6,  name:"Hotel Casa 1800 Granada",     city:"Granada",       stars:4, score:9.38, delta:-0.07, inis:[2,9,14,17]},
-  {id:7,  name:"Hotel Casa 1800 Sevilla",     city:"Sevilla",       stars:4, score:9.31, delta: 0.02, inis:[2,14,16,17]},
-  {id:8,  name:"Hotel Gran Bilbao",           city:"Bilbao",        stars:4, score:8.74, delta:-0.12, inis:[1,6,19]},
-  {id:9,  name:"Hotel Kivir",                 city:"Sevilla",       stars:4, score:9.09, delta: 0.15, inis:[11,13,15,20]},
-  {id:10, name:"Hoteles Desconecta2",         city:"Cádiz",         stars:3, score:8.92, delta: 0.08, inis:[9,10,17]},
-  {id:11, name:"Marina Bayview Gran Canaria", city:"Gran Canaria",  stars:4, score:9.21, delta:-0.02, inis:[12,13,15,16]},
-  {id:12, name:"Vincci Sevilla Vintage",      city:"Sevilla",       stars:4, score:8.98, delta: 0.05, inis:[2,14,18]},
-  {id:13, name:"Petit Palace Puerta del Sol", city:"Madrid",        stars:3, score:8.68, delta:-0.09, inis:[6,19,20]},
-  {id:14, name:"Hotel Cristal Palace",        city:"Barcelona",     stars:4, score:9.12, delta: 0.04, inis:[1,11,12,16]}
+  {id:1,  name:"ARTIEM Capri",                city:"Menorca",       stars:4.5, art:0, score:9.42, delta: 0.06, inis:[1,2,9,11,16,14,13,12,17,10]},
+  {id:2,  name:"ARTIEM Carlos - Adults Only", city:"Menorca",       stars:4.5, art:3, score:9.28, delta: 0.11, inis:[2,11,13,16,9,14,15,17,12]},
+  {id:3,  name:"ARTIEM Madrid",               city:"Madrid",        stars:4,   art:1, score:9.05, delta:-0.04, inis:[1,6,19,20,11,13,15,18]},
+  {id:4,  name:"Buendía Corralejo Nohotel",   city:"Fuerteventura", stars:3.5, art:0, score:8.86, delta: 0.19, inis:[15,17,18,9,10,11,20]},
+  {id:5,  name:"Hotel Bécquer",               city:"Sevilla",       stars:4,   art:4, score:9.16, delta: 0.03, inis:[2,12,14,16,17,1,11,13,9,18,20]},
+  {id:6,  name:"Hotel Casa 1800 Granada",     city:"Granada",       stars:4.5, art:4, score:9.38, delta:-0.07, inis:[2,9,14,17,16,11,12,13,15]},
+  {id:7,  name:"Hotel Casa 1800 Sevilla",     city:"Sevilla",       stars:4.5, art:4, score:9.31, delta: 0.02, inis:[2,14,16,17,9,11,12,15,18,20]},
+  {id:8,  name:"Hotel Gran Bilbao",           city:"Bilbao",        stars:4,   art:1, score:8.74, delta:-0.12, inis:[1,6,19,20,18,15]},
+  {id:9,  name:"Hotel Kivir",                 city:"Sevilla",       stars:4,   art:2, score:9.09, delta: 0.15, inis:[11,13,15,20,2,14,17,16,12]},
+  {id:10, name:"Hoteles Desconecta2",         city:"Cádiz",         stars:3.5, art:2, score:8.92, delta: 0.08, inis:[9,10,17,15,11,18,20]},
+  {id:11, name:"Marina Bayview Gran Canaria", city:"Gran Canaria",  stars:4,   art:2, score:9.21, delta:-0.02, inis:[12,13,15,16,1,11,14,17,10]},
+  {id:12, name:"Vincci Sevilla Vintage",      city:"Sevilla",       stars:4,   art:4, score:8.98, delta: 0.05, inis:[2,14,18,17,11,20,9]},
+  {id:13, name:"Petit Palace Puerta del Sol", city:"Madrid",        stars:3,   art:1, score:8.68, delta:-0.09, inis:[6,19,20,18,13]},
+  {id:14, name:"Hotel Cristal Palace",        city:"Barcelona",     stars:4,   art:1, score:9.12, delta: 0.04, inis:[1,11,12,16,2,14,15,17,19]}
 ];
-const MY_HOTEL = {name:"Hotel Jaippy", city:"ClassOne", score:9.113, delta:-0.029, mine:true};
+const MY_HOTEL = {name:"Hotel Jaippy", city:"ClassOne", stars:4, art:3, score:9.113, delta:-0.029, mine:true,
+                  inis:[1,3,9,11,12,14,16]};
 const compSet = new Set();
 const compOpen = new Set();
+const COMP_CHIPS_VISIBLE = 3;
 
+/* Etiqueta corta para los chips: el título completo va en el tooltip. */
+const INI_SHORT = {
+  1:"Llamada check-in", 2:"Carta bienvenida", 3:"Repetidores", 4:"Encuesta estancia",
+  5:"Grifo termostático", 6:"Enchufes USB", 7:"Insonorización", 8:"Limpieza visible",
+  9:"Aromaterapia", 10:"Limpieza exprés", 11:"Almohadas a la carta", 12:"Upgrade",
+  13:"Late check-out", 14:"Bombones", 15:"Agua y snack", 16:"Desayuno local",
+  17:"Mapa de rutas", 18:"Guía transporte", 19:"WiFi premium", 20:"QR WiFi"
+};
+const COMP_STAR = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.6 7.2.9-5.2 5 1.3 7.1L12 18.2 5.7 21.6 7 14.5l-5.2-5 7.2-.9z"/></svg>';
+const COMP_STAR_HALF = '<svg viewBox="0 0 24 24" fill="none"><defs><linearGradient id="csh"><stop offset="50%" stop-color="currentColor"/><stop offset="50%" stop-color="rgba(25,25,25,.16)"/></linearGradient></defs><path d="M12 2l3 6.6 7.2.9-5.2 5 1.3 7.1L12 18.2 5.7 21.6 7 14.5l-5.2-5 7.2-.9z" fill="url(#csh)"/></svg>';
+function compStars(n){
+  let out = "";
+  for (let k = 1; k <= 5; k++){
+    if (n >= k) out += COMP_STAR;
+    else if (n >= k - 0.5) out += COMP_STAR_HALF;
+  }
+  return `<span class="comp-stars" title="${fmtNum(n,1)} estrellas">${out}</span>`;
+}
+function compScoreBox(v, dec){
+  return `<span class="comp-score" role="cell">${fmtNum(v, dec)}</span>`;
+}
 const COMP_ARROW = {
-  up:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>',
-  down:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></svg>',
-  flat:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14"/></svg>'
+  up:'<svg class="comp-trend-ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17L10 10l4 4 7-7"/><path d="M14 3h7v7"/></svg>',
+  down:'<svg class="comp-trend-ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l7 7 4-4 7 7"/><path d="M14 21h7v-7"/></svg>',
+  flat:'<svg class="comp-trend-ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12h16"/></svg>'
 };
 function compTrend(d){
   const cls = d > 0.005 ? "up" : d < -0.005 ? "down" : "flat";
-  const txt = cls === "flat" ? "Estable"
-    : `${d > 0 ? "+" : "−"}${fmtNum(Math.abs(d), 2)}`;
-  return `<span class="comp-trend ${cls}">${COMP_ARROW[cls]}${txt}</span>`;
+  const txt = cls === "flat" ? "Estable" : `${d > 0 ? "+" : "−"}${fmtNum(Math.abs(d), 2)}`;
+  return `<span class="comp-trend ${cls}" role="cell">${COMP_ARROW[cls]}${txt}</span>`;
 }
-function compAddHotel(){
-  const sel = document.getElementById("compSelect");
-  const id = Number(sel.value);
-  if (!id){ toast("Elige un hotel de la lista"); return; }
+/* Iniciativas visibles + expansor "+N más" */
+/* Lo útil no es qué hacen, sino qué hacen que tú no: las que ya haces van
+   al final y atenuadas, para que los primeros chips sean tu hueco real. */
+const MY_INIS = new Set(MY_HOTEL.inis);
+const CHK = '<svg class="chk" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+/* Icono fijo de hotel en ámbar: todas las iniciativas comparten el mismo,
+   sin el emoji propio de cada una. */
+const COMP_HOTEL_ICO = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V8l8-5 8 5v13"/><path d="M9 21v-6h6v6"/><path d="M9 12h.01M15 12h.01M9 8h.01M15 8h.01"/></svg>';
+function compChip(id, mine){
+  const ini = INI_DATA.find(x => x.id === id);
+  if (!ini) return "";
+  const doing = !mine && MY_INIS.has(id);
+  return `<button class="comp-chip${doing ? " is-doing" : ""}" onclick="openIniDetalle(${id})"
+    title="${ini.title}${doing ? " · ya la haces" : ""}"><i>${COMP_HOTEL_ICO}</i>${INI_SHORT[id] || ini.title}${doing ? CHK : ""}</button>`;
+}
+function compSortedInis(h){
+  const ids = [...(h.inis || [])];
+  if (h.mine) return ids;
+  return ids.sort((a,b) => (MY_INIS.has(a) ? 1 : 0) - (MY_INIS.has(b) ? 1 : 0));
+}
+/* Un botón por fila; todas las iniciativas juntas en el panel de abajo. */
+function compInisCell(h){
+  const n = (h.inis || []).length;
+  const open = compOpen.has(h.id);
+  return `<span class="comp-inis" role="cell">
+    <button class="comp-inis-btn${open ? " is-open" : ""}" onclick="compToggle(${h.id})"
+            aria-expanded="${open}">
+      ${n} ${n === 1 ? "iniciativa" : "iniciativas"}
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+  </span>`;
+}
+function compInisPanel(h){
+  if (!compOpen.has(h.id)) return "";
+  const ids = compSortedInis(h);
+  if (!ids.length) return "";
+  return `
+    <div class="comp-panel">
+      <span class="comp-chips">${ids.map(id => compChip(id, h.mine)).join("")}</span>
+    </div>`;
+}
+let compQuery = "";
+function compFree(){ return COMP_CATALOG.filter(h => !compSet.has(h.id)); }
+/* Solo repinta la lista de resultados: si repintara todo, se perdería el foco. */
+function renderCompResults(){
+  const inp = document.getElementById("compQuery");
+  if (inp) compQuery = inp.value;
+  const box = document.getElementById("compResults");
+  if (!box) return;
+  const q = compQuery.trim().toLowerCase();
+  const list = compFree().filter(h => !q || h.name.toLowerCase().includes(q) || h.city.toLowerCase().includes(q));
+  box.innerHTML = list.length
+    ? list.map(h => `
+        <button class="comp-result" onclick="compAddHotel(${h.id})">
+          <span class="comp-result-name">${h.name}</span>
+          <span class="comp-result-meta">${h.city} · ${fmtNum(h.stars,1)}★ · nota ${fmtNum(h.score,2)}</span>
+        </button>`).join("")
+    : `<p class="comp-noresult">Ningún establecimiento coincide con “${compQuery.trim()}”.</p>`;
+}
+function compAddHotel(id){
   compSet.add(id);
+  compQuery = "";
   renderCompetencia();
   toast(`"${COMP_CATALOG.find(h => h.id === id).name}" añadido a tu competencia`);
 }
@@ -5629,19 +5742,19 @@ function renderCompetencia(){
   const wrap = document.getElementById("compPanel");
   if (!wrap) return;
   const chosen = COMP_CATALOG.filter(h => compSet.has(h.id));
-  const free = COMP_CATALOG.filter(h => !compSet.has(h.id));
+  const agotado = compFree().length === 0;
 
   const adder = `
     <section class="card comp-add">
-      <span class="comp-add-lbl">Añadir un hotel a tu competencia</span>
-      <select class="comp-sel" id="compSelect" ${free.length ? "" : "disabled"}>
-        <option value="">${free.length ? "Busca por nombre de establecimiento…" : "Ya has añadido todos los hoteles disponibles"}</option>
-        ${free.map(h => `<option value="${h.id}">${h.name} · ${h.city} ${h.stars}★</option>`).join("")}
-      </select>
-      <button class="btn-ini-new" onclick="compAddHotel()" ${free.length ? "" : "disabled"}>
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-        Añadir
-      </button>
+      <p class="comp-add-lbl">Añadir hoteles de tu competencia</p>
+      <p class="comp-add-hint">Elige 10 hoteles con los que te comparas y descubre qué iniciativas están aplicando.</p>
+      <label class="comp-search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="text" id="compQuery" value="${compQuery}" autocomplete="off"
+               placeholder="${agotado ? "Ya has añadido todos los establecimientos" : "Escribe el nombre del hotel o la ciudad…"}"
+               oninput="renderCompResults()" ${agotado ? "disabled" : ""}>
+      </label>
+      <div class="comp-results" id="compResults"></div>
     </section>`;
 
   if (chosen.length === 0){
@@ -5649,68 +5762,52 @@ function renderCompetencia(){
       <section class="card comp-empty">
         <h3>Todavía no has definido tu competencia</h3>
         <p>Añade los hoteles con los que compites de verdad: los que se plantea tu huésped
-           antes de reservarte. Cuando tengas al menos uno verás su puntuación, si están
-           mejorando o empeorando, y qué iniciativas están aplicando.</p>
+           antes de reservarte. Verás su puntuación, si están mejorando o empeorando, y
+           <b>qué iniciativas están aplicando</b>.</p>
       </section>`;
+    renderCompResults();
     return;
   }
 
   // Ranking por nota, con tu hotel dentro para ver la posición real
   const all = [...chosen, MY_HOTEL].sort((a,b) => b.score - a.score);
-  const avg = chosen.reduce((s,h) => s + h.score, 0) / chosen.length;
-  const myPos = all.findIndex(h => h.mine) + 1;
-  const mejores = chosen.filter(h => h.score > MY_HOTEL.score).length;
-  const subiendo = chosen.filter(h => h.delta > 0.005).length;
 
-  const rows = all.map((h, i) => {
-    if (h.mine) return `
-      <div class="comp-row is-mine">
-        <span class="comp-rank">${i + 1}.</span>
-        <span class="comp-name"><span class="comp-hotel">${h.name}</span><span class="comp-city">Tu hotel · ${h.city}</span></span>
-        <span class="comp-score">${fmtNum(h.score, 3)}</span>
-        ${compTrend(h.delta)}
-        <span></span><span></span>
-      </div>`;
-    const open = compOpen.has(h.id);
-    return `
-      <div class="comp-row">
-        <span class="comp-rank">${i + 1}.</span>
-        <span class="comp-name"><span class="comp-hotel">${h.name}</span><span class="comp-city">${h.city} · ${h.stars}★</span></span>
-        <span class="comp-score">${fmtNum(h.score, 2)}</span>
-        ${compTrend(h.delta)}
-        <button class="comp-inis-btn${open ? " is-open" : ""}" onclick="compToggle(${h.id})">
-          ${h.inis.length} iniciativas
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-        </button>
-        <button class="comp-del" onclick="compRemove(${h.id})" title="Quitar de mi competencia" aria-label="Quitar">
+  const rows = all.map((h, i) => `
+    <div class="comp-row${h.mine ? " is-mine" : ""}" role="row">
+      <span class="comp-rank" role="cell" aria-label="Puesto ${i + 1}">${i + 1}.</span>
+      <span class="comp-name" role="cell">
+        <span class="comp-mark" style="${h.mine
+          ? "background:var(--amber);color:var(--midnight)"
+          : (c => `background:${c}1a;color:${c}`)(INI_C_COLORS[i % INI_C_COLORS.length])}">${iniInitials(h.name)}</span>
+        <span class="comp-name-txt">
+          <span class="comp-hotel">${h.name}</span>
+          <span class="comp-city">${h.mine ? "Tu hotel · " + h.city : h.city} · <span class="tip comp-google">${fmtNum(h.stars, 1)}★<span class="tip-box tip-start">${SRC_GOOGLE} Valoración de Google, sobre 5.</span></span></span>
+        </span>
+      </span>
+      ${compScoreBox(h.score, 2)}
+      ${compTrend(h.delta)}
+      ${compInisCell(h)}
+      ${h.mine ? '<span role="cell"></span>' : `
+        <button class="comp-del" onclick="compRemove(${h.id})" title="Quitar de mi competencia" aria-label="Quitar ${h.name} de mi competencia">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
-        </button>
-      </div>
-      ${open ? `
-        <div class="comp-panel">
-          <p class="comp-panel-lbl">Iniciativas que aplica. Pulsa una para ver la ficha completa.</p>
-          <div class="comp-chips">
-            ${h.inis.map(id => {
-              const ini = INI_DATA.find(x => x.id === id);
-              return ini ? `<button class="comp-chip" onclick="openIniDetalle(${id})">${ini.emoji} ${ini.title}</button>` : "";
-            }).join("")}
-          </div>
-        </div>` : ""}`;
-  }).join("");
+        </button>`}
+    </div>${compInisPanel(h)}`).join("");
+
+  const huecos = chosen.reduce((s,h) => s + h.inis.filter(id => !MY_INIS.has(id)).length, 0);
 
   wrap.innerHTML = adder + `
-    <section class="card comp-summary">
-      <div><p class="comp-sum-lbl">Tu posición</p><p class="comp-sum-val">${myPos}.º de ${all.length}</p></div>
-      <div><p class="comp-sum-lbl">Tu nota</p><p class="comp-sum-val">${fmtNum(MY_HOTEL.score, 3)}</p></div>
-      <div><p class="comp-sum-lbl">Media del set</p><p class="comp-sum-val">${fmtNum(avg, 2)}</p></div>
-      <div><p class="comp-sum-lbl">Por encima de ti</p><p class="comp-sum-val">${mejores} de ${chosen.length}</p></div>
-      <div><p class="comp-sum-lbl">Mejorando</p><p class="comp-sum-val">${subiendo} de ${chosen.length}</p></div>
-    </section>
     <section class="card comp-list">
-      <div class="comp-head">
-        <span>#</span><span>Establecimiento</span><span>Nota</span><span>Tendencia</span><span>Iniciativas</span><span></span>
+      <div class="comp-grid" role="table" aria-label="Comparativa con tu competencia">
+        <div class="comp-head" role="row">
+          <span role="columnheader"><span class="sr-only">Puesto</span></span>
+          <span role="columnheader">Hotel</span>
+          <span role="columnheader">Puntuación</span>
+          <span role="columnheader">Evolución · 30 días</span>
+          <span role="columnheader">Iniciativas</span>
+          <span role="columnheader"><span class="sr-only">Acciones</span></span>
+        </div>
+        ${rows}
       </div>
-      ${rows}
     </section>`;
 }
 
@@ -6015,6 +6112,8 @@ function switchIniTab(tab, btn){
   document.getElementById("iniTabMis").style.display = tab === "mis" ? "" : "none";
   document.getElementById("iniTabRec").style.display = tab === "rec" ? "" : "none";
   document.getElementById("iniTabComp").style.display = tab === "comp" ? "" : "none";
+  // Crear iniciativas solo tiene sentido en la propia lista del hotel
+  document.getElementById("iniNewBtn").hidden = tab !== "mis";
   if (tab === "comp") renderCompetencia();
   markBarTab(btn);
 }
