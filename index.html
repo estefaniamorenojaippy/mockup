@@ -1047,8 +1047,18 @@ svg{display:block}
 }
 .ini-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(25,25,25,.08)}
 .ini-img{
-  height:120px;display:flex;align-items:center;justify-content:center;
-  font-size:2.8rem;position:relative;
+  height:132px;display:flex;align-items:center;justify-content:center;
+  font-size:2.8rem;position:relative;overflow:hidden;
+}
+/* Tratamiento común para que fotos de distinta procedencia se lean como
+   una sola familia: mismo encuadre, saturación y calidez. */
+.ini-img img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  filter:saturate(.88) contrast(1.03) brightness(1.03);
+}
+.ini-img::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,161,59,.10),rgba(25,25,25,.06));
 }
 .ini-body{padding:14px 16px 16px;flex:1;display:flex;flex-direction:column}
 /* Categoría en la esquina superior izquierda de la imagen */
@@ -1625,8 +1635,8 @@ svg{display:block}
 /* El tile apila ilustración sobre texto y anula el layout horizontal de arriba */
 .ini-card{flex-direction:column;align-items:stretch;cursor:pointer;text-align:left;width:100%}
 .ini-card:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
-/* Recomendadas: tarjetas de esquina recta */
-#iniGrid .ini-card,#iniGrid .ini-img{border-radius:0}
+/* Recomendadas: esquinas ligeramente redondeadas */
+#iniGrid .ini-card{border-radius:12px}
 .ini-art{width:100%;flex-shrink:0;aspect-ratio:3/2;background:var(--ivory)}
 .ini-art svg{width:100%;height:100%;display:block}
 .ini-b{padding:7px 9px;display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
@@ -1869,7 +1879,7 @@ svg{display:block}
 .comp-empty h3{font-size:1rem;font-weight:700;color:var(--midnight);margin-bottom:8px}
 .comp-empty p{font-size:.82rem;color:var(--ink-faint);line-height:1.6;max-width:520px;margin:0 auto}
 .comp-list{padding:0;overflow:visible}
-.comp-grid{--comp-cols:34px minmax(180px,1fr) 92px 124px 130px 38px}
+.comp-grid{--comp-cols:34px minmax(180px,1fr) 92px 124px 38px}
 .comp-head,.comp-row{display:grid;grid-template-columns:var(--comp-cols);gap:10px;align-items:center}
 .comp-head{
   padding:12px 20px;background:var(--ivory);border-bottom:1px solid var(--line);
@@ -1911,46 +1921,12 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
 .comp-trend.up{color:var(--good)}
 .comp-trend.down{color:var(--bad)}
 .comp-trend.flat{color:#B5AFA7}
-/* Iniciativas: un solo botón que despliega el grupo completo debajo */
-.comp-inis{display:flex;align-items:center;justify-content:center}
-.comp-inis-btn{
-  display:inline-flex;align-items:center;gap:5px;
-  font-size:.75rem;font-weight:600;color:var(--ink-soft);
-  border:1px solid var(--line);border-radius:999px;padding:5px 12px;background:#fff;
-  cursor:pointer;transition:all .12s;white-space:nowrap;
-}
-.comp-inis-btn{margin:0 auto}
-.comp-inis-btn:hover{border-color:var(--amber);background:#FFFDF7;color:var(--midnight)}
-.comp-inis-btn svg{transition:transform .15s}
-.comp-inis-btn.is-open{border-color:var(--amber);background:#FFFDF7;color:var(--midnight)}
-.comp-inis-btn.is-open svg{transform:rotate(180deg)}
-.comp-chips{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.comp-chip{
-  display:inline-flex;align-items:center;gap:5px;
-  font-size:.68rem;font-weight:600;color:var(--charcoal);
-  background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 8px;
-  cursor:pointer;transition:all .12s;white-space:nowrap;
-}
-.comp-chip:hover{border-color:var(--amber);background:#FFFDF7}
-.comp-chip i{display:inline-flex;color:var(--amber);flex-shrink:0}
-/* Iniciativa que ya haces: se atenúa para que resalten las que te faltan */
-.comp-chip.is-doing{background:var(--ivory);border-color:transparent;color:var(--ink-faint)}
-.comp-chip.is-doing i{opacity:.55}
-.comp-chip.is-doing:hover{border-color:var(--line-strong);background:var(--ivory)}
-.comp-chip .chk{color:var(--good);flex-shrink:0}
 .comp-del{
   width:28px;height:28px;border-radius:8px;margin:0 auto;color:#C4BEB6;
   display:flex;align-items:center;justify-content:center;transition:all .12s;
 }
 .comp-row:hover .comp-del{color:var(--ink-faint)}
 .comp-del:hover{background:var(--bad-bg);color:var(--bad)}
-/* Grupo completo de iniciativas, desplegado hacia abajo */
-/* Ámbar a la izquierda para atar el desplegable a su fila */
-.comp-panel{
-  padding:2px 20px 18px 64px;border-bottom:1px solid var(--line);
-  background:var(--cotton);box-shadow:inset 3px 0 0 var(--amber);
-}
-.comp-panel-lbl{font-size:.7rem;color:var(--olive);margin-bottom:9px}
 
 /* ─── Ficha de iniciativa ─── */
 .idet-back{
@@ -1964,9 +1940,10 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
 .idet-hero{padding:24px 26px 0;margin-bottom:16px;overflow:hidden}
 .idet-hero-top{display:flex;align-items:flex-start;gap:20px;padding-bottom:20px}
 .idet-emoji{
-  width:88px;height:88px;flex-shrink:0;font-size:2.7rem;
+  width:120px;height:96px;flex-shrink:0;font-size:2.7rem;border-radius:12px;overflow:hidden;
   display:flex;align-items:center;justify-content:center;
 }
+.idet-emoji img{width:100%;height:100%;object-fit:cover;display:block}
 .idet-hero-txt{flex:1;min-width:0}
 .idet-cat{
   display:inline-flex;font-size:.58rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
@@ -3383,7 +3360,6 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
     <div class="ini-bar">
       <button class="ini-bar-btn active" data-ini-tab="mis" onclick="switchIniTab('mis',this)">Mis iniciativas</button>
       <button class="ini-bar-btn" data-ini-tab="rec" onclick="switchIniTab('rec',this)">Recomendadas</button>
-      <button class="ini-bar-btn" data-ini-tab="comp" onclick="switchIniTab('comp',this)">Competencia</button>
     </div>
     <button class="btn-ini-new" id="iniNewBtn" onclick="editingTagName=null;openTagModal()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -3418,11 +3394,22 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
   <div id="iniTabRec" style="display:none">
     <section class="card" style="padding:16px 20px;margin-bottom:18px">
       <div class="ini-filters">
-        <div class="ini-cats" id="iniCats"></div>
         <div class="ini-right-filters">
           <div class="select-pill">
-            <select id="iniProfileFilter" onchange="renderIniciativas()" aria-label="Filtrar por perfil">
-              <option value="all">Todos los perfiles</option>
+            <select id="iniCatFilterSel" onchange="setIniCat(this.value)" aria-label="Filtrar por categoría"></select>
+          </div>
+          <div class="select-pill">
+            <select id="iniProfileFilter" onchange="renderIniciativas()" aria-label="Filtrar por perfil de huésped">
+              <option value="all">Perfil de huésped</option>
+            </select>
+          </div>
+          <div class="select-pill">
+            <select id="iniMomentFilter" onchange="renderIniciativas()" aria-label="Filtrar por momento de la estancia">
+              <option value="all">Momento de la estancia</option>
+              <option value="pre">Antes de llegar</option>
+              <option value="checkin">Check-in</option>
+              <option value="estancia">Durante la estancia</option>
+              <option value="checkout">Check-out</option>
             </select>
           </div>
           <div class="select-pill">
@@ -3457,9 +3444,7 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
     </div>
   </div>
 
-  <div id="iniTabComp" style="display:none">
-    <div id="compPanel"></div>
-  </div>
+
 </main>
 
 <!-- ═══════════ VISTA: ANALÍTICAS ═══════════ -->
@@ -3561,6 +3546,12 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
     </div>
   </section>
 
+  <!-- Competencia: hoteles con los que el usuario se compara -->
+  <section class="card" style="padding:22px 24px 26px">
+    <h3 class="geo-title">Competencia</h3>
+    <p class="geo-sub">Elige los hoteles con los que te comparas y sigue su puntuación y evolución.</p>
+    <div id="compPanel" style="margin-top:16px"></div>
+  </section>
 
 </main>
 
@@ -5465,7 +5456,8 @@ const INI_CATS = [
   {id:"confort", label:"Confort", color:"#1565C0"},
   {id:"calidad", label:"Calidad-precio", color:"#F9A825"},
   {id:"ubicacion", label:"Ubicación", color:"#AD1457"},
-  {id:"wifi", label:"WiFi", color:"#00838F"}
+  {id:"wifi", label:"WiFi", color:"#00838F"},
+  {id:"wow", label:"Wow", color:"#8E24AA"}
 ];
 /* Ficha en profundidad de cada iniciativa: en qué consiste, pasos y cómo
    medirla. Va en un mapa aparte para no engordar INI_DATA. */
@@ -5529,7 +5521,16 @@ const INI_DETAIL = {
      measure:"Sigue las menciones al WiFi y a la conexión, y guarda las mediciones antes y después por habitación."},
   20:{how:"Un QR en la mesilla que conecta al WiFi sin teclear la contraseña. Elimina el momento de fricción más habitual del primer minuto en la habitación, y ahorra llamadas a recepción.",
      steps:["Genera el QR de conexión con el estándar WiFi, no un enlace a una página.","Imprime una tarjeta pequeña y ponla en la mesilla y en el escritorio.","Prueba el QR con Android y con iPhone antes de repartirlo por las habitaciones.","Regenera las tarjetas cada vez que cambies la contraseña de la red."],
-     measure:"Cuenta las llamadas a recepción preguntando por el WiFi: deberían bajar casi a cero en la primera semana."}
+     measure:"Cuenta las llamadas a recepción preguntando por el WiFi: deberían bajar casi a cero en la primera semana."},
+  21:{how:"Una copa de cava en la terraza al llegar, servida por alguien del equipo y no dejada en la habitación. Lo que la convierte en un recuerdo no es la copa: es que alguien te acompañe cinco minutos y te cuente el hotel y el barrio.",
+      steps:["Define la franja en la que puedes atenderlo bien, normalmente de 18:00 a 20:30.","Ofrécelo en el check-in a quien llegue dentro de esa franja, no por mensaje.","Sirve en la terraza, nunca en la habitación: el escenario es la mitad del valor.","Aprovecha esos minutos para contar dos recomendaciones del barrio y anotar lo que celebran."],
+      measure:"Cuenta cuántas reseñas mencionan la copa o la terraza, y compara la nota de quienes la aceptaron con el resto."},
+  22:{how:"Regalar un circuito de spa corto a las estancias largas, sin anunciarlo al reservar. El efecto viene de la sorpresa: el mismo detalle prometido de antemano se percibe como parte de lo contratado y no genera reseña.",
+      steps:["Localiza cada mañana las estancias de tres noches o más que entran ese día.","Reserva dos huecos diarios de spa fuera de las horas punta para no restar aforo de pago.","Comunícalo en persona el segundo día, cuando ya hay confianza con el equipo.","No lo publiques en la web ni en la confirmación: si deja de ser sorpresa, deja de funcionar."],
+      measure:"Sigue la nota del apartado Instalaciones en estancias largas y cuántas reseñas mencionan el spa."},
+  23:{how:"Detectar la celebración en la reserva y preparar algo en la habitación antes de que entren. Es la iniciativa que más fotos genera en redes, porque el huésped encuentra la escena montada y quiere compartirla.",
+      steps:["Añade un campo de celebración en el motor de reserva y revisa también las peticiones especiales.","Prepara dos versiones: una de cumpleaños y otra de aniversario, con tarta o cava y decoración.","Móntalo antes del check-in, nunca mientras el huésped está en la habitación.","Escribe la felicitación a mano con el nombre: el detalle impreso no produce el mismo efecto."],
+      measure:"Cuenta las menciones a la celebración en reseñas y redes, y la tasa de repetición de esos huéspedes."}
 };
 const INI_DETAIL_FALLBACK = {
   how:"Ficha en preparación. En cuanto haya suficientes hoteles aplicándola, aquí verás en qué consiste y los pasos concretos.",
@@ -5539,7 +5540,7 @@ const iniDetail = id => INI_DETAIL[id] || INI_DETAIL_FALLBACK;
 
 const INI_DATA = [
   {
-    id:1, cat:"personal", title:"Llamada de check-in anticipada",
+    id:1, moment:"pre", cat:"personal", title:"Llamada de check-in anticipada",
     emoji:"📞", bg:"#E8EAF6",
     desc:"Llama al huésped 24h antes de la llegada para confirmar hora, preguntar preferencias y anticipar necesidades. Transforma el check-in en una experiencia personalizada.",
     impact:"alto", diff:2,
@@ -5547,7 +5548,7 @@ const INI_DATA = [
     validated:"9 hoteles ClassOne", tagName:"LLAMADA CHECK-IN", coste:"0€"
   },
   {
-    id:2, cat:"personal", title:"Carta de bienvenida personalizada",
+    id:2, moment:"checkin", cat:"personal", title:"Carta de bienvenida personalizada",
     emoji:"✉️", bg:"#EDE7F6",
     desc:"Una nota manuscrita con el nombre del huésped y recomendaciones locales. Especialmente efectiva con parejas y viajeros que buscan experiencias únicas.",
     impact:"alto", diff:1,
@@ -5555,7 +5556,7 @@ const INI_DATA = [
     validated:"9 hoteles ClassOne", tagName:"CARTA BIENVENIDA", coste:"0,15€"
   },
   {
-    id:3, cat:"personal", title:"Programa de reconocimiento de repetidores",
+    id:3, moment:"checkin", cat:"personal", title:"Programa de reconocimiento de repetidores",
     emoji:"🤝", bg:"#F3E5F5",
     desc:"Identifica huéspedes que repiten y ofréceles un detalle especial (upgrade, amenity, nota). Refuerza la sensación de ser reconocido y valorado.",
     impact:"alto", diff:2,
@@ -5563,7 +5564,7 @@ const INI_DATA = [
     validated:"14 hoteles ClassOne", tagName:"RECONOCER REPETIDORES", coste:"0€"
   },
   {
-    id:4, cat:"personal", title:"Encuesta de satisfacción durante la estancia",
+    id:4, moment:"estancia", cat:"personal", title:"Encuesta de satisfacción durante la estancia",
     emoji:"💬", bg:"#E8F5E9",
     desc:"Envía una encuesta breve por WhatsApp al segundo día de estancia. Detecta problemas a tiempo y permite corregir antes del check-out.",
     impact:"medio", diff:2,
@@ -5571,7 +5572,7 @@ const INI_DATA = [
     validated:"7 hoteles similares", tagName:"ENCUESTA ESTANCIA", coste:"0,50€"
   },
   {
-    id:5, cat:"instalaciones", title:"Renovación de baños con grifo termostático",
+    id:5, moment:"estancia", cat:"instalaciones", title:"Renovación de baños con grifo termostático",
     emoji:"🚿", bg:"#E0F7FA",
     desc:"Instala grifería termostática en duchas. Elimina la queja recurrente de presión y temperatura de agua, una de las más mencionadas en reseñas negativas.",
     impact:"alto", diff:3,
@@ -5579,7 +5580,7 @@ const INI_DATA = [
     validated:"11 hoteles similares", tagName:"GRIFO TERMOSTÁTICO", coste:"2,80€"
   },
   {
-    id:6, cat:"instalaciones", title:"Enchufes USB junto a la cama",
+    id:6, moment:"estancia", cat:"instalaciones", title:"Enchufes USB junto a la cama",
     emoji:"🔌", bg:"#ECEFF1",
     desc:"Añade puertos USB-A y USB-C integrados en las mesillas de noche. Elimina la necesidad de adaptadores y es muy valorado por business.",
     impact:"medio", diff:2,
@@ -5587,7 +5588,7 @@ const INI_DATA = [
     validated:"18 hoteles similares", tagName:"USB MESILLA", coste:"0,40€"
   },
   {
-    id:7, cat:"instalaciones", title:"Insonorización de habitaciones con pasillo",
+    id:7, moment:"estancia", cat:"instalaciones", title:"Insonorización de habitaciones con pasillo",
     emoji:"🔇", bg:"#E8EAF6",
     desc:"Mejora el aislamiento acústico de las habitaciones que dan al pasillo. El ruido nocturno es la queja más frecuente del segmento tránsito.",
     impact:"alto", diff:3,
@@ -5595,7 +5596,7 @@ const INI_DATA = [
     validated:"8 hoteles ClassOne", tagName:"INSONORIZACIÓN", coste:"1,50€"
   },
   {
-    id:8, cat:"limpieza", title:"Protocolo de limpieza visible",
+    id:8, moment:"checkin", cat:"limpieza", title:"Protocolo de limpieza visible",
     emoji:"✨", bg:"#E0F2F1",
     desc:"Coloca un sello de limpieza verificada en la puerta y un checklist visible en el baño. Aumenta la percepción de higiene sin coste operativo adicional.",
     impact:"alto", diff:1,
@@ -5603,7 +5604,7 @@ const INI_DATA = [
     validated:"22 hoteles similares", tagName:"SELLO LIMPIEZA", coste:"0,20€"
   },
   {
-    id:9, cat:"limpieza", title:"Kit de aromaterapia en la habitación",
+    id:9, moment:"estancia", cat:"limpieza", title:"Kit de aromaterapia en la habitación",
     emoji:"🌿", bg:"#E8F5E9",
     desc:"Difusor con aceites esenciales de lavanda o eucalipto. Mejora la percepción de limpieza y frescura sin intervención del personal.",
     impact:"medio", diff:1,
@@ -5611,7 +5612,7 @@ const INI_DATA = [
     validated:"8 hoteles ClassOne", tagName:"AROMATERAPIA", coste:"0,80€"
   },
   {
-    id:10, cat:"limpieza", title:"Limpieza exprés a petición",
+    id:10, moment:"estancia", cat:"limpieza", title:"Limpieza exprés a petición",
     emoji:"🧹", bg:"#F1F8E9",
     desc:"Ofrece servicio de limpieza rápida (15 min) bajo demanda vía WhatsApp o tablet en habitación. Muy valorado por estancias largas y familias.",
     impact:"medio", diff:2,
@@ -5619,7 +5620,7 @@ const INI_DATA = [
     validated:"6 hoteles ClassOne", tagName:"LIMPIEZA EXPRÉS", coste:"3,50€"
   },
   {
-    id:11, cat:"confort", title:"Almohadas a la carta",
+    id:11, moment:"checkin", cat:"confort", title:"Almohadas a la carta",
     emoji:"🛏️", bg:"#E3F2FD",
     desc:"Ofrece menú de almohadas (viscoelástica, pluma, hipoalergénica) que el huésped elige al reservar o al llegar. Reduce la queja más frecuente sobre la cama.",
     impact:"alto", diff:2,
@@ -5627,7 +5628,7 @@ const INI_DATA = [
     validated:"14 hoteles similares", tagName:"ALMOHADAS CARTA", coste:"1,20€"
   },
   {
-    id:12, cat:"confort", title:"Upgrade gratuito según disponibilidad",
+    id:12, moment:"checkin", cat:"confort", title:"Upgrade gratuito según disponibilidad",
     emoji:"⬆️", bg:"#EDE7F6",
     desc:"Ofrece upgrade a habitación superior cuando hay disponibilidad. Bajo coste real y alto impacto en la percepción de valor.",
     impact:"alto", diff:1,
@@ -5635,7 +5636,7 @@ const INI_DATA = [
     validated:"19 hoteles similares", tagName:"FREE UPGRADE", coste:"0€"
   },
   {
-    id:13, cat:"confort", title:"Late check-out flexible",
+    id:13, moment:"checkout", cat:"confort", title:"Late check-out flexible",
     emoji:"🕐", bg:"#ECEFF1",
     desc:"Ofrece late check-out gratuito cuando la ocupación lo permite. Elimina una de las quejas más frecuentes sin coste real.",
     impact:"alto", diff:1,
@@ -5643,7 +5644,7 @@ const INI_DATA = [
     validated:"16 hoteles similares", tagName:"LATE CHECKOUT", coste:"0€"
   },
   {
-    id:14, cat:"calidad", title:"Bombones artesanales en la habitación",
+    id:14, moment:"checkin", cat:"calidad", title:"Bombones artesanales en la habitación",
     emoji:"🍫", bg:"#FBE9E7",
     desc:"Coloca bombones de un obrador local en la almohada antes de la llegada. Coste bajo, impacto alto en la primera impresión y percepción de valor.",
     impact:"alto", diff:1,
@@ -5651,7 +5652,7 @@ const INI_DATA = [
     validated:"12 hoteles ClassOne", tagName:"BOMBONES HABITACIÓN", coste:"0,60€"
   },
   {
-    id:15, cat:"calidad", title:"Botella de agua y snack de cortesía",
+    id:15, moment:"checkin", cat:"calidad", title:"Botella de agua y snack de cortesía",
     emoji:"💧", bg:"#E0F7FA",
     desc:"Botella de agua y una barrita energética en la habitación. Detalle mínimo que genera menciones positivas en reseñas sobre relación calidad-precio.",
     impact:"medio", diff:1,
@@ -5659,7 +5660,7 @@ const INI_DATA = [
     validated:"18 hoteles similares", tagName:"AGUA Y SNACK", coste:"1,50€"
   },
   {
-    id:16, cat:"calidad", title:"Desayuno con productos locales",
+    id:16, moment:"estancia", cat:"calidad", title:"Desayuno con productos locales",
     emoji:"🥐", bg:"#FFF8E1",
     desc:"Incorpora pan de un obrador cercano, mermeladas artesanales y quesos de la zona. El desayuno es el aspecto más mencionado en reseñas positivas.",
     impact:"alto", diff:2,
@@ -5667,7 +5668,7 @@ const INI_DATA = [
     validated:"22 hoteles similares", tagName:"DESAYUNO LOCAL", coste:"2,50€"
   },
   {
-    id:17, cat:"ubicacion", title:"Mapa de rutas locales personalizado",
+    id:17, moment:"checkin", cat:"ubicacion", title:"Mapa de rutas locales personalizado",
     emoji:"🗺️", bg:"#FCE4EC",
     desc:"Crea un mapa impreso con rutas a pie, restaurantes recomendados y secretos del barrio. Compensa la percepción de lejanía al centro.",
     impact:"medio", diff:1,
@@ -5675,7 +5676,7 @@ const INI_DATA = [
     validated:"13 hoteles similares", tagName:"MAPA LOCAL", coste:"0,35€"
   },
   {
-    id:18, cat:"ubicacion", title:"Guía de transporte público desde el hotel",
+    id:18, moment:"checkin", cat:"ubicacion", title:"Guía de transporte público desde el hotel",
     emoji:"🚇", bg:"#E8EAF6",
     desc:"Tarjeta plastificada con las rutas de transporte más útiles desde el hotel. Reduce la queja de ubicación al mostrar la buena conectividad.",
     impact:"medio", diff:1,
@@ -5683,7 +5684,7 @@ const INI_DATA = [
     validated:"10 hoteles similares", tagName:"GUÍA TRANSPORTE", coste:"0,30€"
   },
   {
-    id:19, cat:"wifi", title:"Upgrade de ancho de banda WiFi",
+    id:19, moment:"estancia", cat:"wifi", title:"Upgrade de ancho de banda WiFi",
     emoji:"📶", bg:"#E0F7FA",
     desc:"Aumenta el ancho de banda a 300 Mbps simétricos y añade repetidores en cada planta. El WiFi lento es la queja nº 1 del segmento Business.",
     impact:"alto", diff:3,
@@ -5691,21 +5692,79 @@ const INI_DATA = [
     validated:"15 hoteles similares", tagName:"UPGRADE WIFI", coste:"150€"
   },
   {
-    id:20, cat:"wifi", title:"QR de conexión directa en la mesilla",
+    id:20, moment:"checkin", cat:"wifi", title:"QR de conexión directa en la mesilla",
     emoji:"📱", bg:"#E3F2FD",
     desc:"Código QR en la mesilla que conecta automáticamente al WiFi sin contraseña. Elimina la fricción del login y mejora la percepción de tecnología.",
     impact:"medio", diff:1,
     profiles:["Business","Viajeros solos / tránsito","Parejas city-break","Familias"],
     validated:"11 hoteles ClassOne", tagName:"QR WIFI", coste:"0,10€"
+  },
+  {
+    id:21, moment:"checkin", cat:"wow", title:"Copa de bienvenida en la terraza",
+    emoji:"🥂", bg:"#FFF3E0",
+    desc:"Invita a una copa de cava en la terraza al llegar, con la puesta de sol como escenario. Convierte el check-in en el primer recuerdo de la estancia.",
+    impact:"alto", diff:2,
+    profiles:["Parejas city-break","Parejas de tránsito"],
+    validated:"7 hoteles ClassOne", tagName:"COPA BIENVENIDA", coste:"1,80€"
+  },
+  {
+    id:22, moment:"estancia", cat:"wow", title:"Experiencia wellness sorpresa",
+    emoji:"💆", bg:"#E8F5E9",
+    desc:"Regala 30 minutos de circuito de spa a las estancias de tres noches o más, sin anunciarlo al reservar. La sorpresa multiplica el efecto del detalle.",
+    impact:"alto", diff:2,
+    profiles:["Parejas city-break","Business"],
+    validated:"5 hoteles ClassOne", tagName:"WELLNESS SORPRESA", coste:"6,00€"
+  },
+  {
+    id:23, moment:"estancia", cat:"wow", title:"Detalle de celebración personalizado",
+    emoji:"🎂", bg:"#FCE4EC",
+    desc:"Detecta cumpleaños y aniversarios en la reserva y prepara una tarta o una decoración en la habitación. Es la iniciativa que genera más fotos en redes.",
+    impact:"alto", diff:2,
+    profiles:["Parejas city-break","Familias"],
+    validated:"9 hoteles ClassOne", tagName:"CELEBRACIÓN", coste:"4,50€"
   }
 ];
+/* Fotografía real de cada iniciativa (Unsplash, licencia libre). Se sirve
+   recortada desde su CDN para no cargar el archivo con imágenes embebidas. */
+const INI_PHOTO = {
+  1:"photo-1581309558346-f325181f9df6",  // teléfono de recepción
+  2:"photo-1473186505569-9c61870c11f9",  // nota escrita a mano
+  3:"photo-1558959357-685f9c7ace7b",     // recepción dando la bienvenida
+  4:"photo-1593733925160-6f78dc0be8b6",  // mensaje en el móvil
+  5:"photo-1652662700928-5a4685e87d64",  // ducha
+  6:"photo-1583863788434-e58a36330cf0",  // cable de carga USB
+  7:"photo-1660662735785-6e7c067d6cd0",  // pasillo de habitaciones
+  8:"photo-1580256081112-e49377338b7f",  // carro de limpieza
+  9:"photo-1608571702346-bf078a741b19",  // difusor de aromaterapia
+  10:"photo-1621891336682-341097be99cd", // haciendo la cama
+  11:"photo-1600414428640-f78a67c2aa3b", // almohadas apiladas
+  12:"photo-1567627007677-b6502f1fcfd5", // suite con vistas
+  13:"photo-1754606581512-222f5ea9d8c9", // despertador en la mesilla
+  14:"photo-1599599810769-bcde5a160d32", // bombones
+  15:"photo-1616118132534-381148898bb4", // agua y snack
+  16:"photo-1596252890311-caa6a004a6ee", // desayuno
+  17:"photo-1568317711805-97917847953d", // mapa de la ciudad
+  18:"photo-1508619209906-bfca41e2286e", // metro
+  19:"photo-1589362281138-e3f7ebe47f1a", // router WiFi
+  20:"photo-1595079676339-1534801ad6cf", // escaneo de código QR
+  21:"photo-1476011709915-3f74d289b99b", // copa en la terraza
+  22:"photo-1600334089648-b0d9d3028eb2", // spa
+  23:"photo-1761249256884-8f7c258cd1fb"  // celebración
+};
+const iniPhoto = (id, w = 560, h = 360) =>
+  INI_PHOTO[id] ? `https://images.unsplash.com/${INI_PHOTO[id]}?auto=format&fit=crop&w=${w}&h=${h}&q=70` : "";
+
 let iniFavs = new Set();
 let iniCatFilter = "all";
 let iniFavFilter = false;
 
+/* Las categorías van en un desplegable: son 9 y como píldoras ocupaban
+   dos líneas enteras de la barra de filtros. */
 function renderIniCats(){
-  document.getElementById("iniCats").innerHTML = INI_CATS.map(c =>
-    `<button class="ini-cat${c.id === iniCatFilter ? " active" : ""}" data-cat="${c.id}" onclick="setIniCat('${c.id}')">${c.label}</button>`
+  const sel = document.getElementById("iniCatFilterSel");
+  if (!sel) return;
+  sel.innerHTML = INI_CATS.map(c =>
+    `<option value="${c.id}"${c.id === iniCatFilter ? " selected" : ""}>${c.id === "all" ? "Todas las categorías" : c.label}</option>`
   ).join("");
 }
 function setIniCat(id){
@@ -5746,17 +5805,6 @@ const COMP_CATALOG = [
 const MY_HOTEL = {name:"Hotel Jaippy", city:"ClassOne", stars:4, art:3, score:9.113, delta:-0.029, mine:true,
                   inis:[1,3,9,11,12,14,16]};
 const compSet = new Set();
-const compOpen = new Set();
-const COMP_CHIPS_VISIBLE = 3;
-
-/* Etiqueta corta para los chips: el título completo va en el tooltip. */
-const INI_SHORT = {
-  1:"Llamada check-in", 2:"Carta bienvenida", 3:"Repetidores", 4:"Encuesta estancia",
-  5:"Grifo termostático", 6:"Enchufes USB", 7:"Insonorización", 8:"Limpieza visible",
-  9:"Aromaterapia", 10:"Limpieza exprés", 11:"Almohadas a la carta", 12:"Upgrade",
-  13:"Late check-out", 14:"Bombones", 15:"Agua y snack", 16:"Desayuno local",
-  17:"Mapa de rutas", 18:"Guía transporte", 19:"WiFi premium", 20:"QR WiFi"
-};
 const COMP_STAR = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6.6 7.2.9-5.2 5 1.3 7.1L12 18.2 5.7 21.6 7 14.5l-5.2-5 7.2-.9z"/></svg>';
 const COMP_STAR_HALF = '<svg viewBox="0 0 24 24" fill="none"><defs><linearGradient id="csh"><stop offset="50%" stop-color="currentColor"/><stop offset="50%" stop-color="rgba(25,25,25,.16)"/></linearGradient></defs><path d="M12 2l3 6.6 7.2.9-5.2 5 1.3 7.1L12 18.2 5.7 21.6 7 14.5l-5.2-5 7.2-.9z" fill="url(#csh)"/></svg>';
 function compStars(n){
@@ -5779,47 +5827,6 @@ function compTrend(d){
   const cls = d > 0.005 ? "up" : d < -0.005 ? "down" : "flat";
   const txt = cls === "flat" ? "Estable" : `${d > 0 ? "+" : "−"}${fmtNum(Math.abs(d), 2)}`;
   return `<span class="comp-trend ${cls}" role="cell">${COMP_ARROW[cls]}${txt}</span>`;
-}
-/* Iniciativas visibles + expansor "+N más" */
-/* Lo útil no es qué hacen, sino qué hacen que tú no: las que ya haces van
-   al final y atenuadas, para que los primeros chips sean tu hueco real. */
-const MY_INIS = new Set(MY_HOTEL.inis);
-const CHK = '<svg class="chk" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
-/* Icono fijo de hotel en ámbar: todas las iniciativas comparten el mismo,
-   sin el emoji propio de cada una. */
-const COMP_HOTEL_ICO = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V8l8-5 8 5v13"/><path d="M9 21v-6h6v6"/><path d="M9 12h.01M15 12h.01M9 8h.01M15 8h.01"/></svg>';
-function compChip(id, mine){
-  const ini = INI_DATA.find(x => x.id === id);
-  if (!ini) return "";
-  const doing = !mine && MY_INIS.has(id);
-  return `<button class="comp-chip${doing ? " is-doing" : ""}" onclick="openIniDetalle(${id})"
-    title="${ini.title}${doing ? " · ya la haces" : ""}"><i>${COMP_HOTEL_ICO}</i>${INI_SHORT[id] || ini.title}${doing ? CHK : ""}</button>`;
-}
-function compSortedInis(h){
-  const ids = [...(h.inis || [])];
-  if (h.mine) return ids;
-  return ids.sort((a,b) => (MY_INIS.has(a) ? 1 : 0) - (MY_INIS.has(b) ? 1 : 0));
-}
-/* Un botón por fila; todas las iniciativas juntas en el panel de abajo. */
-function compInisCell(h){
-  const n = (h.inis || []).length;
-  const open = compOpen.has(h.id);
-  return `<span class="comp-inis" role="cell">
-    <button class="comp-inis-btn${open ? " is-open" : ""}" onclick="compToggle(${h.id})"
-            aria-expanded="${open}">
-      ${n} ${n === 1 ? "iniciativa" : "iniciativas"}
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-    </button>
-  </span>`;
-}
-function compInisPanel(h){
-  if (!compOpen.has(h.id)) return "";
-  const ids = compSortedInis(h);
-  if (!ids.length) return "";
-  return `
-    <div class="comp-panel">
-      <span class="comp-chips">${ids.map(id => compChip(id, h.mine)).join("")}</span>
-    </div>`;
 }
 let compQuery = "";
 function compFree(){ return COMP_CATALOG.filter(h => !compSet.has(h.id)); }
@@ -5847,13 +5854,9 @@ function compAddHotel(id){
 }
 function compRemove(id){
   const h = COMP_CATALOG.find(x => x.id === id);
-  askConfirm(`Dejarás de ver las iniciativas y la evolución de "${h.name}".`,
-    () => { compSet.delete(id); compOpen.delete(id); renderCompetencia(); toast(`"${h.name}" quitado de tu competencia`); },
+  askConfirm(`Dejarás de ver la puntuación y la evolución de "${h.name}".`,
+    () => { compSet.delete(id); renderCompetencia(); toast(`"${h.name}" quitado de tu competencia`); },
     {title:"¿Quitar este hotel de tu competencia?", okLabel:"Quitar"});
-}
-function compToggle(id){
-  compOpen.has(id) ? compOpen.delete(id) : compOpen.add(id);
-  renderCompetencia();
 }
 function renderCompetencia(){
   const wrap = document.getElementById("compPanel");
@@ -5864,7 +5867,7 @@ function renderCompetencia(){
   const adder = `
     <section class="card comp-add">
       <p class="comp-add-lbl">Añadir hoteles de tu competencia</p>
-      <p class="comp-add-hint">Elige 10 hoteles con los que te comparas y descubre qué iniciativas están aplicando.</p>
+      <p class="comp-add-hint">Elige 10 hoteles con los que te comparas y sigue su puntuación y evolución.</p>
       <label class="comp-search">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input type="text" id="compQuery" value="${compQuery}" autocomplete="off"
@@ -5879,8 +5882,7 @@ function renderCompetencia(){
       <section class="card comp-empty">
         <h3>Todavía no has definido tu competencia</h3>
         <p>Añade los hoteles con los que compites de verdad: los que se plantea tu huésped
-           antes de reservarte. Verás su puntuación, si están mejorando o empeorando, y
-           <b>qué iniciativas están aplicando</b>.</p>
+           antes de reservarte. Verás su puntuación y <b>si están mejorando o empeorando</b>.</p>
       </section>`;
     renderCompResults();
     return;
@@ -5903,14 +5905,11 @@ function renderCompetencia(){
       </span>
       ${compScoreBox(h.score, 2)}
       ${compTrend(h.delta)}
-      ${compInisCell(h)}
       ${h.mine ? '<span role="cell"></span>' : `
         <button class="comp-del" onclick="compRemove(${h.id})" title="Quitar de mi competencia" aria-label="Quitar ${h.name} de mi competencia">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
         </button>`}
-    </div>${compInisPanel(h)}`).join("");
-
-  const huecos = chosen.reduce((s,h) => s + h.inis.filter(id => !MY_INIS.has(id)).length, 0);
+    </div>`).join("");
 
   wrap.innerHTML = adder + `
     <section class="card comp-list">
@@ -5920,7 +5919,6 @@ function renderCompetencia(){
           <span role="columnheader">Hotel</span>
           <span role="columnheader">Puntuación</span>
           <span role="columnheader">Evolución · 30 días</span>
-          <span role="columnheader">Iniciativas</span>
           <span role="columnheader"><span class="sr-only">Acciones</span></span>
         </div>
         ${rows}
@@ -6027,7 +6025,7 @@ function openIniDetalle(id){
   document.getElementById("iniDetalle").innerHTML = `
     <section class="card idet-hero">
       <div class="idet-hero-top">
-        <div class="idet-emoji" style="background:${i.bg}">${i.emoji}</div>
+        <div class="idet-emoji" style="background:${i.bg}"><img src="${iniPhoto(i.id, 260, 260)}" alt="${i.title}"></div>
         <div class="idet-hero-txt">
           <span class="idet-cat" style="background:${cat.color}18;color:${cat.color}">${cat.label}</span>
           <h1 class="idet-title">${i.title}</h1>
@@ -6062,11 +6060,10 @@ function openIniDetalle(id){
           <p class="idet-sub">En el orden en que lo han aplicado los hoteles donde funciona.</p>
           <ol class="idet-steps">${d.steps.map(s => `<li class="idet-step">${s}</li>`).join("")}</ol>` : ""}
 
-        ${d.measure ? `
-          <div class="idet-measure">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            <p><b>Cómo saber si funciona.</b> ${d.measure}</p>
-          </div>` : ""}
+        <div class="idet-measure">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <p><b>Cómo saber si funciona.</b> Pon en marcha la iniciativa, etiqueta a los huéspedes y mide el impacto en tu puntuación.</p>
+        </div>
 
         <div class="idet-actions">
           <button class="btn-ini-new" onclick="iniDetalleToTag()">
@@ -6162,10 +6159,12 @@ function iniCreateTag(iniId, ev){
 }
 function renderIniciativas(){
   const profile = document.getElementById("iniProfileFilter").value;
+  const moment = document.getElementById("iniMomentFilter").value;
   const sortBy = document.getElementById("iniSortBy").value;
   let items = [...INI_DATA];
   if (iniCatFilter !== "all") items = items.filter(i => i.cat === iniCatFilter);
   if (profile !== "all") items = items.filter(i => i.profiles.includes(profile));
+  if (moment !== "all") items = items.filter(i => i.moment === moment);
   if (iniFavFilter) items = items.filter(i => iniFavs.has(i.id));
   const impactOrder = {alto:0, medio:1, bajo:2};
   if (sortBy === "impacto") items.sort((a,b) => impactOrder[a.impact] - impactOrder[b.impact]);
@@ -6186,8 +6185,8 @@ function renderIniciativas(){
              onclick="openIniDetalle(${i.id})"
              onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openIniDetalle(${i.id})}">
       <div class="ini-img" style="background:${i.bg}">
+        <img src="${iniPhoto(i.id)}" alt="${i.title}" loading="lazy">
         <span class="ini-cat-badge" style="color:${catObj.color}">${catObj.label}</span>
-        ${i.emoji}
       </div>
       <div class="ini-body">
         <h3 class="ini-title">${i.title}</h3>
@@ -6228,10 +6227,8 @@ function markBarTab(btn){
 function switchIniTab(tab, btn){
   document.getElementById("iniTabMis").style.display = tab === "mis" ? "" : "none";
   document.getElementById("iniTabRec").style.display = tab === "rec" ? "" : "none";
-  document.getElementById("iniTabComp").style.display = tab === "comp" ? "" : "none";
   // Crear iniciativas solo tiene sentido en la propia lista del hotel
   document.getElementById("iniNewBtn").hidden = tab !== "mis";
-  if (tab === "comp") renderCompetencia();
   markBarTab(btn);
 }
 function initIniciativas(){
@@ -8081,6 +8078,7 @@ document.getElementById("hpProfilesRows").innerHTML = HP_PROFILES.map((p, i) => 
     </td>
   </tr>`;
 }).join("");
+renderCompetencia();
 
 /* Widget compacto de perfiles en la home */
 (function(){
