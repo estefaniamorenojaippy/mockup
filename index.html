@@ -2996,87 +2996,114 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
 .rpt2-h{font-size:1.02rem;font-weight:700;color:var(--midnight);font-family:"Instrument Sans",sans-serif}
 .rpt2-sub{font-size:.8rem;color:var(--ink-faint);margin-top:5px;line-height:1.5}
 
-/* Cumplimiento del plan */
-.rpt2-plan{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;margin-top:18px}
+/* Estado del plan: frase corta + anillo de progreso */
+.rpt2-hero{
+  display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap;
+  padding:26px 30px;margin-bottom:18px;
+}
+.rpt2-hero[hidden]{display:none}
+.rpt2-hero-txt{flex:1;min-width:260px}
+.rpt2-hero-line{font-size:1.02rem;line-height:1.55;color:var(--charcoal);margin-top:12px}
+.rpt2-hero-line b{font-weight:700;color:var(--midnight)}
 .rpt2-plan-badge{
-  display:inline-flex;align-items:center;gap:9px;padding:12px 18px;border-radius:14px;
-  font-size:.88rem;font-weight:700;border:1px solid transparent;flex-shrink:0;
+  display:inline-flex;align-items:center;gap:8px;padding:6px 13px;border-radius:999px;
+  font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
 }
-.rpt2-plan-badge.ok{background:var(--good-bg);color:var(--good);border-color:#CBE0C4}
-.rpt2-plan-badge.no{background:var(--bad-bg);color:var(--bad);border-color:#F0CFC3}
-.rpt2-plan-txt{font-size:.84rem;line-height:1.6;color:var(--charcoal);flex:1;min-width:250px}
-.rpt2-plan-txt b{color:var(--midnight);font-weight:700}
-.rpt2-plan-track{height:9px;border-radius:5px;background:var(--track);margin-top:16px;position:relative;overflow:hidden}
-.rpt2-plan-fill{height:100%;border-radius:5px;background:var(--sunrise)}
-.rpt2-plan-scale{display:flex;justify-content:space-between;font-size:.72rem;color:var(--ink-faint);margin-top:7px}
+.rpt2-plan-badge.ok{background:var(--good-bg);color:var(--good)}
+.rpt2-plan-badge.no{background:var(--bad-bg);color:var(--bad)}
+.rpt2-plan-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
 .rpt2-trend{
-  display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:7px 12px;border-radius:999px;
-  font-size:.78rem;font-weight:700;
+  display:inline-flex;align-items:center;gap:6px;margin-top:14px;
+  font-size:.8rem;font-weight:700;
 }
-.rpt2-trend.up{background:var(--good-bg);color:var(--good)}
-.rpt2-trend.down{background:var(--bad-bg);color:var(--bad)}
+.rpt2-trend.up{color:var(--good)}
+.rpt2-trend.down{color:var(--bad)}
+.rpt2-ring{position:relative;width:132px;height:132px;flex-shrink:0}
+.rpt2-ring svg{width:100%;height:100%;display:block}
+.rpt2-ring-num{
+  position:absolute;left:0;right:0;top:47%;transform:translateY(-50%);text-align:center;
+  font-size:1.6rem;font-weight:700;color:var(--midnight);line-height:1;
+}
+.rpt2-ring-num small{font-size:.85rem;font-weight:600}
+.rpt2-ring-lbl{
+  position:absolute;left:0;right:0;top:64%;text-align:center;
+  font-size:.68rem;color:var(--ink-faint);
+}
 
-/* Cifras del mes */
-.rpt2-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
-@media(max-width:900px){.rpt2-kpis{grid-template-columns:1fr}}
-.rpt2-kpi{border:1px solid var(--line);border-radius:16px;padding:18px 18px 14px;background:var(--cotton)}
-.rpt2-kpi-lbl{
+/* Nota, conversión y consistencia */
+.rpt2-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+@media(max-width:900px){.rpt2-metrics{grid-template-columns:1fr}}
+.rpt2-metric-lbl{
   font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--olive);
 }
-.rpt2-kpi-val{display:flex;align-items:baseline;gap:10px;margin-top:9px;flex-wrap:wrap}
-.rpt2-kpi-num{font-size:1.95rem;font-weight:700;color:var(--midnight);line-height:1;font-variant-numeric:tabular-nums}
-.rpt2-kpi-num small{font-size:1rem;font-weight:600}
-.rpt2-kpi-delta{display:inline-flex;align-items:center;gap:4px;font-size:.76rem;font-weight:700}
-.rpt2-kpi-delta.up{color:var(--good)}
-.rpt2-kpi-delta.down{color:var(--bad)}
-.rpt2-kpi-delta.flat{color:var(--ink-faint)}
-.rpt2-kpi-note{font-size:.74rem;color:var(--ink-faint);margin-top:8px;line-height:1.45}
-.rpt2-spark{margin-top:12px}
-.rpt2-spark svg{width:100%;height:auto;display:block;overflow:visible}
-.rpt2-spark-lbl{font-family:"Instrument Sans",sans-serif;font-size:8px;fill:var(--ink-faint)}
-.rpt2-spark-cap{
-  display:flex;justify-content:space-between;font-size:.68rem;color:var(--ink-faint);margin-top:4px;
+.rpt2-metric-top{display:flex;align-items:baseline;gap:10px;margin-top:8px}
+.rpt2-metric-num{
+  font-size:2.1rem;font-weight:700;color:var(--midnight);line-height:1;font-variant-numeric:tabular-nums;
+}
+.rpt2-metric-num small{font-size:1.05rem;font-weight:600}
+.rpt2-metric-delta{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;font-weight:700}
+.rpt2-metric-delta.up{color:var(--good)}
+.rpt2-metric-delta.down{color:var(--bad)}
+.rpt2-metric-delta.flat{color:var(--ink-faint)}
+.rpt2-metric-axis{
+  display:flex;justify-content:space-between;font-size:.68rem;color:var(--ink-faint);margin-top:2px;
 }
 
-/* Iniciativas validadas / descartadas */
-.rpt2-tallies{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
-.rpt2-tally{
-  display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;
-  font-size:.78rem;font-weight:700;
+/* Gráfica del año con lectura al pasar el cursor */
+.rpt2-chart{position:relative;margin-top:38px}
+.rpt2-chart svg{width:100%;height:78px;display:block;overflow:visible}
+.rpt2-hit{cursor:crosshair}
+.rpt2-tip{
+  --ax:50%;
+  position:absolute;bottom:calc(100% + 7px);transform:translateX(calc(-1 * var(--ax)));
+  background:var(--midnight);color:#fff;border-radius:8px;padding:5px 10px;
+  display:none;align-items:baseline;gap:7px;white-space:nowrap;pointer-events:none;z-index:3;
 }
-.rpt2-tally::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.rpt2-tip.is-on{display:flex}
+.rpt2-tip b{font-size:.8rem;font-weight:700}
+.rpt2-tip span{font-size:.68rem;opacity:.72}
+.rpt2-tip::after{
+  content:"";position:absolute;top:100%;left:var(--ax);transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:var(--midnight);
+}
+
+/* Iniciativas, en versión corta */
+.rpt2-inis-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.rpt2-tallies{display:flex;gap:7px;flex-wrap:wrap}
+.rpt2-tally{
+  display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;
+  font-size:.74rem;font-weight:700;
+}
+.rpt2-tally::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
 .rpt2-tally.ok{background:var(--good-bg);color:var(--good)}
 .rpt2-tally.no{background:var(--bad-bg);color:var(--bad)}
 .rpt2-tally.test{background:#FFF4E3;color:#B87309}
-.rpt2-inis{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.rpt2-inis{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:18px}
 @media(max-width:820px){.rpt2-inis{grid-template-columns:1fr}}
-.rpt2-ini-col{border:1px solid var(--line);border-radius:16px;padding:16px 16px 8px}
-.rpt2-ini-hd{display:flex;align-items:center;gap:9px;margin-bottom:4px}
-.rpt2-ini-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.rpt2-ini-hd{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.rpt2-ini-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .rpt2-ini-col.ok .rpt2-ini-dot{background:var(--good)}
 .rpt2-ini-col.no .rpt2-ini-dot{background:var(--bad)}
-.rpt2-ini-ttl{font-size:.8rem;font-weight:700;color:var(--midnight)}
-.rpt2-ini-count{
-  margin-left:auto;font-size:.74rem;font-weight:700;padding:3px 9px;border-radius:999px;
+.rpt2-ini-ttl{
+  font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--olive);
 }
-.rpt2-ini-col.ok .rpt2-ini-count{background:var(--good-bg);color:var(--good)}
-.rpt2-ini-col.no .rpt2-ini-count{background:var(--bad-bg);color:var(--bad)}
-.rpt2-ini-sub{font-size:.74rem;color:var(--ink-faint);margin-bottom:10px;line-height:1.45}
-.rpt2-ini-row{
-  display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);
-}
+.rpt2-ini-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
 .rpt2-ini-ico{
-  width:26px;height:26px;border-radius:8px;background:var(--ivory);
-  display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;
+  width:24px;height:24px;border-radius:7px;background:var(--ivory);
+  display:flex;align-items:center;justify-content:center;font-size:.82rem;flex-shrink:0;
 }
-.rpt2-ini-name{font-size:.79rem;color:var(--midnight);font-weight:600;flex:1;min-width:0;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.rpt2-ini-res{font-size:.72rem;color:var(--ink-faint);flex-shrink:0}
-.rpt2-ini-imp{font-size:.76rem;font-weight:700;flex-shrink:0;min-width:52px;text-align:right;
-  font-variant-numeric:tabular-nums}
+.rpt2-ini-name{
+  font-size:.82rem;color:var(--midnight);font-weight:600;flex:1;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.rpt2-ini-imp{
+  font-size:.78rem;font-weight:700;flex-shrink:0;font-variant-numeric:tabular-nums;
+}
 .rpt2-ini-imp.up{color:var(--good)}
 .rpt2-ini-imp.down{color:var(--bad)}
-.rpt2-ini-empty{font-size:.76rem;color:var(--ink-faint);padding:10px 0 14px}
+.rpt2-ini-empty,.rpt2-ini-more{
+  font-size:.75rem;color:var(--ink-faint);padding:9px 0 0;border-top:1px solid var(--line);
+}
 
 /* Secciones traidas de otras partes de la herramienta */
 .rpt2-slot[hidden]{display:none}
@@ -3737,11 +3764,11 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
   </div>
 
   <div class="ini-bar">
-    <button class="ini-bar-btn active" data-an-tab="datos" onclick="switchAnTab('datos',this)">Analíticas</button>
-    <button class="ini-bar-btn" data-an-tab="informe" onclick="switchAnTab('informe',this)">Informe de evolución</button>
+    <button class="ini-bar-btn active" data-an-tab="informe" onclick="switchAnTab('informe',this)">Informe de evolución</button>
+    <button class="ini-bar-btn" data-an-tab="datos" onclick="switchAnTab('datos',this)">Analíticas</button>
   </div>
 
-  <div id="anTabDatos">
+  <div id="anTabDatos" style="display:none">
 
   <!-- Nacionalidades ordenadas por la nota que te ponen -->
   <section class="card geo-card" id="anSecGeo">
@@ -3823,16 +3850,16 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
   </div><!-- /anTabDatos -->
 
   <!-- ═══════ INFORME DE EVOLUCIÓN ═══════ -->
-  <div id="anTabInforme" style="display:none">
+  <div id="anTabInforme">
 
     <div class="rpt2-bar">
       <div class="rpt2-bar-left">
         <div class="select-pill">
           <select id="rptMonth" onchange="renderInforme()" aria-label="Mes del informe">
-            <option value="5" selected>Agosto 2026</option>
-            <option value="4">Julio 2026</option>
-            <option value="3">Junio 2026</option>
-            <option value="2">Mayo 2026</option>
+            <option value="15" selected>Agosto 2026</option>
+            <option value="14">Julio 2026</option>
+            <option value="13">Junio 2026</option>
+            <option value="12">Mayo 2026</option>
           </select>
         </div>
         <span class="rpt2-bar-note" id="rptRange"></span>
@@ -3855,25 +3882,20 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
 
     <div id="rptDoc">
 
-      <!-- 1. Cumplimiento del plan de reseñas -->
-      <section class="card rpt2-sec" data-rsec="plan">
-        <h3 class="rpt2-h">Cumplimiento del plan de reseñas</h3>
-        <p class="rpt2-sub">Objetivo del plan: llegar a <b>9,20</b> antes del 4 de octubre de 2026.</p>
-        <div id="rptPlan"></div>
-      </section>
+      <!-- 1. Estado del plan de reseñas -->
+      <section class="card rpt2-hero" data-rsec="plan" id="rptPlan"></section>
 
-      <!-- 2. Cifras del mes -->
+      <!-- 2. Nota, conversión y consistencia — el año completo al pasar el cursor -->
       <section class="card rpt2-sec" data-rsec="cifras">
-        <h3 class="rpt2-h">Cifras del mes</h3>
-        <p class="rpt2-sub">Cada cifra frente al mes anterior y su evolución en los últimos seis meses.</p>
-        <div class="rpt2-kpis" id="rptKpis"></div>
+        <div class="rpt2-metrics" id="rptKpis"></div>
       </section>
 
       <!-- 3. Iniciativas validadas y descartadas -->
       <section class="card rpt2-sec" data-rsec="inis">
-        <h3 class="rpt2-h">Iniciativas validadas y descartadas</h3>
-        <p class="rpt2-sub">Qué has cerrado en el periodo y qué efecto ha tenido en la nota.</p>
-        <div class="rpt2-tallies" id="rptInisStrip"></div>
+        <div class="rpt2-inis-head">
+          <h3 class="rpt2-h">Iniciativas</h3>
+          <div class="rpt2-tallies" id="rptInisStrip"></div>
+        </div>
         <div class="rpt2-inis" id="rptInis"></div>
       </section>
 
@@ -8997,57 +9019,117 @@ function toggleAsp(btn){
    iniciativas; el resto de bloques son opcionales y se activan desde
    "Personalizar informe". */
 
-/* Serie mensual en la escala del Índice Jaippy (la misma que usa la
-   proyección semanal), para que las dos vistas sean coherentes. */
+/* Serie mensual en la escala del Índice Jaippy (la misma que usa la proyección
+   semanal). Guardamos 16 meses para que cualquier mes del selector tenga los
+   doce anteriores completos en las gráficas. */
 const RPT_MONTHS = [
-  {lbl:"Marzo 2026",  short:"Mar", dias:"1 – 31 de marzo de 2026",  res:512, punt:9.050, conv:29.40, cons:41.20},
-  {lbl:"Abril 2026",  short:"Abr", dias:"1 – 30 de abril de 2026",  res:548, punt:9.080, conv:30.10, cons:43.00},
-  {lbl:"Mayo 2026",   short:"May", dias:"1 – 31 de mayo de 2026",   res:571, punt:9.120, conv:31.80, cons:44.10},
-  {lbl:"Junio 2026",  short:"Jun", dias:"1 – 30 de junio de 2026",  res:596, punt:9.140, conv:30.60, cons:45.00},
-  {lbl:"Julio 2026",  short:"Jul", dias:"1 – 31 de julio de 2026",  res:602, punt:9.118, conv:31.30, cons:45.50},
-  {lbl:"Agosto 2026", short:"Ago", dias:"1 – 31 de agosto de 2026", res:607, punt:9.113, conv:26.18, cons:46.39}
+  {lbl:"Mayo 2025",       short:"May", dias:"1 – 31 de mayo de 2025",       res:498, punt:8.960, conv:27.10, cons:37.80},
+  {lbl:"Junio 2025",      short:"Jun", dias:"1 – 30 de junio de 2025",      res:523, punt:8.985, conv:27.90, cons:38.60},
+  {lbl:"Julio 2025",      short:"Jul", dias:"1 – 31 de julio de 2025",      res:561, punt:9.010, conv:28.40, cons:39.20},
+  {lbl:"Agosto 2025",     short:"Ago", dias:"1 – 31 de agosto de 2025",     res:588, punt:9.002, conv:27.60, cons:38.90},
+  {lbl:"Septiembre 2025", short:"Sep", dias:"1 – 30 de septiembre de 2025", res:540, punt:9.020, conv:28.80, cons:39.90},
+  {lbl:"Octubre 2025",    short:"Oct", dias:"1 – 31 de octubre de 2025",    res:502, punt:9.035, conv:29.60, cons:40.40},
+  {lbl:"Noviembre 2025",  short:"Nov", dias:"1 – 30 de noviembre de 2025",  res:468, punt:9.028, conv:28.90, cons:40.10},
+  {lbl:"Diciembre 2025",  short:"Dic", dias:"1 – 31 de diciembre de 2025",  res:491, punt:9.041, conv:29.20, cons:40.80},
+  {lbl:"Enero 2026",      short:"Ene", dias:"1 – 31 de enero de 2026",      res:455, punt:9.030, conv:28.50, cons:40.30},
+  {lbl:"Febrero 2026",    short:"Feb", dias:"1 – 28 de febrero de 2026",    res:472, punt:9.044, conv:29.10, cons:40.90},
+  {lbl:"Marzo 2026",      short:"Mar", dias:"1 – 31 de marzo de 2026",      res:512, punt:9.050, conv:29.40, cons:41.20},
+  {lbl:"Abril 2026",      short:"Abr", dias:"1 – 30 de abril de 2026",      res:548, punt:9.080, conv:30.10, cons:43.00},
+  {lbl:"Mayo 2026",       short:"May", dias:"1 – 31 de mayo de 2026",       res:571, punt:9.120, conv:31.80, cons:44.10},
+  {lbl:"Junio 2026",      short:"Jun", dias:"1 – 30 de junio de 2026",      res:596, punt:9.140, conv:30.60, cons:45.00},
+  {lbl:"Julio 2026",      short:"Jul", dias:"1 – 31 de julio de 2026",      res:602, punt:9.118, conv:31.30, cons:45.50},
+  {lbl:"Agosto 2026",     short:"Ago", dias:"1 – 31 de agosto de 2026",     res:607, punt:9.113, conv:26.18, cons:46.39}
 ];
 
 const RPT_UP   = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M10 7h7v7"/></svg>';
 const RPT_DOWN = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7l10 10"/><path d="M17 10v7h-7"/></svg>';
 
-/* Mini gráfica de los últimos meses: línea + punto final destacado */
-function rptSpark(vals, color){
-  const W = 240, H = 54, P = 5;
-  const min = Math.min(...vals), max = Math.max(...vals);
-  const span = (max - min) || 1;
-  const x = i => vals.length === 1 ? W/2 : P + i * (W - P*2) / (vals.length - 1);
-  const y = v => P + (H - P*2) * (1 - (v - min) / span);
+/* Las tres cifras del informe. Cada una dibuja los doce meses que terminan en el
+   mes seleccionado; al pasar el cursor se lee el valor de cada uno. */
+const RPT_METRICS = [
+  {key:"punt", label:"Nota",         dec:3, unit:""},
+  {key:"conv", label:"Conversión",   dec:2, unit:"%"},
+  {key:"cons", label:"Consistencia", dec:2, unit:"%"}
+];
+const RPT_CW = 300, RPT_CH = 90, RPT_CPAD = 8, RPT_CTOP = 12, RPT_CBOT = 10;
+
+function rptMetricCard(m, idx){
+  const win = RPT_MONTHS.slice(Math.max(0, idx - 11), idx + 1);
+  const vals = win.map(x => x[m.key]);
+  const cur = vals[vals.length - 1], prev = vals.length > 1 ? vals[vals.length - 2] : cur;
+  const d = cur - prev;
+  const dir = d > 0.0005 ? "up" : d < -0.0005 ? "down" : "flat";
+  const color = dir === "down" ? "var(--bad)" : "var(--good)";
+  const min = Math.min(...vals), max = Math.max(...vals), span = (max - min) || 1;
+  const x = i => RPT_CPAD + i * (RPT_CW - RPT_CPAD * 2) / Math.max(1, vals.length - 1);
+  const y = v => RPT_CTOP + (RPT_CH - RPT_CTOP - RPT_CBOT) * (1 - (v - min) / span);
   const pts = vals.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
-  const area = `${P},${H-P} ${pts} ${W-P},${H-P}`;
-  const last = vals.length - 1;
+  const bandW = (RPT_CW - RPT_CPAD * 2) / Math.max(1, vals.length - 1);
+  const hits = vals.map((v, i) => `
+    <rect class="rpt2-hit" data-i="${i}" x="${(x(i) - bandW/2).toFixed(1)}" y="0"
+      width="${bandW.toFixed(1)}" height="${RPT_CH}" fill="transparent"/>`).join("");
+  const data = win.map((w, i) =>
+    `${w.lbl}|${fmtNum(vals[i], m.dec)}${m.unit}|${x(i).toFixed(1)}|${y(vals[i]).toFixed(1)}`).join("~");
   return `
-    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-hidden="true">
-      <polygon points="${area}" fill="${color}" opacity=".10"/>
-      <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2"
-        stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
-      <circle cx="${x(last).toFixed(1)}" cy="${y(vals[last]).toFixed(1)}" r="3" fill="${color}"/>
-    </svg>`;
+    <article class="rpt2-metric">
+      <p class="rpt2-metric-lbl">${m.label}</p>
+      <div class="rpt2-metric-top">
+        <span class="rpt2-metric-num">${fmtNum(cur, m.dec)}${m.unit ? `<small>${m.unit}</small>` : ""}</span>
+        <span class="rpt2-metric-delta ${dir}">
+          ${dir === "up" ? RPT_UP : dir === "down" ? RPT_DOWN : ""}
+          ${dir === "flat" ? "=" : (d > 0 ? "+" : "−") + fmtNum(Math.abs(d), m.dec)}
+        </span>
+      </div>
+      <div class="rpt2-chart" data-points="${data}" data-w="${RPT_CW}">
+        <svg viewBox="0 0 ${RPT_CW} ${RPT_CH}" preserveAspectRatio="none" role="img"
+             aria-label="${m.label}, últimos ${vals.length} meses">
+          <polygon points="${RPT_CPAD},${RPT_CH} ${pts} ${RPT_CW - RPT_CPAD},${RPT_CH}" fill="${color}" opacity=".08"/>
+          <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2.2"
+            stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+          <line class="rpt2-cursor" x1="0" x2="0" y1="0" y2="${RPT_CH}" stroke="var(--line-strong)"
+            stroke-width="1" vector-effect="non-scaling-stroke" opacity="0"/>
+          <circle class="rpt2-dot" r="3.5" cx="0" cy="0" fill="${color}" opacity="0"/>
+          ${hits}
+        </svg>
+        <span class="rpt2-tip"></span>
+      </div>
+      <div class="rpt2-metric-axis"><span>${win[0].short}</span><span>${win[win.length-1].short}</span></div>
+    </article>`;
 }
 
-/* Una de las tres cifras del mes */
-function rptKpiCard(o){
-  const dir = o.delta > 0.0005 ? "up" : o.delta < -0.0005 ? "down" : "flat";
-  const arrow = dir === "up" ? RPT_UP : dir === "down" ? RPT_DOWN : "";
-  const sign = o.delta > 0 ? "+" : o.delta < 0 ? "−" : "";
-  const deltaTxt = dir === "flat" ? "Sin cambios"
-    : `${sign}${fmtNum(Math.abs(o.delta), o.dec)}${o.unit === "%" ? " pts" : ""} vs. mes anterior`;
-  return `
-    <article class="rpt2-kpi">
-      <p class="rpt2-kpi-lbl">${o.label}</p>
-      <div class="rpt2-kpi-val">
-        <span class="rpt2-kpi-num">${fmtNum(o.value, o.dec)}${o.unit ? `<small>${o.unit}</small>` : ""}</span>
-        <span class="rpt2-kpi-delta ${dir}">${arrow}${deltaTxt}</span>
-      </div>
-      <p class="rpt2-kpi-note">${o.note}</p>
-      <div class="rpt2-spark">${rptSpark(o.series, dir === "down" ? "var(--bad)" : "var(--amber)")}</div>
-      <div class="rpt2-spark-cap"><span>${RPT_MONTHS[0].short}</span><span>${o.lastShort}</span></div>
-    </article>`;
+/* Un único listener por gráfica: mueve la guía, el punto y la etiqueta. */
+function rptBindCharts(){
+  document.querySelectorAll("#rptKpis .rpt2-chart").forEach(box => {
+    const pts = box.dataset.points.split("~").map(s => s.split("|"));
+    const W = +box.dataset.w;
+    const line = box.querySelector(".rpt2-cursor");
+    const dot = box.querySelector(".rpt2-dot");
+    const tip = box.querySelector(".rpt2-tip");
+    box.querySelectorAll(".rpt2-hit").forEach(hit => {
+      hit.addEventListener("mouseenter", () => {
+        const [lbl, val, px, py] = pts[+hit.dataset.i];
+        line.setAttribute("x1", px); line.setAttribute("x2", px); line.style.opacity = 1;
+        dot.setAttribute("cx", px); dot.setAttribute("cy", py); dot.style.opacity = 1;
+        tip.innerHTML = `<b>${val}</b><span>${lbl}</span>`;
+        const pct = px / W * 100;
+        // en los extremos se ancla al borde para no salirse de la tarjeta
+        const anchor = pct < 18 ? 18 : pct > 82 ? 82 : 50;
+        tip.style.left = pct.toFixed(2) + "%";
+        tip.style.setProperty("--ax", anchor + "%");
+        tip.classList.add("is-on");
+      });
+    });
+    box.addEventListener("mouseleave", () => {
+      line.style.opacity = 0; dot.style.opacity = 0; tip.classList.remove("is-on");
+    });
+  });
+}
+
+function renderRptKpis(idx){
+  const el = document.getElementById("rptKpis");
+  if (!el) return;
+  el.innerHTML = RPT_METRICS.map(m => rptMetricCard(m, idx)).join("");
+  rptBindCharts();
 }
 
 /* Cierre de iniciativas: se lee del mismo estado que la tabla "Mis iniciativas" */
@@ -9060,7 +9142,6 @@ function rptIniRow(name){
     <div class="rpt2-ini-row">
       <span class="rpt2-ini-ico">${getTagIcon(name)}</span>
       <span class="rpt2-ini-name" title="${name}">${name}</span>
-      <span class="rpt2-ini-res">${s.res || 0} huéspedes</span>
       <span class="rpt2-ini-imp ${impCls}">${impTxt}</span>
     </div>`;
 }
@@ -9078,78 +9159,58 @@ function renderRptInis(){
   });
   val.sort((a, b) => (TAG_STATS[b].imp || 0) - (TAG_STATS[a].imp || 0));
   des.sort((a, b) => (TAG_STATS[a].imp || 0) - (TAG_STATS[b].imp || 0));
-  const col = (cls, title, sub, list) => `
-    <div class="rpt2-ini-col ${cls}">
-      <div class="rpt2-ini-hd">
-        <span class="rpt2-ini-dot"></span>
-        <span class="rpt2-ini-ttl">${title}</span>
-        <span class="rpt2-ini-count">${list.length}</span>
-      </div>
-      <p class="rpt2-ini-sub">${sub}</p>
-      ${list.length ? list.map(rptIniRow).join("")
-                    : `<p class="rpt2-ini-empty">Todavía no hay ninguna.</p>`}
-    </div>`;
   const strip = document.getElementById("rptInisStrip");
   if (strip) strip.innerHTML = `
     <span class="rpt2-tally ok">${val.length} validadas</span>
     <span class="rpt2-tally no">${des.length} descartada${des.length === 1 ? "" : "s"}</span>
-    <span class="rpt2-tally test">${prueba} todavía en prueba</span>`;
-  el.innerHTML =
-    col("ok", "Validadas", "Superaron los 25 huéspedes y mejoraron la nota. Se mantienen activas.", val) +
-    col("no", "Descartadas", "No aportaron mejora suficiente. Ya no se aplican a nuevos huéspedes.", des);
+    <span class="rpt2-tally test">${prueba} en prueba</span>`;
+  const col = (cls, title, list) => `
+    <div class="rpt2-ini-col ${cls}">
+      <div class="rpt2-ini-hd"><span class="rpt2-ini-dot"></span><span class="rpt2-ini-ttl">${title}</span></div>
+      ${list.length ? list.slice(0, 4).map(rptIniRow).join("")
+                    : `<p class="rpt2-ini-empty">Ninguna todavía.</p>`}
+      ${list.length > 4 ? `<p class="rpt2-ini-more">y ${list.length - 4} más</p>` : ""}
+    </div>`;
+  el.innerHTML = col("ok", "Validadas", val) + col("no", "Descartadas", des);
 }
 
-/* Cumplimiento del plan + tendencia frente al mes anterior */
+/* Estado del plan: una frase, un anillo de progreso y la tendencia del mes */
 function renderRptPlan(idx){
   const el = document.getElementById("rptPlan");
   if (!el) return;
   const m = RPT_MONTHS[idx], prev = RPT_MONTHS[idx - 1];
   const cumplido = m.punt >= RPT_GOAL;
   const falta = RPT_GOAL - m.punt;
-  const base = RPT_MONTHS[0].punt;
+  const base = RPT_MONTHS[Math.max(0, idx - 11)].punt;
   const pct = Math.max(0, Math.min(100, (m.punt - base) / (RPT_GOAL - base) * 100));
   const dPunt = prev ? m.punt - prev.punt : 0;
   const mejora = dPunt > 0;
-  // reseñas de 10 que faltarían para cerrar la diferencia con el objetivo
-  const faltan = Math.max(0, Math.ceil(m.res * falta / (10 - RPT_GOAL)));
-  const okIcon = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4.5 4.5L19 7"/></svg>';
-  const noIcon = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.6 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.6a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>';
+  const R = 42, C = 2 * Math.PI * R, len = pct / 100 * C;
   el.innerHTML = `
-    <div class="rpt2-plan">
+    <div class="rpt2-hero-txt">
       <span class="rpt2-plan-badge ${cumplido ? "ok" : "no"}">
-        ${cumplido ? okIcon + "Plan cumplido" : noIcon + "Plan no cumplido"}
+        ${cumplido ? "Plan cumplido" : "Plan no cumplido"}
       </span>
-      <p class="rpt2-plan-txt">
+      <p class="rpt2-hero-line">
         ${cumplido
-          ? `Cierras <b>${m.lbl.toLowerCase()}</b> en <b>${fmtNum(m.punt, 3)}</b>, por encima del objetivo de 9,20. Mantén las iniciativas validadas para consolidarlo.`
-          : `Cierras <b>${m.lbl.toLowerCase()}</b> en <b>${fmtNum(m.punt, 3)}</b>: faltan <b>${fmtNum(falta, 3)}</b> puntos para el objetivo de 9,20. Con el volumen actual de ${m.res} reseñas harían falta unas <b>${faltan} reseñas de 10</b> más para cerrar la diferencia.`}
+          ? `Cierras <b>${m.lbl.toLowerCase()}</b> en <b>${fmtNum(m.punt, 3)}</b>, por encima del objetivo de 9,20.`
+          : `Cierras <b>${m.lbl.toLowerCase()}</b> en <b>${fmtNum(m.punt, 3)}</b>, a <b>${fmtNum(falta, 3)}</b> del objetivo de 9,20.`}
       </p>
-    </div>
-    <div class="rpt2-plan-track"><div class="rpt2-plan-fill" style="width:${pct.toFixed(1)}%"></div></div>
-    <div class="rpt2-plan-scale"><span>${fmtNum(base, 2)}</span><span>${fmtNum(pct, 0)}% del recorrido</span><span>Objetivo 9,20</span></div>
-    ${prev ? `<span class="rpt2-trend ${mejora ? "up" : "down"}">
+      ${prev ? `<span class="rpt2-trend ${mejora ? "up" : "down"}">
         ${mejora ? RPT_UP : RPT_DOWN}
         ${mejora ? "Mejorando" : "Empeorando"} respecto a ${prev.lbl.toLowerCase()}
-        (${mejora ? "+" : "−"}${fmtNum(Math.abs(dPunt), 3)})
-      </span>` : ""}`;
-}
-
-function renderRptKpis(idx){
-  const el = document.getElementById("rptKpis");
-  if (!el) return;
-  const m = RPT_MONTHS[idx], prev = RPT_MONTHS[idx - 1] || m;
-  const hasta = k => RPT_MONTHS.slice(0, idx + 1).map(x => x[k]);
-  const dieces = Math.round(m.res * m.cons / 100);
-  el.innerHTML =
-    rptKpiCard({label:"Puntuación", value:m.punt, unit:"", dec:3,
-      delta:m.punt - prev.punt, series:hasta("punt"), lastShort:m.short,
-      note:"Índice Jaippy con tres decimales sobre la nota de Booking.com."}) +
-    rptKpiCard({label:"Conversión", value:m.conv, unit:"%", dec:2,
-      delta:m.conv - prev.conv, series:hasta("conv"), lastShort:m.short,
-      note:`Porcentaje de reservas que dejan reseña: ${m.res} reseñas en el mes.`}) +
-    rptKpiCard({label:"Consistencia", value:m.cons, unit:"%", dec:2,
-      delta:m.cons - prev.cons, series:hasta("cons"), lastShort:m.short,
-      note:`Reseñas de 10 sobre el total: ${dieces} de ${m.res} huéspedes te puntuaron con un 10.`});
+      </span>` : ""}
+    </div>
+    <div class="rpt2-ring">
+      <svg viewBox="0 0 100 100" role="img" aria-label="${fmtNum(pct, 0)}% del recorrido hacia el objetivo">
+        <circle cx="50" cy="50" r="${R}" fill="none" stroke="var(--track)" stroke-width="9"/>
+        <circle cx="50" cy="50" r="${R}" fill="none" stroke="${cumplido ? "var(--good)" : "var(--amber)"}"
+          stroke-width="9" stroke-linecap="round" transform="rotate(-90 50 50)"
+          stroke-dasharray="${len.toFixed(1)} ${(C - len).toFixed(1)}"/>
+      </svg>
+      <span class="rpt2-ring-num">${fmtNum(pct, 0)}<small>%</small></span>
+      <span class="rpt2-ring-lbl">del recorrido</span>
+    </div>`;
 }
 
 function renderInforme(){
@@ -9165,12 +9226,12 @@ function renderInforme(){
 
 /* ─── Personalización: qué secciones entran en el informe ─── */
 const RPT_SECTIONS = [
-  {id:"plan",   label:"Cumplimiento del plan de reseñas",   lock:true},
-  {id:"cifras", label:"Cifras del mes",                     lock:true},
+  {id:"plan",   label:"Estado del plan de reseñas",         lock:true},
+  {id:"cifras", label:"Nota, conversión y consistencia",    lock:true},
   {id:"inis",   label:"Iniciativas validadas y descartadas", lock:true},
-  {id:"exec",   label:"Resumen ejecutivo",                  on:true},
-  {id:"evol",   label:"Evolución semanal y proyección",     on:true},
-  {id:"bench",  label:"Comparativa con hoteles similares",  on:true},
+  {id:"exec",   label:"Resumen ejecutivo",                  on:false},
+  {id:"evol",   label:"Evolución semanal y proyección",     on:false},
+  {id:"bench",  label:"Comparativa con hoteles similares",  on:false},
   {id:"rings",  label:"Valoraciones conseguidas por nota",  on:false, from:"Home"},
   {id:"tags",   label:"Conversión por iniciativa",          on:false, from:"Iniciativas"},
   {id:"nac",    label:"Nacionalidades que mejor te puntúan", on:false, from:"Analíticas", clone:"anSecGeo",      slot:"rptSlotNac"},
@@ -9286,6 +9347,8 @@ function switchAnTab(tab, btn){
 
 renderInforme();
 applyRptSections();
+// el informe es la pestaña de entrada de Analíticas
+switchAnTab("informe", document.querySelector('[data-an-tab="informe"]'));
 </script>
 </body>
 </html>
