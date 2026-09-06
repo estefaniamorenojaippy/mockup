@@ -2379,7 +2379,7 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
 .confirm-modal{width:352px}
 .confirm-text{font-size:.85rem;line-height:1.55;color:var(--ink-soft);margin-bottom:24px}
 
-/* ─── Informes: resumen ejecutivo, evolución semanal y comparativa ─── */
+/* ─── Informe de evolución: resumen ejecutivo, evolución semanal y comparativa ─── */
 .rpt-exec{
   display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;
   background:var(--line);border:1px solid var(--line);border-radius:14px;
@@ -2974,6 +2974,153 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
   font-size:.82rem;color:var(--ink-faint);
 }
 .tag-foot-row .tag-cell{color:var(--midnight)}
+/* ═══════════ Informe de evolución (pestaña de Analíticas) ═══════════ */
+.rpt2-bar{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  margin:0 0 22px;
+}
+.rpt2-bar-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.rpt2-bar-note{font-size:.78rem;color:var(--ink-faint)}
+.rpt2-bar-acts{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rpt2-act{
+  display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border-radius:999px;
+  border:1px solid var(--line-strong);background:var(--cotton);cursor:pointer;
+  font:600 .78rem/1 "Instrument Sans",sans-serif;color:var(--charcoal);
+}
+.rpt2-act:hover{border-color:var(--midnight);color:var(--midnight)}
+.rpt2-act.is-primary{background:var(--amber);border-color:var(--amber);color:var(--midnight);font-weight:700}
+.rpt2-act.is-primary:hover{background:var(--saffron);border-color:var(--saffron)}
+
+.rpt2-sec{padding:24px 26px 28px;margin-bottom:22px}
+.rpt2-sec[hidden]{display:none}
+.rpt2-h{font-size:1.02rem;font-weight:700;color:var(--midnight);font-family:"Instrument Sans",sans-serif}
+.rpt2-sub{font-size:.8rem;color:var(--ink-faint);margin-top:5px;line-height:1.5}
+
+/* Cumplimiento del plan */
+.rpt2-plan{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;margin-top:18px}
+.rpt2-plan-badge{
+  display:inline-flex;align-items:center;gap:9px;padding:12px 18px;border-radius:14px;
+  font-size:.88rem;font-weight:700;border:1px solid transparent;flex-shrink:0;
+}
+.rpt2-plan-badge.ok{background:var(--good-bg);color:var(--good);border-color:#CBE0C4}
+.rpt2-plan-badge.no{background:var(--bad-bg);color:var(--bad);border-color:#F0CFC3}
+.rpt2-plan-txt{font-size:.84rem;line-height:1.6;color:var(--charcoal);flex:1;min-width:250px}
+.rpt2-plan-txt b{color:var(--midnight);font-weight:700}
+.rpt2-plan-track{height:9px;border-radius:5px;background:var(--track);margin-top:16px;position:relative;overflow:hidden}
+.rpt2-plan-fill{height:100%;border-radius:5px;background:var(--sunrise)}
+.rpt2-plan-scale{display:flex;justify-content:space-between;font-size:.72rem;color:var(--ink-faint);margin-top:7px}
+.rpt2-trend{
+  display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:7px 12px;border-radius:999px;
+  font-size:.78rem;font-weight:700;
+}
+.rpt2-trend.up{background:var(--good-bg);color:var(--good)}
+.rpt2-trend.down{background:var(--bad-bg);color:var(--bad)}
+
+/* Cifras del mes */
+.rpt2-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+@media(max-width:900px){.rpt2-kpis{grid-template-columns:1fr}}
+.rpt2-kpi{border:1px solid var(--line);border-radius:16px;padding:18px 18px 14px;background:var(--cotton)}
+.rpt2-kpi-lbl{
+  font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--olive);
+}
+.rpt2-kpi-val{display:flex;align-items:baseline;gap:10px;margin-top:9px;flex-wrap:wrap}
+.rpt2-kpi-num{font-size:1.95rem;font-weight:700;color:var(--midnight);line-height:1;font-variant-numeric:tabular-nums}
+.rpt2-kpi-num small{font-size:1rem;font-weight:600}
+.rpt2-kpi-delta{display:inline-flex;align-items:center;gap:4px;font-size:.76rem;font-weight:700}
+.rpt2-kpi-delta.up{color:var(--good)}
+.rpt2-kpi-delta.down{color:var(--bad)}
+.rpt2-kpi-delta.flat{color:var(--ink-faint)}
+.rpt2-kpi-note{font-size:.74rem;color:var(--ink-faint);margin-top:8px;line-height:1.45}
+.rpt2-spark{margin-top:12px}
+.rpt2-spark svg{width:100%;height:auto;display:block;overflow:visible}
+.rpt2-spark-lbl{font-family:"Instrument Sans",sans-serif;font-size:8px;fill:var(--ink-faint)}
+.rpt2-spark-cap{
+  display:flex;justify-content:space-between;font-size:.68rem;color:var(--ink-faint);margin-top:4px;
+}
+
+/* Iniciativas validadas / descartadas */
+.rpt2-tallies{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.rpt2-tally{
+  display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;
+  font-size:.78rem;font-weight:700;
+}
+.rpt2-tally::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.rpt2-tally.ok{background:var(--good-bg);color:var(--good)}
+.rpt2-tally.no{background:var(--bad-bg);color:var(--bad)}
+.rpt2-tally.test{background:#FFF4E3;color:#B87309}
+.rpt2-inis{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+@media(max-width:820px){.rpt2-inis{grid-template-columns:1fr}}
+.rpt2-ini-col{border:1px solid var(--line);border-radius:16px;padding:16px 16px 8px}
+.rpt2-ini-hd{display:flex;align-items:center;gap:9px;margin-bottom:4px}
+.rpt2-ini-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.rpt2-ini-col.ok .rpt2-ini-dot{background:var(--good)}
+.rpt2-ini-col.no .rpt2-ini-dot{background:var(--bad)}
+.rpt2-ini-ttl{font-size:.8rem;font-weight:700;color:var(--midnight)}
+.rpt2-ini-count{
+  margin-left:auto;font-size:.74rem;font-weight:700;padding:3px 9px;border-radius:999px;
+}
+.rpt2-ini-col.ok .rpt2-ini-count{background:var(--good-bg);color:var(--good)}
+.rpt2-ini-col.no .rpt2-ini-count{background:var(--bad-bg);color:var(--bad)}
+.rpt2-ini-sub{font-size:.74rem;color:var(--ink-faint);margin-bottom:10px;line-height:1.45}
+.rpt2-ini-row{
+  display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);
+}
+.rpt2-ini-ico{
+  width:26px;height:26px;border-radius:8px;background:var(--ivory);
+  display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;
+}
+.rpt2-ini-name{font-size:.79rem;color:var(--midnight);font-weight:600;flex:1;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rpt2-ini-res{font-size:.72rem;color:var(--ink-faint);flex-shrink:0}
+.rpt2-ini-imp{font-size:.76rem;font-weight:700;flex-shrink:0;min-width:52px;text-align:right;
+  font-variant-numeric:tabular-nums}
+.rpt2-ini-imp.up{color:var(--good)}
+.rpt2-ini-imp.down{color:var(--bad)}
+.rpt2-ini-empty{font-size:.76rem;color:var(--ink-faint);padding:10px 0 14px}
+
+/* Secciones traidas de otras partes de la herramienta */
+.rpt2-slot[hidden]{display:none}
+.rpt2-slot > .card{margin-bottom:22px}
+.rpt2-slot .card{pointer-events:none}
+.rpt2-from{
+  display:inline-flex;align-items:center;gap:6px;font-size:.68rem;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--olive);
+  background:var(--ivory);padding:4px 10px;border-radius:999px;margin-bottom:9px;
+}
+
+/* Modal de personalizacion */
+.rpt2-cust{max-width:560px;width:min(560px,92vw)}
+.rpt2-cust-grp{margin-top:18px}
+.rpt2-cust-grp h4{
+  font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--olive);
+  margin-bottom:8px;font-family:"Instrument Sans",sans-serif;
+}
+.rpt2-cust-opt{
+  display:flex;align-items:center;gap:11px;padding:10px 12px;border:1px solid var(--line);
+  border-radius:12px;margin-bottom:7px;cursor:pointer;
+}
+.rpt2-cust-opt:hover{border-color:var(--line-strong)}
+.rpt2-cust-opt input{width:16px;height:16px;accent-color:var(--amber);cursor:pointer;flex-shrink:0}
+.rpt2-cust-opt.is-lock{opacity:.6;cursor:default}
+.rpt2-cust-opt.is-lock input{cursor:default}
+.rpt2-cust-lbl{font-size:.82rem;color:var(--midnight);font-weight:600;flex:1}
+.rpt2-cust-tag{font-size:.68rem;color:var(--olive);background:var(--ivory);padding:3px 8px;border-radius:999px}
+.rpt2-cust-body{max-height:min(56vh,470px);overflow-y:auto;padding-right:4px}
+
+/* Modal de envio por email */
+.rpt2-mail{max-width:520px;width:min(520px,92vw)}
+.rpt2-mail-field{margin-top:14px}
+.rpt2-mail-field label{
+  display:block;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--olive);margin-bottom:6px;
+}
+.rpt2-mail-field input,.rpt2-mail-field textarea{
+  width:100%;border:1px solid var(--line-strong);border-radius:12px;padding:11px 13px;
+  font:400 .84rem/1.5 "Instrument Sans",sans-serif;color:var(--midnight);background:#fff;
+}
+.rpt2-mail-field textarea{resize:vertical;min-height:88px}
+.rpt2-mail-field input:focus,.rpt2-mail-field textarea:focus{outline:none;border-color:var(--amber)}
+.rpt2-mail-note{font-size:.74rem;color:var(--ink-faint);margin-top:12px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -3125,11 +3272,6 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
     Analíticas
     <svg class="tab-caret" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
   </button>
-  <button class="nav-tab" data-view="informes" onclick="showView('informes',this)">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg>
-    Informes
-    <svg class="tab-caret" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-  </button>
 </nav>
 </div>
 
@@ -3197,7 +3339,7 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
     <span class="hp-next">8,8</span>
   </section>
 
-  <!-- hpScoreCards oculto: lo usa Informes para copiar su innerHTML -->
+  <!-- hpScoreCards oculto: el informe de evolución copia su innerHTML -->
   <div style="display:none"><div class="hpw-cards" id="hpScoreCards"></div></div>
 
   <!-- ── Tu objetivo semanal de puntuaciones ── -->
@@ -3570,9 +3712,9 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
   <div class="page-head">
     <div>
       <h1>Analíticas</h1>
-      <p class="review-count">Evolución de las puntuaciones recibidas.</p>
+      <p class="review-count" id="anSubtitle">Evolución de las puntuaciones recibidas.</p>
     </div>
-    <div class="controls">
+    <div class="controls" id="anControls">
       <div class="select-pill">
         <select id="anPreset" onchange="anPresetChange(this.value)" aria-label="Rango rápido">
           <option value="12">Últimos 12 meses</option>
@@ -3594,8 +3736,15 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
     </div>
   </div>
 
+  <div class="ini-bar">
+    <button class="ini-bar-btn active" data-an-tab="datos" onclick="switchAnTab('datos',this)">Analíticas</button>
+    <button class="ini-bar-btn" data-an-tab="informe" onclick="switchAnTab('informe',this)">Informe de evolución</button>
+  </div>
+
+  <div id="anTabDatos">
+
   <!-- Nacionalidades ordenadas por la nota que te ponen -->
-  <section class="card geo-card">
+  <section class="card geo-card" id="anSecGeo">
     <h3 class="geo-title">Qué nacionalidades te puntúan mejor</h3>
     <p class="geo-sub">De la que mejor te valora a la que peor, sobre las 607 reseñas del periodo.</p>
 
@@ -3648,7 +3797,7 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
   </section>
 
   <!-- Tabla de perfiles de cliente -->
-  <section class="card hp-profiles-card" style="margin-bottom:20px">
+  <section class="card hp-profiles-card" id="anSecProfiles" style="margin-bottom:20px">
     <div style="overflow-x:auto">
     <table class="hp-ptable">
       <thead>
@@ -3665,11 +3814,123 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
   </section>
 
   <!-- Competencia: hoteles con los que el usuario se compara -->
-  <section class="card" style="padding:22px 24px 26px">
+  <section class="card" id="anSecComp" style="padding:22px 24px 26px">
     <h3 class="geo-title">Competencia</h3>
     <p class="geo-sub">Elige los hoteles con los que te comparas y sigue su puntuación y evolución.</p>
     <div id="compPanel" style="margin-top:16px"></div>
   </section>
+
+  </div><!-- /anTabDatos -->
+
+  <!-- ═══════ INFORME DE EVOLUCIÓN ═══════ -->
+  <div id="anTabInforme" style="display:none">
+
+    <div class="rpt2-bar">
+      <div class="rpt2-bar-left">
+        <div class="select-pill">
+          <select id="rptMonth" onchange="renderInforme()" aria-label="Mes del informe">
+            <option value="5" selected>Agosto 2026</option>
+            <option value="4">Julio 2026</option>
+            <option value="3">Junio 2026</option>
+            <option value="2">Mayo 2026</option>
+          </select>
+        </div>
+        <span class="rpt2-bar-note" id="rptRange"></span>
+      </div>
+      <div class="rpt2-bar-acts">
+        <button class="rpt2-act" onclick="openRptCustom()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2" fill="var(--cotton)"/><circle cx="15" cy="12" r="2" fill="var(--cotton)"/><circle cx="8" cy="18" r="2" fill="var(--cotton)"/></svg>
+          Personalizar informe
+        </button>
+        <button class="rpt2-act" onclick="downloadInforme()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 20h16"/></svg>
+          Descargar
+        </button>
+        <button class="rpt2-act is-primary" onclick="openRptMail()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="m3 7 9 6 9-6"/></svg>
+          Enviar por email
+        </button>
+      </div>
+    </div>
+
+    <div id="rptDoc">
+
+      <!-- 1. Cumplimiento del plan de reseñas -->
+      <section class="card rpt2-sec" data-rsec="plan">
+        <h3 class="rpt2-h">Cumplimiento del plan de reseñas</h3>
+        <p class="rpt2-sub">Objetivo del plan: llegar a <b>9,20</b> antes del 4 de octubre de 2026.</p>
+        <div id="rptPlan"></div>
+      </section>
+
+      <!-- 2. Cifras del mes -->
+      <section class="card rpt2-sec" data-rsec="cifras">
+        <h3 class="rpt2-h">Cifras del mes</h3>
+        <p class="rpt2-sub">Cada cifra frente al mes anterior y su evolución en los últimos seis meses.</p>
+        <div class="rpt2-kpis" id="rptKpis"></div>
+      </section>
+
+      <!-- 3. Iniciativas validadas y descartadas -->
+      <section class="card rpt2-sec" data-rsec="inis">
+        <h3 class="rpt2-h">Iniciativas validadas y descartadas</h3>
+        <p class="rpt2-sub">Qué has cerrado en el periodo y qué efecto ha tenido en la nota.</p>
+        <div class="rpt2-tallies" id="rptInisStrip"></div>
+        <div class="rpt2-inis" id="rptInis"></div>
+      </section>
+
+      <!-- Opcional: resumen ejecutivo -->
+      <section class="card rpt2-sec" data-rsec="exec">
+        <h3 class="rpt2-h">Resumen ejecutivo</h3>
+        <p class="rpt2-sub">Qué ha pasado, por qué y qué hacer a continuación.</p>
+        <div class="rpt-exec" id="rptExec" style="margin-top:18px"></div>
+      </section>
+
+      <!-- Opcional: evolución semanal + proyección -->
+      <section class="card rpt2-sec" data-rsec="evol">
+        <h3 class="rpt2-h">Evolución de la nota, semana a semana</h3>
+        <p class="rpt2-sub">Nota de cada semana del periodo y proyección hasta el final del plan si se mantiene el ritmo actual.</p>
+        <div id="rptEvolChart" class="rpt-evol"></div>
+        <div class="rpt-proj" id="rptProj"></div>
+      </section>
+
+      <!-- Opcional: comparativa con hoteles similares -->
+      <section class="card rpt2-sec" data-rsec="bench">
+        <h3 class="rpt2-h">Cómo estás frente a hoteles similares</h3>
+        <p class="rpt2-sub">Hoteles de tu misma categoría, ubicación y perfil de huésped.</p>
+        <div class="rpt-bench" id="rptBench"></div>
+      </section>
+
+      <!-- Opcional: valoraciones conseguidas por nota -->
+      <section class="card rpt2-sec" data-rsec="rings">
+        <span class="rpt2-from">Desde Home</span>
+        <h3 class="rpt2-h">Valoraciones conseguidas</h3>
+        <p class="rpt2-sub">Consigue más valoraciones excelentes y mantén el resto dentro del límite para seguir mejorando tu nota.</p>
+        <div class="hpw-cards" id="rptScoreCards" style="margin-top:18px"></div>
+      </section>
+
+      <!-- Opcional: conversión por iniciativa -->
+      <section class="card rpt2-sec" data-rsec="tags">
+        <span class="rpt2-from">Desde Iniciativas</span>
+        <article class="initiatives" style="margin-top:0">
+          <h3 class="rpt2-h">Conversión por iniciativa</h3>
+          <div class="init-meta">
+            <span class="period-pill small">18 may - 9 ago 2026</span>
+            <span class="init-tags">Nº etiquetas utilizadas → 15</span>
+          </div>
+          <div class="init-head">
+            <span>Etiqueta</span><span>Reservas</span><span>Conversión</span><span>Puntuación media</span>
+          </div>
+          <div id="initRows"></div>
+        </article>
+      </section>
+
+      <!-- Opcionales clonadas de otras pestañas -->
+      <div class="rpt2-slot" data-rsec="nac"  id="rptSlotNac"></div>
+      <div class="rpt2-slot" data-rsec="perf" id="rptSlotPerf"></div>
+      <div class="rpt2-slot" data-rsec="comp" id="rptSlotComp"></div>
+      <div class="rpt2-slot" data-rsec="menc" id="rptSlotMenc"></div>
+
+    </div>
+  </div>
 
 </main>
 
@@ -3802,156 +4063,6 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
   </div>
 </div>
 
-<!-- ═══════════ VISTA: INFORMES ═══════════ -->
-<main class="wrap view" id="view-informes" hidden>
-
-  <!-- Barra de herramientas -->
-  <section class="card toolbar">
-    <div class="field field-plan">
-      <span class="field-label">Plan</span>
-      <button class="field-box" onclick="toast('Selector de plan (mockup)')">
-        <span class="plan-chip">reportsucommon.ao…</span>
-        <span class="plan-text">Objetivo 9,2 (18 de mayo de 2026 – 4 de octubre de 2026)</span>
-        <svg class="field-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-      </button>
-    </div>
-    <div class="field field-range">
-      <span class="field-label">Rango por semanas</span>
-      <button class="field-box" onclick="toast('Rango por semanas (mockup)')">
-        <span class="range-text">18/05/26 – 09/08/26</span>
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2.5"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
-      </button>
-    </div>
-    <button class="btn-export" onclick="toast('Generando PDF del informe…')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18"/><path d="M7 14h6"/></svg>
-      Exportar PDF
-    </button>
-  </section>
-
-  <!-- Informe -->
-  <section class="card report">
-    <header class="report-head">
-      <h2>Informe por semanas de Hotel Jaippy</h2>
-      <img class="report-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeAAAACeCAYAAADqi9mQAABYkElEQVR42u19eXgcV5X9ufdVS/Ju2Za6qiXHWRxCBCQEJyQhEAiBIQk7hDUwwAzrsC8TYIAh7BB2mIVlYIYfMKxhCcmwhkxISALB7JglTohtqatasmU78abuevf+/tArTaUjyZK6epFd9/v6i2NL3dWvXr1zl3PPBXLLLbfccsstt5YbdfB1aX9///Ge510iIpLVtRKREJEBcE25XL4RAAOQfCu03AwA6/v+ucaYN4tIrKomo3tsmdkTkWvDMHxP8ln5kueWW26dZF6HXhcDsJ7nDTHz24my9ROYGXEcewByAG6z8ycig4VC4ZGqiizvMzPDWnugwx3N3HLLLQfgzjRVnXCRUeyimCwsBlAgon357e8AT4u5KiJWVWsZ7sdYRAoA8nucW2655QDcQJTkpVKWmX1vVeX89nfMPTYuC5HVPVb3Xvk9zi233Do3AMmXILfccsstt9xyAM4tt9xyyy23HIBzyy233HLLLbccgHPLLbfccsstB+Dccsstt9xyyy0H4Nxyyy233HLLATi33HLLLbfccssBOLfccsstt9xyAM4tt9xyyy233HIAzi233HLLLbccgHPLLbfccsstB+Dccsstt9xyyy0H4Nxyyy233HLLATi33HLLLbfccssBOLfccsstt9xyAM4tt9xyyy233HIAzi233HLLLbccgHPLLbfccsstNwCA1+HXpwBi99KM3jMGQEQk+e3vmHts3Ysyek/rnMv8HueWW245AC8oPGfuIiJPVbO8zgIzI47jZfntb7+JSJfneYaITJb7mogAIL/HueWWWw7AC4iKoKq3isj7XbRK2Z35YkTkf5P/z7dBW8y6m3Gtqj5GRLK8x0pEzMzl9GfllltuueWWW2655ZZbbke50SK4PtOk95Y8+u2Ye8xNzKTk9zi33HLLLbfccsstt9xyyy233HLLLbfccsstt9xyyy233HLLLbfccsstNxzNJKzc/u8+Ud09o+lat1J/1mn+Prcjaz/QHJ9hrXvllltuOQDnhunlQZODVTPoYTWp+yz5Ibyo9wVnsCc4pRKW74XWnaf5Oue2aAGYmiH00WFtOOQO1ntcWxAES621vjFmtaquIKJeVV0OwKgqMXMNwAEA+1R1jzFmj+d5Y9u2bds7w3f1Ui06nbAW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" alt="jaippy">
-    </header>
-
-    <div class="period">
-      <p class="period-label">Periodo del informe</p>
-      <span class="period-pill">18 de mayo de 2026 – 9 de agosto de 2026</span>
-      <div class="period-dots" id="periodDots"></div>
-      <p class="period-note">Tu puntuación en Booking muestra una tendencia negativa. Aunque tienes
-        indicadores positivos en cuanto a porcentaje de reseñas de 10, necesitas
-        enfocarte en mejorar la experiencia global para revertir la tendencia y acercarte al 9,2.</p>
-    </div>
-
-    <!-- Resumen ejecutivo: qué ha pasado, por qué y qué hacer -->
-    <div class="rpt-exec" id="rptExec"></div>
-
-    <!-- 3 KPIs comparados -->
-    <div class="kpi-grid">
-      <article class="kpi-col">
-        <h3>Índice Jaippy</h3>
-        <div class="kpi-value">
-          <img class="kpi-mark" src="data:image/png;base64,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" alt="">
-          <span class="kv">9,113</span>
-          <span class="kd down">−0,05% <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7l10 10"/><path d="M17 10v7h-7"/></svg></span>
-        </div>
-        <div class="mini-chart" data-max="10" data-step="2" data-suffix=""
-             data-prev="9.118" data-curr="9.113" data-plabel="9,118" data-clabel="9,113"></div>
-        <p class="kpi-caption">Métrica que muestra, con 3 decimales de precisión, la puntuación de Booking.com</p>
-      </article>
-
-      <article class="kpi-col">
-        <h3>Conversión</h3>
-        <div class="kpi-value">
-          <svg class="kpi-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="14" height="14" rx="2.5"/><path d="M4 7v13a1 1 0 0 0 1 1h12"/><path d="m14 7.6.9 1.9 2 .2-1.5 1.3.4 2-1.8-1.1-1.8 1.1.4-2L11 9.7l2-.2z"/></svg>
-          <span class="kv">26,18<small>%</small></span>
-          <span class="kd down">−16,4% <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7l10 10"/><path d="M17 10v7h-7"/></svg></span>
-        </div>
-        <div class="mini-chart" data-max="100" data-step="20" data-suffix=" %"
-             data-prev="31.3" data-curr="26.2" data-plabel="31,3 %" data-clabel="26,2 %"></div>
-        <p class="kpi-caption">Porcentaje de reservas que dejan una reseña en Booking.com</p>
-      </article>
-
-      <article class="kpi-col">
-        <h3>Consistencia</h3>
-        <div class="kpi-value">
-          <svg class="kpi-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="14" height="14" rx="2.5"/><path d="M4 7v13a1 1 0 0 0 1 1h12"/><text x="14" y="12.5" text-anchor="middle" font-size="7" font-weight="700" fill="currentColor" stroke="none">10</text></svg>
-          <span class="kv">46,39<small>%</small></span>
-          <span class="kd up">+2,02% <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M10 7h7v7"/></svg></span>
-        </div>
-        <div class="mini-chart" data-max="100" data-step="20" data-suffix=" %"
-             data-prev="45.5" data-curr="46.4" data-plabel="45,5 %" data-clabel="46,4 %"></div>
-        <p class="kpi-caption">Probabilidad de que un huésped te ponga una reseña de 10.</p>
-      </article>
-    </div>
-
-    <div class="report-sep"></div>
-
-    <!-- Evolución semanal de la nota + proyección al objetivo -->
-    <article class="rpt-block">
-      <h3 class="blk-title">Evolución de la nota, semana a semana</h3>
-      <p class="blk-sub">Nota de cada semana del periodo y proyección hasta el final del plan si se mantiene el ritmo actual.</p>
-      <div id="rptEvolChart" class="rpt-evol"></div>
-      <div class="rpt-proj" id="rptProj"></div>
-    </article>
-
-    <div class="report-sep"></div>
-
-    <!-- Comparativa con hoteles similares -->
-    <article class="rpt-block">
-      <h3 class="blk-title">Cómo estás frente a hoteles similares</h3>
-      <p class="blk-sub">Hoteles de tu misma categoría, ubicación y perfil de huésped.</p>
-      <div class="rpt-bench" id="rptBench"></div>
-    </article>
-
-    <div class="report-sep"></div>
-
-    <!-- Progreso -->
-    <article style="margin-top:52px;max-width:420px">
-      <h3 class="blk-title">Progreso del plan hasta la fecha seleccionada</h3>
-      <p class="blk-sub">Porcentaje de progreso y grado de éxito de la ejecución del plan.</p>
-      <div class="rpt-prog-wrap">
-        <div class="rpt-prog-top">
-          <span class="rpt-prog-pct">60<small>%</small></span>
-          <span class="rpt-prog-sublbl">del plan completado</span>
-        </div>
-        <div class="rpt-prog-track">
-          <div class="rpt-prog-fill" style="width:60%"></div>
-        </div>
-        <p class="rpt-prog-msg">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.6 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.6a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
-          Vas 15 semanas por detrás de lo previsto
-        </p>
-      </div>
-    </article>
-
-    <div class="report-sep"></div>
-
-    <!-- Valoraciones conseguidas — ring cards igual que home -->
-    <div class="hpw-legend-row" style="margin:0 0 12px">
-      <p class="hpw-section-title">Valoraciones conseguidas esta semana
-        <small>Consigue más valoraciones excelentes y mantén el resto dentro del límite para seguir mejorando tu nota.</small></p>
-    </div>
-    <div class="hpw-cards" id="rptScoreCards"></div>
-
-    <!-- Evolución de iniciativas -->
-    <article class="initiatives">
-      <h3 class="blk-title">Evolución de iniciativas</h3>
-      <div class="init-meta">
-        <span class="period-pill small">18 may - 9 ago 2026</span>
-        <span class="init-tags">Nº etiquetas utilizadas → 15</span>
-      </div>
-      <div class="init-head">
-        <span>Etiqueta</span><span>Reservas</span><span>Conversión</span><span>Puntuación media</span>
-      </div>
-      <div id="initRows"></div>
-    </article>
-  </section>
-
-
-</main>
-
 <!-- ═══════════ VISTA: FICHA DE INICIATIVA ═══════════ -->
 <main class="wrap view" id="view-ini-detalle" hidden>
   <button class="idet-back" onclick="closeIniDetalle()">
@@ -3982,7 +4093,7 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
 
   <div id="empTabMenciones" style="display:none">
     <div class="emp-layout">
-      <section class="card pad">
+      <section class="card pad" id="empSecChart">
         <h2 class="blk-title big">Top empleados mencionados</h2>
         <p class="blk-sub">Haz clic en una barra para ver las reseñas donde se le menciona.</p>
         <div id="empChart" class="emp-chart"></div>
@@ -4114,6 +4225,54 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
     <div class="modal-foot" style="margin-top:24px">
       <button class="m-btn" onclick="closeNewEmpModal()">CANCELAR</button>
       <button class="m-btn newemp-create" id="newEmpCreate" onclick="createNewEmp()">CREAR USUARIO</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Personalizar el informe de evolución -->
+<div class="modal-overlay" id="rptCustModal" hidden onclick="closeRptCustom()">
+  <div class="modal rpt2-cust" role="dialog" aria-labelledby="rptCustTitle" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <h3 id="rptCustTitle">Personalizar informe</h3>
+      <button class="m-close" onclick="closeRptCustom()" aria-label="Cerrar">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <p class="rpt2-sub">Elige qué secciones quieres incluir. Puedes añadir bloques de otras partes de la herramienta.</p>
+    <div class="rpt2-cust-body" id="rptCustList"></div>
+    <div class="modal-foot" style="margin-top:20px">
+      <button class="m-btn" onclick="closeRptCustom()">CANCELAR</button>
+      <button class="m-btn" style="color:var(--saffron)" onclick="saveRptCustom()">APLICAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- Enviar el informe por email -->
+<div class="modal-overlay" id="rptMailModal" hidden onclick="closeRptMail()">
+  <div class="modal rpt2-mail" role="dialog" aria-labelledby="rptMailTitle" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <h3 id="rptMailTitle">Enviar informe por email</h3>
+      <button class="m-close" onclick="closeRptMail()" aria-label="Cerrar">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="rpt2-mail-field">
+      <label for="rptMailTo">Para</label>
+      <input type="text" id="rptMailTo" placeholder="direccion@hotel.com, otra@hotel.com">
+    </div>
+    <div class="rpt2-mail-field">
+      <label for="rptMailSubject">Asunto</label>
+      <input type="text" id="rptMailSubject">
+    </div>
+    <div class="rpt2-mail-field">
+      <label for="rptMailMsg">Mensaje</label>
+      <textarea id="rptMailMsg"></textarea>
+    </div>
+    <p class="rpt2-mail-note" id="rptMailNote"></p>
+    <div class="modal-foot" style="margin-top:20px">
+      <button class="m-btn" onclick="closeRptMail()">CANCELAR</button>
+      <button class="m-btn" style="color:var(--saffron)" onclick="sendRptMail()">ENVIAR</button>
     </div>
   </div>
 </div>
@@ -7022,14 +7181,14 @@ const TAG_ICON_MAP = {
 function getTagIcon(name){ return TAG_ICON_MAP[name] || "🏷️"; }
 
 /* ═══════════ Panel de etiquetas (fondo de Habitaciones) ═══════════
-   Reutiliza las cifras de "Evolución de iniciativas" (Informes) para las
+   Reutiliza las cifras de "Conversión por iniciativa" (el informe) para las
    etiquetas que aparecen en ambos sitios; el resto son plausibles y menores. */
 const TAG_STATS = {
   "todo bien":                  {res:578, pct:36.33, punt:9.2,  imp:0.10, on:true,  desde:"2025-03-10"},
   "Queso idiazabal":            {res:54,  pct:53.7,  punt:9.2,  imp:0.19, on:true,  desde:"2025-10-02"},
   "LLAMADA IN":                 {res:53,  pct:33.96, punt:9.3,  imp:0.09, on:true,  desde:"2025-11-18"},
   "chocolate":                  {res:43,  pct:30.23, punt:9.5,  imp:0.19, on:true,  desde:"2026-01-15"},
-  "FREE UPGRADE":               {res:25,  pct:28,    punt:8.1,  imp:-1.01,on:true,  desde:"2026-02-20"},
+  "FREE UPGRADE":               {res:25,  pct:28,    punt:8.1,  imp:-1.01,on:false, desde:"2026-02-20"},
   "TARTA CUMPLE EN DESAYUNOS":  {res:12,  pct:33.33, punt:9.0,  imp:-0.19,on:true,  desde:"2026-04-08"},
   "PILATES":                    {res:6,   pct:16.67, punt:9.0,  imp:-0.11,on:true,  desde:"2026-05-22"},
   "Donuts":                     {res:4,   pct:25,    punt:7.0,  imp:-2.11,on:true,  desde:"2026-06-11"},
@@ -7511,16 +7670,13 @@ function saveTag(){
   toast(name ? `Iniciativa "${name}" creada` : "Iniciativa creada");
 }
 document.addEventListener("keydown", e => {
-  if (e.key === "Escape"){ closeTagModal(); closeQrModal(); closeRoomModal(); closeConfirm(); closeNotifModal(); closeEvolModal(); closeNewEmpModal(); closeIniModal(); closeTestModal(); }
+  if (e.key === "Escape"){ closeTagModal(); closeQrModal(); closeRoomModal(); closeConfirm(); closeNotifModal(); closeEvolModal(); closeNewEmpModal(); closeIniModal(); closeTestModal(); closeRptCustom(); closeRptMail(); }
 });
 
 /* ═══════════ Datos y render de INFORMES ═══════════ */
-// Puntos del periodo: 13 semanas transcurridas de 20 (plan 18 may – 4 oct)
-document.getElementById("periodDots").innerHTML =
-  Array.from({length:20}, (_,i) => `<span class="period-dot${i < 13 ? " on" : ""}"></span>`).join("");
 
 
-// Informes: ring-card helper (reutiliza estilos hpw-card de la home)
+// Informe de evolución: ring-card helper (reutiliza estilos hpw-card de la home)
 const RPT_R = 27, RPT_C = 2 * Math.PI * RPT_R;
 function rptRingCard(score, obt, cap, pct, color, warn, capLabel){
   const len = Math.min(100, pct) / 100 * RPT_C;
@@ -7545,7 +7701,7 @@ function rptRingCard(score, obt, cap, pct, color, warn, capLabel){
     <span style="font-size:.64rem;color:var(--ink-faint);font-variant-numeric:tabular-nums">${Math.round(pct)}%</span>
   </div>`;
 }
-// Informes: mismas ring-cards que home — se rellena después de definir HPW_SCORES
+// Informe de evolución: mismas ring-cards que home — se rellena después de definir HPW_SCORES
 
 /* Home: puntuaciones por nota. Del 1 al 8 es un límite que no conviene superar;
    el 9 y el 10 son el objetivo a alcanzar. Todas muestran obtenidas/referencia. */
@@ -7602,7 +7758,7 @@ const hpwRings = notes =>
 
 document.getElementById("hpScoreCards").innerHTML = HPW_SCORES.map(hpwCard).join("");
 
-// Informes: ring-cards idénticas a la home
+// Informe de evolución: ring-cards idénticas a la home
 document.getElementById("rptScoreCards").innerHTML =
   document.getElementById("hpScoreCards").innerHTML;
 
@@ -7676,7 +7832,7 @@ renderEvolChart();
 function openEvolModal(){ document.getElementById("evolModal").hidden = false; }
 function closeEvolModal(){ document.getElementById("evolModal").hidden = true; }
 
-/* ═══════════ Informes: evolución semanal, proyección y comparativa ═══════════
+/* ═══════════ Informe de evolución: evolución semanal, proyección y comparativa ═══
    La serie va en la escala del propio informe (Índice Jaippy, 9,1x contra el
    objetivo 9,2). No se reutiliza la del pop-up de la home porque esa va en la
    escala 8,7x y contradiría el KPI que hay justo encima. */
@@ -8835,6 +8991,301 @@ function toggleAsp(btn){
   btn.classList.toggle("is-open", open);
   btn.setAttribute("aria-expanded", open);
 }
+/* ═══════════ Informe de evolución (pestaña dentro de Analíticas) ═══════════
+   Sustituye a la antigua pestaña de Informes. Reúne el cumplimiento del plan,
+   las tres cifras de cabecera con su evolución mensual y el cierre de
+   iniciativas; el resto de bloques son opcionales y se activan desde
+   "Personalizar informe". */
+
+/* Serie mensual en la escala del Índice Jaippy (la misma que usa la
+   proyección semanal), para que las dos vistas sean coherentes. */
+const RPT_MONTHS = [
+  {lbl:"Marzo 2026",  short:"Mar", dias:"1 – 31 de marzo de 2026",  res:512, punt:9.050, conv:29.40, cons:41.20},
+  {lbl:"Abril 2026",  short:"Abr", dias:"1 – 30 de abril de 2026",  res:548, punt:9.080, conv:30.10, cons:43.00},
+  {lbl:"Mayo 2026",   short:"May", dias:"1 – 31 de mayo de 2026",   res:571, punt:9.120, conv:31.80, cons:44.10},
+  {lbl:"Junio 2026",  short:"Jun", dias:"1 – 30 de junio de 2026",  res:596, punt:9.140, conv:30.60, cons:45.00},
+  {lbl:"Julio 2026",  short:"Jul", dias:"1 – 31 de julio de 2026",  res:602, punt:9.118, conv:31.30, cons:45.50},
+  {lbl:"Agosto 2026", short:"Ago", dias:"1 – 31 de agosto de 2026", res:607, punt:9.113, conv:26.18, cons:46.39}
+];
+
+const RPT_UP   = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M10 7h7v7"/></svg>';
+const RPT_DOWN = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7l10 10"/><path d="M17 10v7h-7"/></svg>';
+
+/* Mini gráfica de los últimos meses: línea + punto final destacado */
+function rptSpark(vals, color){
+  const W = 240, H = 54, P = 5;
+  const min = Math.min(...vals), max = Math.max(...vals);
+  const span = (max - min) || 1;
+  const x = i => vals.length === 1 ? W/2 : P + i * (W - P*2) / (vals.length - 1);
+  const y = v => P + (H - P*2) * (1 - (v - min) / span);
+  const pts = vals.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+  const area = `${P},${H-P} ${pts} ${W-P},${H-P}`;
+  const last = vals.length - 1;
+  return `
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-hidden="true">
+      <polygon points="${area}" fill="${color}" opacity=".10"/>
+      <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2"
+        stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+      <circle cx="${x(last).toFixed(1)}" cy="${y(vals[last]).toFixed(1)}" r="3" fill="${color}"/>
+    </svg>`;
+}
+
+/* Una de las tres cifras del mes */
+function rptKpiCard(o){
+  const dir = o.delta > 0.0005 ? "up" : o.delta < -0.0005 ? "down" : "flat";
+  const arrow = dir === "up" ? RPT_UP : dir === "down" ? RPT_DOWN : "";
+  const sign = o.delta > 0 ? "+" : o.delta < 0 ? "−" : "";
+  const deltaTxt = dir === "flat" ? "Sin cambios"
+    : `${sign}${fmtNum(Math.abs(o.delta), o.dec)}${o.unit === "%" ? " pts" : ""} vs. mes anterior`;
+  return `
+    <article class="rpt2-kpi">
+      <p class="rpt2-kpi-lbl">${o.label}</p>
+      <div class="rpt2-kpi-val">
+        <span class="rpt2-kpi-num">${fmtNum(o.value, o.dec)}${o.unit ? `<small>${o.unit}</small>` : ""}</span>
+        <span class="rpt2-kpi-delta ${dir}">${arrow}${deltaTxt}</span>
+      </div>
+      <p class="rpt2-kpi-note">${o.note}</p>
+      <div class="rpt2-spark">${rptSpark(o.series, dir === "down" ? "var(--bad)" : "var(--amber)")}</div>
+      <div class="rpt2-spark-cap"><span>${RPT_MONTHS[0].short}</span><span>${o.lastShort}</span></div>
+    </article>`;
+}
+
+/* Cierre de iniciativas: se lee del mismo estado que la tabla "Mis iniciativas" */
+function rptIniRow(name){
+  const s = TAG_STATS[name] || {};
+  const imp = typeof s.imp === "number" ? s.imp : null;
+  const impCls = imp === null ? "" : imp >= 0 ? "up" : "down";
+  const impTxt = imp === null ? "—" : `${imp >= 0 ? "+" : "−"}${fmtNum(Math.abs(imp), 2)}`;
+  return `
+    <div class="rpt2-ini-row">
+      <span class="rpt2-ini-ico">${getTagIcon(name)}</span>
+      <span class="rpt2-ini-name" title="${name}">${name}</span>
+      <span class="rpt2-ini-res">${s.res || 0} huéspedes</span>
+      <span class="rpt2-ini-imp ${impCls}">${impTxt}</span>
+    </div>`;
+}
+
+function renderRptInis(){
+  const el = document.getElementById("rptInis");
+  if (!el) return;
+  const val = [], des = [];
+  let prueba = 0;
+  Object.keys(TAG_STATS).forEach(n => {
+    const st = getTagState(n);
+    if (st === "validada") val.push(n);
+    else if (st === "descartada") des.push(n);
+    else prueba++;
+  });
+  val.sort((a, b) => (TAG_STATS[b].imp || 0) - (TAG_STATS[a].imp || 0));
+  des.sort((a, b) => (TAG_STATS[a].imp || 0) - (TAG_STATS[b].imp || 0));
+  const col = (cls, title, sub, list) => `
+    <div class="rpt2-ini-col ${cls}">
+      <div class="rpt2-ini-hd">
+        <span class="rpt2-ini-dot"></span>
+        <span class="rpt2-ini-ttl">${title}</span>
+        <span class="rpt2-ini-count">${list.length}</span>
+      </div>
+      <p class="rpt2-ini-sub">${sub}</p>
+      ${list.length ? list.map(rptIniRow).join("")
+                    : `<p class="rpt2-ini-empty">Todavía no hay ninguna.</p>`}
+    </div>`;
+  const strip = document.getElementById("rptInisStrip");
+  if (strip) strip.innerHTML = `
+    <span class="rpt2-tally ok">${val.length} validadas</span>
+    <span class="rpt2-tally no">${des.length} descartada${des.length === 1 ? "" : "s"}</span>
+    <span class="rpt2-tally test">${prueba} todavía en prueba</span>`;
+  el.innerHTML =
+    col("ok", "Validadas", "Superaron los 25 huéspedes y mejoraron la nota. Se mantienen activas.", val) +
+    col("no", "Descartadas", "No aportaron mejora suficiente. Ya no se aplican a nuevos huéspedes.", des);
+}
+
+/* Cumplimiento del plan + tendencia frente al mes anterior */
+function renderRptPlan(idx){
+  const el = document.getElementById("rptPlan");
+  if (!el) return;
+  const m = RPT_MONTHS[idx], prev = RPT_MONTHS[idx - 1];
+  const cumplido = m.punt >= RPT_GOAL;
+  const falta = RPT_GOAL - m.punt;
+  const base = RPT_MONTHS[0].punt;
+  const pct = Math.max(0, Math.min(100, (m.punt - base) / (RPT_GOAL - base) * 100));
+  const dPunt = prev ? m.punt - prev.punt : 0;
+  const mejora = dPunt > 0;
+  // reseñas de 10 que faltarían para cerrar la diferencia con el objetivo
+  const faltan = Math.max(0, Math.ceil(m.res * falta / (10 - RPT_GOAL)));
+  const okIcon = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4.5 4.5L19 7"/></svg>';
+  const noIcon = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.6 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.6a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>';
+  el.innerHTML = `
+    <div class="rpt2-plan">
+      <span class="rpt2-plan-badge ${cumplido ? "ok" : "no"}">
+        ${cumplido ? okIcon + "Plan cumplido" : noIcon + "Plan no cumplido"}
+      </span>
+      <p class="rpt2-plan-txt">
+        ${cumplido
+          ? `Cierras <b>${m.lbl.toLowerCase()}</b> en <b>${fmtNum(m.punt, 3)}</b>, por encima del objetivo de 9,20. Mantén las iniciativas validadas para consolidarlo.`
+          : `Cierras <b>${m.lbl.toLowerCase()}</b> en <b>${fmtNum(m.punt, 3)}</b>: faltan <b>${fmtNum(falta, 3)}</b> puntos para el objetivo de 9,20. Con el volumen actual de ${m.res} reseñas harían falta unas <b>${faltan} reseñas de 10</b> más para cerrar la diferencia.`}
+      </p>
+    </div>
+    <div class="rpt2-plan-track"><div class="rpt2-plan-fill" style="width:${pct.toFixed(1)}%"></div></div>
+    <div class="rpt2-plan-scale"><span>${fmtNum(base, 2)}</span><span>${fmtNum(pct, 0)}% del recorrido</span><span>Objetivo 9,20</span></div>
+    ${prev ? `<span class="rpt2-trend ${mejora ? "up" : "down"}">
+        ${mejora ? RPT_UP : RPT_DOWN}
+        ${mejora ? "Mejorando" : "Empeorando"} respecto a ${prev.lbl.toLowerCase()}
+        (${mejora ? "+" : "−"}${fmtNum(Math.abs(dPunt), 3)})
+      </span>` : ""}`;
+}
+
+function renderRptKpis(idx){
+  const el = document.getElementById("rptKpis");
+  if (!el) return;
+  const m = RPT_MONTHS[idx], prev = RPT_MONTHS[idx - 1] || m;
+  const hasta = k => RPT_MONTHS.slice(0, idx + 1).map(x => x[k]);
+  const dieces = Math.round(m.res * m.cons / 100);
+  el.innerHTML =
+    rptKpiCard({label:"Puntuación", value:m.punt, unit:"", dec:3,
+      delta:m.punt - prev.punt, series:hasta("punt"), lastShort:m.short,
+      note:"Índice Jaippy con tres decimales sobre la nota de Booking.com."}) +
+    rptKpiCard({label:"Conversión", value:m.conv, unit:"%", dec:2,
+      delta:m.conv - prev.conv, series:hasta("conv"), lastShort:m.short,
+      note:`Porcentaje de reservas que dejan reseña: ${m.res} reseñas en el mes.`}) +
+    rptKpiCard({label:"Consistencia", value:m.cons, unit:"%", dec:2,
+      delta:m.cons - prev.cons, series:hasta("cons"), lastShort:m.short,
+      note:`Reseñas de 10 sobre el total: ${dieces} de ${m.res} huéspedes te puntuaron con un 10.`});
+}
+
+function renderInforme(){
+  const sel = document.getElementById("rptMonth");
+  if (!sel) return;
+  const idx = +sel.value;
+  const m = RPT_MONTHS[idx];
+  document.getElementById("rptRange").textContent = `${m.dias} · ${m.res} reseñas`;
+  renderRptPlan(idx);
+  renderRptKpis(idx);
+  renderRptInis();
+}
+
+/* ─── Personalización: qué secciones entran en el informe ─── */
+const RPT_SECTIONS = [
+  {id:"plan",   label:"Cumplimiento del plan de reseñas",   lock:true},
+  {id:"cifras", label:"Cifras del mes",                     lock:true},
+  {id:"inis",   label:"Iniciativas validadas y descartadas", lock:true},
+  {id:"exec",   label:"Resumen ejecutivo",                  on:true},
+  {id:"evol",   label:"Evolución semanal y proyección",     on:true},
+  {id:"bench",  label:"Comparativa con hoteles similares",  on:true},
+  {id:"rings",  label:"Valoraciones conseguidas por nota",  on:false, from:"Home"},
+  {id:"tags",   label:"Conversión por iniciativa",          on:false, from:"Iniciativas"},
+  {id:"nac",    label:"Nacionalidades que mejor te puntúan", on:false, from:"Analíticas", clone:"anSecGeo",      slot:"rptSlotNac"},
+  {id:"perf",   label:"Perfiles de cliente",                on:false, from:"Analíticas", clone:"anSecProfiles", slot:"rptSlotPerf"},
+  {id:"comp",   label:"Competencia",                        on:false, from:"Analíticas", clone:"anSecComp",     slot:"rptSlotComp"},
+  {id:"menc",   label:"Top usuarios mencionados",           on:false, from:"Usuarios",   clone:"empSecChart",   slot:"rptSlotMenc",
+   sub:"Los diez usuarios más mencionados por los huéspedes en las reseñas del periodo."}
+];
+const rptOn = {};
+RPT_SECTIONS.forEach(s => rptOn[s.id] = s.lock ? true : !!s.on);
+
+/* Los bloques traídos de otras pestañas se copian sin ids ni interacción:
+   dentro del informe son una foto fija, no un panel manejable. */
+function rptFillClone(sec){
+  const slot = document.getElementById(sec.slot);
+  // el gráfico de menciones solo se pinta al abrir Usuarios: lo forzamos antes de copiarlo
+  if (sec.clone === "empSecChart" && !document.getElementById("empChart").children.length) renderEmpChart();
+  const src = document.getElementById(sec.clone);
+  if (!slot) return;
+  slot.innerHTML = "";
+  if (!src) return;
+  const copy = src.cloneNode(true);
+  copy.removeAttribute("id");
+  copy.querySelectorAll("[id]").forEach(n => n.removeAttribute("id"));
+  copy.querySelectorAll("[onclick]").forEach(n => n.removeAttribute("onclick"));
+  // los subtítulos que invitan a interactuar no tienen sentido en un informe estático
+  if (sec.sub){ const s = copy.querySelector(".blk-sub, .geo-sub"); if (s) s.textContent = sec.sub; }
+  const tag = document.createElement("span");
+  tag.className = "rpt2-from";
+  tag.textContent = "Desde " + sec.from;
+  copy.insertBefore(tag, copy.firstChild);
+  slot.appendChild(copy);
+}
+
+function applyRptSections(){
+  RPT_SECTIONS.forEach(sec => {
+    const el = document.querySelector(`#rptDoc [data-rsec="${sec.id}"]`);
+    if (!el) return;
+    el.hidden = !rptOn[sec.id];
+    if (!sec.clone) return;
+    if (rptOn[sec.id]) rptFillClone(sec);
+    else { const s = document.getElementById(sec.slot); if (s) s.innerHTML = ""; }
+  });
+}
+
+function openRptCustom(){
+  const grp = (title, items) => !items.length ? "" : `
+    <div class="rpt2-cust-grp">
+      <h4>${title}</h4>
+      ${items.map(s => `
+        <label class="rpt2-cust-opt${s.lock ? " is-lock" : ""}">
+          <input type="checkbox" data-rsec-chk="${s.id}" ${rptOn[s.id] ? "checked" : ""} ${s.lock ? "disabled" : ""}>
+          <span class="rpt2-cust-lbl">${s.label}</span>
+          ${s.from ? `<span class="rpt2-cust-tag">${s.from}</span>` : ""}
+        </label>`).join("")}
+    </div>`;
+  document.getElementById("rptCustList").innerHTML =
+    grp("Siempre incluidas", RPT_SECTIONS.filter(s => s.lock)) +
+    grp("Del propio informe", RPT_SECTIONS.filter(s => !s.lock && !s.from)) +
+    grp("De otras partes de la herramienta", RPT_SECTIONS.filter(s => s.from));
+  document.getElementById("rptCustModal").hidden = false;
+}
+function closeRptCustom(){ document.getElementById("rptCustModal").hidden = true; }
+function saveRptCustom(){
+  document.querySelectorAll("[data-rsec-chk]").forEach(chk => {
+    const sec = RPT_SECTIONS.find(s => s.id === chk.dataset.rsecChk);
+    if (sec && !sec.lock) rptOn[sec.id] = chk.checked;
+  });
+  applyRptSections();
+  closeRptCustom();
+  toast(`Informe actualizado · ${RPT_SECTIONS.filter(s => rptOn[s.id]).length} secciones incluidas`);
+}
+
+function downloadInforme(){
+  const n = RPT_SECTIONS.filter(s => rptOn[s.id]).length;
+  const m = RPT_MONTHS[+document.getElementById("rptMonth").value];
+  toast(`Descargando "Informe de evolución · ${m.lbl}" en PDF (${n} secciones)…`);
+}
+
+function openRptMail(){
+  const m = RPT_MONTHS[+document.getElementById("rptMonth").value];
+  const n = RPT_SECTIONS.filter(s => rptOn[s.id]).length;
+  document.getElementById("rptMailSubject").value = `Informe de evolución · ${m.lbl} · Hotel Jaippy`;
+  document.getElementById("rptMailMsg").value =
+    `Hola,\n\nTe envío el informe de evolución de ${m.lbl.toLowerCase()}. ` +
+    `Cerramos el mes en ${fmtNum(m.punt, 3)} con una conversión del ${fmtNum(m.conv, 2)} %.\n\nUn saludo.`;
+  document.getElementById("rptMailNote").textContent =
+    `Se adjunta el informe en PDF con las ${n} secciones seleccionadas en "Personalizar informe".`;
+  document.getElementById("rptMailModal").hidden = false;
+  document.getElementById("rptMailTo").focus();
+}
+function closeRptMail(){ document.getElementById("rptMailModal").hidden = true; }
+function sendRptMail(){
+  const to = document.getElementById("rptMailTo").value.trim();
+  if (!to){ toast("Añade al menos un destinatario"); return; }
+  closeRptMail();
+  toast(`Informe enviado a ${to.split(",").filter(s => s.trim()).length} destinatario(s)`);
+}
+
+/* ─── Pestañas de Analíticas: datos / informe ─── */
+function switchAnTab(tab, btn){
+  document.getElementById("anTabDatos").style.display   = tab === "datos" ? "" : "none";
+  document.getElementById("anTabInforme").style.display = tab === "informe" ? "" : "none";
+  const ctrl = document.getElementById("anControls");
+  if (ctrl) ctrl.style.visibility = tab === "datos" ? "" : "hidden";
+  const sub = document.getElementById("anSubtitle");
+  if (sub) sub.textContent = tab === "datos"
+    ? "Evolución de las puntuaciones recibidas."
+    : "Cómo va el plan de reseñas y qué ha cambiado respecto al mes anterior.";
+  markBarTab(btn);
+  if (tab === "informe"){ renderInforme(); applyRptSections(); }
+}
+
+renderInforme();
+applyRptSections();
 </script>
 </body>
 </html>
