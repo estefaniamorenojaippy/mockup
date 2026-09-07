@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pipe — CRM de ventas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f6f7; --card:#fff; --ink:#17171a; --ink-2:#5c5f66; --ink-3:#8b8f96;
+  --line:#e7e7ea; --line-2:#f0f0f2;
+  --accent:#4f46e5; --accent-soft:#eef0fe;
+  --green:#0f9d58; --green-soft:#e7f6ee;
+  --red:#d92d20; --red-soft:#fdeceb;
+  --radius:14px; --shadow:0 1px 2px rgba(16,17,20,.05),0 1px 12px rgba(16,17,20,.04);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:14px/1.45 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+
+/* ── Topbar ─────────────────────────────── */
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;
+  padding:12px 22px;background:var(--card);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:16px;letter-spacing:-.02em}
+.brand .logo{width:26px;height:26px;border-radius:8px;background:var(--accent);color:#fff;
+  display:grid;place-items:center;font-size:13px;font-weight:700}
+.brand small{display:block;font-weight:500;font-size:11px;color:var(--ink-3);letter-spacing:0}
+.spacer{flex:1}
+.search{position:relative}
+.search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--ink-3)}
+.search input{width:250px;padding:8px 12px 8px 32px;border:1px solid var(--line);
+  border-radius:10px;background:#fbfbfc;outline:none}
+.search input:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px var(--accent-soft)}
+select.sel{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fbfbfc;outline:none}
+select.sel:focus{border-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:10px;
+  border:1px solid var(--line);background:#fff;font-weight:500}
+.btn:hover{background:#fafafb}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-primary:hover{background:#443bd4}
+.btn-ghost{border-color:transparent;background:transparent;color:var(--ink-2)}
+.btn-ghost:hover{background:var(--line-2)}
+.avatar{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+  font-size:11px;font-weight:600;color:#fff;flex:none}
+
+/* ── Layout ─────────────────────────────── */
+.wrap{padding:20px 22px 40px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px 16px;box-shadow:var(--shadow)}
+.kpi .lbl{font-size:12px;color:var(--ink-3);font-weight:500}
+.kpi .val{font-size:24px;font-weight:700;letter-spacing:-.03em;margin-top:5px}
+.kpi .sub{font-size:12px;color:var(--ink-3);margin-top:2px}
+.delta{font-weight:600}
+.delta.up{color:var(--green)} .delta.down{color:var(--red)}
+
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.toolbar h1{margin:0;font-size:16px;font-weight:600;letter-spacing:-.01em}
+.toolbar .count{font-size:13px;color:var(--ink-3)}
+.seg{display:flex;background:var(--line-2);border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;padding:6px 13px;border-radius:8px;
+  font-size:13px;font-weight:500;color:var(--ink-2)}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(16,17,20,.08)}
+
+/* ── Kanban ─────────────────────────────── */
+.board{display:flex;gap:12px;align-items:flex-start;overflow-x:auto;padding-bottom:10px}
+.col{flex:0 0 258px;background:#efeff1;border-radius:var(--radius);padding:10px;
+  border:1px solid transparent;transition:background .12s,border-color .12s}
+.col.drop{background:var(--accent-soft);border-color:#c7c9f7}
+.col-head{display:flex;align-items:center;gap:7px;padding:2px 4px 10px}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.col-head .name{font-size:13px;font-weight:600}
+.col-head .n{font-size:12px;color:var(--ink-3);background:#e2e2e6;border-radius:20px;padding:1px 7px}
+.col-head .sum{margin-left:auto;font-size:12px;font-weight:600;color:var(--ink-2)}
+.stack{display:flex;flex-direction:column;gap:8px;min-height:40px}
+.deal{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:11px 12px;
+  box-shadow:var(--shadow);cursor:grab;transition:box-shadow .12s,transform .12s}
+.deal:hover{box-shadow:0 2px 4px rgba(16,17,20,.07),0 4px 16px rgba(16,17,20,.07)}
+.deal.dragging{opacity:.45;transform:rotate(1.5deg)}
+.deal .co{font-weight:600;letter-spacing:-.01em}
+.deal .meta{font-size:12px;color:var(--ink-3);margin-top:1px}
+.deal .row{display:flex;align-items:center;gap:8px;margin-top:9px}
+.deal .amt{font-weight:600;font-size:13px}
+.deal .av{width:22px;height:22px;font-size:10px;margin-left:auto}
+.tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 7px;border-radius:6px}
+.tag.plan{background:var(--accent-soft);color:var(--accent)}
+.tag.new{background:var(--green-soft);color:var(--green)}
+.tag.stale{background:var(--red-soft);color:var(--red)}
+.empty-col{font-size:12px;color:var(--ink-3);text-align:center;padding:14px 0}
+
+/* ── Lista ──────────────────────────────── */
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;background:var(--card);
+  border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--ink-3);font-weight:600;padding:11px 14px;background:#fbfbfc;border-bottom:1px solid var(--line)}
+td{padding:12px 14px;border-bottom:1px solid var(--line-2)}
+tbody tr:last-child td{border-bottom:0}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:#fafafb}
+td.num{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+th.num{text-align:right}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;
+  padding:3px 9px;border-radius:20px;background:var(--line-2)}
+
+/* ── Drawer ─────────────────────────────── */
+.overlay{position:fixed;inset:0;background:rgba(16,17,20,.32);opacity:0;pointer-events:none;
+  transition:opacity .18s;z-index:40}
+.overlay.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:430px;max-width:92vw;background:var(--card);
+  z-index:50;transform:translateX(102%);transition:transform .22s cubic-bezier(.32,.72,0,1);
+  display:flex;flex-direction:column;box-shadow:-8px 0 30px rgba(16,17,20,.12)}
+.drawer.on{transform:none}
+.dr-head{padding:18px 20px 14px;border-bottom:1px solid var(--line)}
+.dr-head .co{font-size:18px;font-weight:700;letter-spacing:-.02em}
+.dr-head .amt{font-size:15px;font-weight:600;color:var(--ink-2);margin-top:2px}
+.dr-body{flex:1;overflow-y:auto;padding:16px 20px 20px}
+.dr-foot{padding:12px 20px;border-top:1px solid var(--line);display:flex;gap:8px}
+.dr-foot .btn{flex:1;justify-content:center}
+.fields{display:grid;grid-template-columns:104px 1fr;gap:9px 12px;font-size:13px}
+.fields .k{color:var(--ink-3)}
+.sec-title{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);
+  font-weight:600;margin:22px 0 10px}
+.tl{list-style:none;margin:0;padding:0 0 0 16px;border-left:2px solid var(--line-2)}
+.tl li{position:relative;padding:0 0 14px 12px}
+.tl li:last-child{padding-bottom:0}
+.tl li::before{content:"";position:absolute;left:-21px;top:4px;width:8px;height:8px;
+  border-radius:50%;background:#c9cad0;border:2px solid #fff}
+.tl li.hi::before{background:var(--accent)}
+.tl .t{font-size:13px;font-weight:500}
+.tl .d{font-size:12px;color:var(--ink-3)}
+.note-add{display:flex;gap:8px;margin-top:12px}
+.note-add input{flex:1;padding:8px 11px;border:1px solid var(--line);border-radius:10px;
+  background:#fbfbfc;outline:none}
+.note-add input:focus{border-color:var(--accent);background:#fff}
+.won-banner{padding:9px 12px;border-radius:10px;font-size:13px;font-weight:600;margin-top:14px}
+.won-banner.w{background:var(--green-soft);color:var(--green)}
+.won-banner.l{background:var(--red-soft);color:var(--red)}
+
+/* ── Modal ──────────────────────────────── */
+.modal{position:fixed;z-index:60;top:50%;left:50%;transform:translate(-50%,-48%) scale(.97);
+  width:420px;max-width:92vw;background:var(--card);border-radius:16px;padding:20px;
+  box-shadow:0 20px 60px rgba(16,17,20,.22);opacity:0;pointer-events:none;transition:opacity .16s,transform .16s}
+.modal.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.modal h2{margin:0 0 16px;font-size:16px;font-weight:600}
+.f{margin-bottom:12px}
+.f label{display:block;font-size:12px;font-weight:500;color:var(--ink-2);margin-bottom:5px}
+.f input,.f select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:10px;
+  background:#fbfbfc;outline:none}
+.f input:focus,.f select:focus{border-color:var(--accent);background:#fff}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,14px);background:var(--ink);
+  color:#fff;padding:10px 16px;border-radius:11px;font-size:13px;font-weight:500;
+  opacity:0;pointer-events:none;transition:.18s;z-index:70}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:900px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .search input{width:150px}
+  .brand small{display:none}
+}
+@media (max-width:700px){
+  .topbar{flex-wrap:wrap;gap:8px;padding:10px 14px}
+  .search{order:3;flex:1 1 100%}
+  .search input{width:100%}
+  select.sel{order:4;flex:1}
+  .topbar .btn-primary{order:5}
+  .wrap{padding:16px 14px 32px}
+  .toolbar{flex-wrap:wrap}
+  .toolbar .count{flex:1 1 100%;order:5}
+  .col{flex:0 0 82vw}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand"><span class="logo">P</span>
+    <span>Pipe <small>Ventas · Q3 2026</small></span>
+  </div>
+  <div class="spacer"></div>
+  <div class="search">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="Buscar empresa o contacto…" autocomplete="off">
+  </div>
+  <select class="sel" id="ownerFilter"></select>
+  <button class="btn btn-primary" onclick="openNew()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    Nueva oportunidad
+  </button>
+</header>
+
+<div class="wrap">
+  <div class="kpis" id="kpis"></div>
+
+  <div class="toolbar">
+    <h1>Pipeline</h1>
+    <span class="count" id="count"></span>
+    <div class="spacer"></div>
+    <div class="seg">
+      <button id="segK" class="on" onclick="setView('kanban')">Kanban</button>
+      <button id="segL" onclick="setView('lista')">Lista</button>
+    </div>
+    <button class="btn btn-ghost" onclick="reset()" title="Volver a los datos de ejemplo">Restaurar ejemplo</button>
+  </div>
+
+  <div class="board" id="board"></div>
+  <div class="tablewrap" id="list" hidden></div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeAll()"></div>
+
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="dr-head">
+    <div style="display:flex;align-items:flex-start;gap:10px">
+      <div style="flex:1">
+        <div class="co" id="drCo"></div>
+        <div class="amt" id="drAmt"></div>
+      </div>
+      <button class="btn btn-ghost" onclick="closeAll()" aria-label="Cerrar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="dr-body" id="drBody"></div>
+  <div class="dr-foot">
+    <button class="btn" onclick="mark('perdido')" style="color:var(--red)">Marcar perdida</button>
+    <button class="btn btn-primary" onclick="mark('ganado')">Marcar ganada</button>
+  </div>
+</aside>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <h2>Nueva oportunidad</h2>
+  <div class="f"><label for="nCo">Empresa</label><input id="nCo" placeholder="Acme S.L."></div>
+  <div class="f2">
+    <div class="f"><label for="nCt">Contacto</label><input id="nCt" placeholder="Nombre y apellido"></div>
+    <div class="f"><label for="nAmt">Valor anual (€)</label><input id="nAmt" type="number" min="0" step="100" placeholder="12000"></div>
+  </div>
+  <div class="f2">
+    <div class="f"><label for="nStage">Etapa</label><select id="nStage"></select></div>
+    <div class="f"><label for="nOwner">Responsable</label><select id="nOwner"></select></div>
+  </div>
+  <div class="f"><label for="nPlan">Plan</label><select id="nPlan">
+    <option>Starter</option><option selected>Growth</option><option>Scale</option></select></div>
+  <div class="modal-foot">
+    <button class="btn" onclick="closeAll()">Cancelar</button>
+    <button class="btn btn-primary" onclick="createDeal()">Crear oportunidad</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════ Datos ═══════════ */
+const STAGES = [
+  {id:"lead",       name:"Lead",       color:"#9aa0a6"},
+  {id:"contactado", name:"Contactado", color:"#4f46e5"},
+  {id:"demo",       name:"Demo",       color:"#0d9488"},
+  {id:"propuesta",  name:"Propuesta",  color:"#c77700"},
+  {id:"ganado",     name:"Ganado",     color:"#0f9d58"},
+  {id:"perdido",    name:"Perdido",    color:"#d92d20"}
+];
+const OWNERS = [
+  {id:"em", name:"Estefanía M.", color:"#4f46e5"},
+  {id:"dr", name:"Diego R.",     color:"#0d9488"},
+  {id:"lc", name:"Laura C.",     color:"#c77700"}
+];
+const SEED = [
+  ["Northwind Labs","Marta Ruiz","marta@northwind.io",18000,"contactado","em","Growth",3,"Inbound"],
+  ["Acme Cloud","Javier Pons","j.pons@acme.co",42000,"propuesta","em","Scale",6,"Referido"],
+  ["Bitmark","Nuria Sanz","nuria@bitmark.es",9600,"demo","dr","Growth",2,"Inbound"],
+  ["Delfos Analytics","Pau Serra","pau@delfos.ai",24000,"demo","lc","Growth",9,"Outbound"],
+  ["Hexa Retail","Clara Vidal","clara@hexa.shop",7200,"lead","dr","Starter",1,"Inbound"],
+  ["Orbita Fintech","Iván Gómez","ivan@orbita.fi",56000,"propuesta","lc","Scale",14,"Outbound"],
+  ["Trebol Foods","Rosa Marín","rosa@trebol.com",12000,"contactado","dr","Growth",5,"Evento"],
+  ["Kappa Studio","Luis Ferrer","luis@kappa.studio",4800,"lead","em","Starter",0,"Inbound"],
+  ["Zenit Logistics","Andrés Lara","a.lara@zenit.lg",33000,"ganado","em","Scale",21,"Referido"],
+  ["Mirlo Media","Sofía Peña","sofia@mirlo.media",8400,"ganado","lc","Growth",18,"Inbound"],
+  ["Vega Health","Elena Ortiz","elena@vega.health",27500,"contactado","lc","Growth",4,"Outbound"],
+  ["Nodo Games","Marc Bosch","marc@nodo.gg",6000,"lead","dr","Starter",2,"Inbound"],
+  ["Solaris Energy","Rubén Díaz","ruben@solaris.energy",48000,"demo","em","Scale",11,"Evento"],
+  ["Pixel Forge","Aitor Ruiz","aitor@pixelforge.dev",10800,"perdido","dr","Growth",26,"Inbound"],
+  ["Cobalto Legal","Inés Navarro","ines@cobalto.legal",15600,"propuesta","dr","Growth",7,"Referido"],
+  ["Arces Group","Teresa Gil","teresa@arces.group",21000,"ganado","dr","Growth",16,"Outbound"]
+];
+const ACTS = {
+  lead:["Lead creado desde el formulario web"],
+  contactado:["Lead creado","Primer email enviado","Respuesta: quiere ver el producto"],
+  demo:["Lead creado","Llamada de descubrimiento","Demo realizada con el equipo técnico"],
+  propuesta:["Lead creado","Demo realizada","Propuesta enviada","Pendiente de validar con dirección"],
+  ganado:["Demo realizada","Propuesta enviada","Contrato firmado"],
+  perdido:["Demo realizada","Propuesta enviada","Perdida: se van con un competidor más barato"]
+};
+
+function dayLabel(n){
+  if(n<=0) return "hoy";
+  if(n===1) return "ayer";
+  if(n<30) return "hace " + n + " días";
+  return "hace " + Math.round(n/30) + " meses";
+}
+function seedDeals(){
+  return SEED.map(function(r,i){
+    const acts = (ACTS[r[4]]||[]).map(function(t,k,a){
+      return {t:t, d:dayLabel(r[7] + (a.length-1-k)*3)};
+    });
+    return {id:i+1, co:r[0], contact:r[1], email:r[2], amount:r[3], stage:r[4],
+            owner:r[5], plan:r[6], age:r[7], source:r[8], acts:acts};
+  });
+}
+let deals = seedDeals();
+
+/* ═══════════ Persistencia (best effort) ═══════════ */
+const KEY = "pipe-crm-v1";
+try{
+  const s = localStorage.getItem(KEY);
+  if(s){ const p = JSON.parse(s); if(Array.isArray(p) && p.length) deals = p; }
+}catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(deals)); }catch(e){} }
+function reset(){ deals = seedDeals(); save(); refresh(); toast("Datos de ejemplo restaurados"); }
+
+/* ═══════════ Utilidades ═══════════ */
+const eur  = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " €";
+const eurK = n => n>=1000 ? Math.round(n/1000) + "k €" : n + " €";
+const owner = id => OWNERS.find(o => o.id===id) || OWNERS[0];
+const stage = id => STAGES.find(s => s.id===id) || STAGES[0];
+const initials = n => n.split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase();
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+let view = "kanban", q = "", ownerQ = "", openId = null;
+
+function visible(){
+  return deals.filter(function(d){
+    if(ownerQ && d.owner !== ownerQ) return false;
+    if(!q) return true;
+    const s = q.toLowerCase();
+    return d.co.toLowerCase().indexOf(s) > -1 || d.contact.toLowerCase().indexOf(s) > -1;
+  });
+}
+
+/* ═══════════ KPIs ═══════════ */
+function renderKpis(){
+  const ds = visible();
+  const abiertas = ds.filter(d => d.stage!=="ganado" && d.stage!=="perdido");
+  const pipeline = abiertas.reduce((a,d) => a+d.amount, 0);
+  const ganadas  = ds.filter(d => d.stage==="ganado");
+  const cerrado  = ganadas.reduce((a,d) => a+d.amount, 0);
+  const perdidas = ds.filter(d => d.stage==="perdido").length;
+  const conv   = (ganadas.length+perdidas) ? Math.round(ganadas.length/(ganadas.length+perdidas)*100) : 0;
+  const ticket = ganadas.length ? Math.round(cerrado/ganadas.length) : 0;
+  const rows = [
+    ["Pipeline abierto", eur(pipeline),
+      abiertas.length + (abiertas.length===1 ? " oportunidad activa" : " oportunidades activas")],
+    ["Cerrado este trimestre", eur(cerrado), '<span class="delta up">+18%</span> vs. Q2'],
+    ["Tasa de conversión", conv + "%",
+      ganadas.length + (ganadas.length===1 ? " ganada · " : " ganadas · ") +
+      perdidas + (perdidas===1 ? " perdida" : " perdidas")],
+    ["Ticket medio", eur(ticket), '<span class="delta up">+6%</span> vs. Q2']
+  ];
+  document.getElementById("kpis").innerHTML = rows.map(function(k){
+    return '<div class="kpi"><div class="lbl">'+k[0]+'</div><div class="val">'+k[1]+
+           '</div><div class="sub">'+k[2]+'</div></div>';
+  }).join("");
+  document.getElementById("count").textContent =
+    ds.length + (ds.length===1 ? " oportunidad · " : " oportunidades · ") + eur(pipeline) + " en juego";
+}
+
+/* ═══════════ Kanban ═══════════ */
+function renderBoard(){
+  const ds = visible();
+  document.getElementById("board").innerHTML = STAGES.map(function(s){
+    const items = ds.filter(d => d.stage===s.id);
+    const sum = items.reduce((a,d) => a+d.amount, 0);
+    return '<div class="col" data-stage="'+s.id+'">'+
+      '<div class="col-head"><span class="dot" style="background:'+s.color+'"></span>'+
+        '<span class="name">'+s.name+'</span><span class="n">'+items.length+'</span>'+
+        '<span class="sum">'+eurK(sum)+'</span></div>'+
+      '<div class="stack">'+
+        (items.length ? items.map(card).join("") : '<div class="empty-col">Arrastra aquí</div>')+
+      '</div></div>';
+  }).join("");
+  wireDnD();
+}
+function card(d){
+  const o = owner(d.owner);
+  let tag = '<span class="tag plan">'+esc(d.plan)+'</span>';
+  if(d.age===0) tag += ' <span class="tag new">Nuevo</span>';
+  else if(d.age>=12 && d.stage!=="ganado" && d.stage!=="perdido")
+    tag += ' <span class="tag stale">Sin actividad</span>';
+  return '<article class="deal" draggable="true" data-id="'+d.id+'" onclick="openDeal('+d.id+')">'+
+    '<div class="co">'+esc(d.co)+'</div>'+
+    '<div class="meta">'+esc(d.contact)+' · '+esc(d.source)+'</div>'+
+    '<div class="row"><span class="amt">'+eur(d.amount)+'</span>'+
+      '<span class="avatar av" style="background:'+o.color+'" title="'+o.name+'">'+initials(o.name)+'</span></div>'+
+    '<div class="row" style="margin-top:8px">'+tag+
+      '<span style="margin-left:auto;font-size:11px;color:var(--ink-3)">'+dayLabel(d.age)+'</span></div>'+
+    '</article>';
+}
+function wireDnD(){
+  let dragId = null;
+  document.querySelectorAll(".deal").forEach(function(el){
+    el.addEventListener("dragstart", function(e){
+      dragId = +el.dataset.id;
+      el.classList.add("dragging");
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", el.dataset.id);
+    });
+    el.addEventListener("dragend", function(){ el.classList.remove("dragging"); });
+  });
+  document.querySelectorAll(".col").forEach(function(col){
+    col.addEventListener("dragover", function(e){ e.preventDefault(); col.classList.add("drop"); });
+    col.addEventListener("dragleave", function(){ col.classList.remove("drop"); });
+    col.addEventListener("drop", function(e){
+      e.preventDefault(); col.classList.remove("drop");
+      const id = dragId || +e.dataTransfer.getData("text/plain");
+      const d = deals.find(x => x.id===id);
+      const to = col.dataset.stage;
+      if(!d || d.stage===to) return;
+      d.stage = to; d.age = 0;
+      d.acts.push({t:'Movida a "'+stage(to).name+'"', d:"hoy"});
+      save(); refresh(); toast(d.co + " → " + stage(to).name);
+    });
+  });
+}
+
+/* ═══════════ Lista ═══════════ */
+function renderList(){
+  const ds = visible().slice().sort((a,b) => b.amount-a.amount);
+  document.getElementById("list").innerHTML =
+    '<table><thead><tr><th>Empresa</th><th>Contacto</th><th>Etapa</th><th>Plan</th>'+
+    '<th>Responsable</th><th>Últ. actividad</th><th class="num">Valor anual</th></tr></thead><tbody>'+
+    ds.map(function(d){
+      const o = owner(d.owner), s = stage(d.stage);
+      return '<tr onclick="openDeal('+d.id+')"><td style="font-weight:600">'+esc(d.co)+'</td>'+
+        '<td style="color:var(--ink-2)">'+esc(d.contact)+'</td>'+
+        '<td><span class="pill"><span class="dot" style="background:'+s.color+'"></span>'+s.name+'</span></td>'+
+        '<td style="color:var(--ink-2)">'+esc(d.plan)+'</td>'+
+        '<td><span style="display:inline-flex;align-items:center;gap:7px">'+
+          '<span class="avatar" style="width:22px;height:22px;font-size:10px;background:'+o.color+'">'+initials(o.name)+'</span>'+
+          o.name+'</span></td>'+
+        '<td style="color:var(--ink-3)">'+dayLabel(d.age)+'</td>'+
+        '<td class="num">'+eur(d.amount)+'</td></tr>';
+    }).join("")+'</tbody></table>';
+}
+
+function setView(v){
+  view = v;
+  document.getElementById("segK").classList.toggle("on", v==="kanban");
+  document.getElementById("segL").classList.toggle("on", v==="lista");
+  document.getElementById("board").hidden = v!=="kanban";
+  document.getElementById("list").hidden  = v!=="lista";
+  refresh();
+}
+function refresh(){
+  renderKpis();
+  if(view==="kanban") renderBoard(); else renderList();
+  if(openId) renderDrawer();
+}
+
+/* ═══════════ Ficha de oportunidad ═══════════ */
+function openDeal(id){
+  openId = id;
+  renderDrawer();
+  const dr = document.getElementById("drawer");
+  dr.classList.add("on");
+  dr.setAttribute("aria-hidden","false");
+  document.getElementById("overlay").classList.add("on");
+}
+function nextStep(d){
+  const map = {
+    lead:"Enviar el primer email de contacto y calificar la necesidad.",
+    contactado:"Agendar una demo con el equipo decisor.",
+    demo:"Preparar y enviar la propuesta económica.",
+    propuesta:"Hacer seguimiento de la propuesta y resolver objeciones.",
+    ganado:"Traspasar la cuenta al equipo de onboarding.",
+    perdido:"Revisar el motivo de pérdida y reactivar en 6 meses."
+  };
+  return map[d.stage] || "";
+}
+function renderDrawer(){
+  const d = deals.find(x => x.id===openId);
+  if(!d) return;
+  const o = owner(d.owner), s = stage(d.stage);
+  document.getElementById("drCo").textContent = d.co;
+  document.getElementById("drAmt").innerHTML = eur(d.amount) +
+    ' <span style="color:var(--ink-3);font-weight:400">· '+esc(d.plan)+' · anual</span>';
+  let banner = "";
+  if(d.stage==="ganado")  banner = '<div class="won-banner w">Oportunidad ganada · contrato firmado</div>';
+  if(d.stage==="perdido") banner = '<div class="won-banner l">Oportunidad perdida</div>';
+  document.getElementById("drBody").innerHTML =
+    '<div class="fields">'+
+      '<div class="k">Etapa</div><div><span class="pill"><span class="dot" style="background:'+s.color+'"></span>'+s.name+'</span></div>'+
+      '<div class="k">Contacto</div><div>'+esc(d.contact)+'</div>'+
+      '<div class="k">Email</div><div style="color:var(--accent)">'+esc(d.email)+'</div>'+
+      '<div class="k">Origen</div><div>'+esc(d.source)+'</div>'+
+      '<div class="k">Responsable</div><div><span style="display:inline-flex;align-items:center;gap:7px">'+
+        '<span class="avatar" style="width:22px;height:22px;font-size:10px;background:'+o.color+'">'+initials(o.name)+'</span>'+o.name+'</span></div>'+
+      '<div class="k">Últ. actividad</div><div>'+dayLabel(d.age)+'</div>'+
+    '</div>'+ banner +
+    '<div class="sec-title">Siguiente paso</div>'+
+    '<div style="font-size:13px;color:var(--ink-2)">'+nextStep(d)+'</div>'+
+    '<div class="sec-title">Actividad</div>'+
+    '<ul class="tl">'+
+      d.acts.slice().reverse().map(function(a,i){
+        return '<li'+(i===0?' class="hi"':'')+'><div class="t">'+esc(a.t)+
+               '</div><div class="d">'+esc(a.d)+'</div></li>';
+      }).join("")+
+    '</ul>'+
+    '<div class="note-add"><input id="noteIn" placeholder="Añadir nota…" '+
+      'onkeydown="if(event.key===\'Enter\')addNote()">'+
+      '<button class="btn" onclick="addNote()">Añadir</button></div>';
+}
+function addNote(){
+  const inp = document.getElementById("noteIn");
+  const v = inp.value.trim();
+  if(!v) return;
+  const d = deals.find(x => x.id===openId);
+  d.acts.push({t:v, d:"hoy"});
+  d.age = 0;
+  save(); refresh(); toast("Nota añadida");
+}
+function mark(st){
+  const d = deals.find(x => x.id===openId);
+  if(!d) return;
+  d.stage = st; d.age = 0;
+  d.acts.push({t: st==="ganado" ? "Oportunidad ganada" : "Oportunidad perdida", d:"hoy"});
+  save(); refresh();
+  toast(d.co + (st==="ganado" ? " marcada como ganada" : " marcada como perdida"));
+  closeAll();
+}
+
+/* ═══════════ Nueva oportunidad ═══════════ */
+function openNew(){
+  document.getElementById("modal").classList.add("on");
+  document.getElementById("overlay").classList.add("on");
+  document.getElementById("nCo").focus();
+}
+function createDeal(){
+  const co = document.getElementById("nCo").value.trim();
+  if(!co){ document.getElementById("nCo").focus(); toast("Falta el nombre de la empresa"); return; }
+  const ct  = document.getElementById("nCt").value.trim() || "Sin contacto";
+  const amt = +document.getElementById("nAmt").value || 0;
+  const st  = document.getElementById("nStage").value;
+  const ow  = document.getElementById("nOwner").value;
+  const pl  = document.getElementById("nPlan").value;
+  const nextId = deals.reduce((m,d) => Math.max(m,d.id), 0) + 1;
+  deals.push({
+    id:nextId, co:co, contact:ct,
+    email: ct.split(" ")[0].toLowerCase()+"@"+co.toLowerCase().replace(/[^a-z0-9]/g,"")+".com",
+    amount:amt, stage:st, owner:ow, plan:pl, age:0, source:"Manual",
+    acts:[{t:"Oportunidad creada", d:"hoy"}]
+  });
+  save(); closeAll(); refresh(); toast(co + " añadida al pipeline");
+  ["nCo","nCt","nAmt"].forEach(function(i){ document.getElementById(i).value = ""; });
+}
+
+function closeAll(){
+  const dr = document.getElementById("drawer");
+  dr.classList.remove("on");
+  dr.setAttribute("aria-hidden","true");
+  document.getElementById("modal").classList.remove("on");
+  document.getElementById("overlay").classList.remove("on");
+  openId = null;
+}
+let tt;
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("on");
+  clearTimeout(tt);
+  tt = setTimeout(function(){ t.classList.remove("on"); }, 2400);
+}
+
+/* ═══════════ Init ═══════════ */
+document.getElementById("ownerFilter").innerHTML =
+  '<option value="">Todo el equipo</option>' +
+  OWNERS.map(o => '<option value="'+o.id+'">'+o.name+'</option>').join("");
+document.getElementById("nStage").innerHTML =
+  STAGES.filter(s => s.id!=="ganado" && s.id!=="perdido")
+        .map(s => '<option value="'+s.id+'">'+s.name+'</option>').join("");
+document.getElementById("nOwner").innerHTML =
+  OWNERS.map(o => '<option value="'+o.id+'">'+o.name+'</option>').join("");
+document.getElementById("q").addEventListener("input", function(e){ q = e.target.value; refresh(); });
+document.getElementById("ownerFilter").addEventListener("change", function(e){ ownerQ = e.target.value; refresh(); });
+document.addEventListener("keydown", function(e){ if(e.key==="Escape") closeAll(); });
+refresh();
+</script>
+</body>
+</html>
