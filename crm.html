@@ -72,9 +72,14 @@ select.sel:focus{border-color:var(--accent)}
 .col{flex:0 0 262px;background:#efeff1;border-radius:var(--radius);padding:10px;
   border:1px solid transparent;transition:background .12s,border-color .12s}
 .col.drop{background:var(--accent-soft);border-color:#c7c9f7}
-.col-head{display:flex;align-items:center;gap:7px;padding:2px 2px 10px}
+.col-head{display:flex;align-items:center;gap:7px;padding:2px 2px 10px;cursor:grab}
+.col-head:active{cursor:grabbing}
+.col.col-dragging{opacity:.45}
+.col-name-edit{font-size:13px;font-weight:600;padding:2px 6px;border:1px solid var(--accent);
+  border-radius:7px;background:#fff;outline:none;min-width:90px;max-width:150px}
 .dot{width:8px;height:8px;border-radius:50%;flex:none}
-.col-head .name{font-size:13px;font-weight:600}
+.col-head .name{font-size:13px;font-weight:600;padding:2px 4px;border-radius:6px}
+.col-head .name:hover{background:#e2e2e6}
 .col-head .n{font-size:12px;color:var(--ink-3);background:#e2e2e6;border-radius:20px;padding:1px 7px}
 .col-head .sum{margin-left:auto;font-size:12px;font-weight:600;color:var(--ink-2)}
 .stack{display:flex;flex-direction:column;gap:8px;min-height:40px}
@@ -232,7 +237,6 @@ input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--line
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
     <input id="q" type="search" placeholder="Buscar empresa o contacto…" autocomplete="off">
   </div>
-  <select class="sel" id="modelFilter"></select>
   <button class="btn" onclick="openModels()">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="2" fill="currentColor" stroke="none"/><circle cx="7" cy="18" r="2" fill="currentColor" stroke="none"/></svg>
     Modelos de negocio
@@ -250,6 +254,14 @@ input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--line
     <h1>Pipeline</h1>
     <span class="count" id="count"></span>
     <div class="spacer"></div>
+    <button class="btn btn-ghost" onclick="exportData()" title="Descargar una copia de todos los datos">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 20h16"/></svg>
+      Exportar
+    </button>
+    <button class="btn btn-ghost" onclick="document.getElementById('importIn').click()" title="Cargar una copia guardada">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 20h16"/></svg>
+      Importar
+    </button>
     <button class="btn btn-ghost" onclick="resetAll()" title="Volver a los datos de ejemplo">Restaurar ejemplo</button>
   </div>
 
@@ -336,6 +348,7 @@ input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--line
 </div>
 
 <datalist id="srcList"></datalist>
+<input type="file" id="importIn" hidden accept=".json,application/json">
 <input type="file" id="fileIn" hidden multiple
        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg,.csv,.txt">
 <div class="toast" id="toast"></div>
@@ -453,6 +466,37 @@ function save(){
     }catch(e2){}
   }
 }
+/* Copia de seguridad: el navegador guarda los datos de esta máquina;
+   exportar produce un .json que se puede llevar a otro equipo. */
+function exportData(){
+  const stamp = new Date().toISOString().slice(0,10);
+  const blob = new Blob([JSON.stringify(S, null, 2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "pipe-crm-" + stamp + ".json";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  toast("Copia descargada: " + a.download);
+}
+function importData(file){
+  const rd = new FileReader();
+  rd.onload = function(){
+    let p;
+    try{ p = JSON.parse(rd.result); }
+    catch(e){ toast("Ese archivo no es una copia válida"); return; }
+    if(!p || !Array.isArray(p.stages) || !Array.isArray(p.deals) || !p.stages.length){
+      toast("Ese archivo no es una copia válida"); return;
+    }
+    if(!confirm("Se van a sustituir los datos actuales (" + S.deals.length +
+                " oportunidades) por los del archivo (" + p.deals.length + "). ¿Continuar?")) return;
+    S = {stages:p.stages, models:Array.isArray(p.models) ? p.models : [], deals:p.deals};
+    save(); closeAll(); syncSelects(); refresh();
+    toast("Datos importados: " + S.deals.length + " oportunidades");
+  };
+  rd.onerror = function(){ toast("No se pudo leer el archivo"); };
+  rd.readAsText(file);
+}
 function resetAll(){
   S = defaultState(); save(); closeAll(); refresh(); toast("Datos de ejemplo restaurados");
 }
@@ -473,11 +517,10 @@ function modelChip(id){
   return '<span class="chip" style="background:'+m.color+'1f;color:'+m.color+'">'+esc(m.name)+'</span>';
 }
 
-let q = "", modelQ = "", openId = null;
+let q = "", openId = null;
 
 function visible(){
   return S.deals.filter(function(d){
-    if(modelQ && (d.model || "") !== modelQ) return false;
     if(!q) return true;
     const s = q.toLowerCase();
     if(d.co.toLowerCase().indexOf(s) > -1) return true;
@@ -525,8 +568,11 @@ function renderBoard(){
     const items = ds.filter(d => d.stage===s.id);
     const sum = items.reduce((a,d) => a+d.amount, 0);
     return '<div class="col" data-stage="'+s.id+'">'+
-      '<div class="col-head"><span class="dot" style="background:'+s.color+'"></span>'+
-        '<span class="name">'+esc(s.name)+'</span><span class="n">'+items.length+'</span>'+
+      '<div class="col-head" onmousedown="colDragStart(event,\''+s.id+'\')" '+
+        'title="Arrastra para reordenar · doble clic en el nombre para renombrar">'+
+        '<span class="dot" style="background:'+s.color+'"></span>'+
+        '<span class="name" ondblclick="editColName(event,\''+s.id+'\')">'+esc(s.name)+'</span>'+
+        '<span class="n">'+items.length+'</span>'+
         '<span class="sum">'+eurK(sum)+'</span>'+
         '<button class="icon-btn" title="Opciones de la columna" onclick="colMenu(event,\''+s.id+'\')">'+
           '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>'+
@@ -556,16 +602,18 @@ function card(d){
     '</div></article>';
 }
 function wireDnD(){
-  let dragId = null;
+  let dragId = null;      /* oportunidad que se arrastra */
+
   document.querySelectorAll(".deal").forEach(function(el){
     el.addEventListener("dragstart", function(e){
-      dragId = +el.dataset.id;
+      dragId = +el.dataset.id; dragCol = null;
       el.classList.add("dragging");
       e.dataTransfer.effectAllowed = "move";
       e.dataTransfer.setData("text/plain", el.dataset.id);
     });
     el.addEventListener("dragend", function(){ el.classList.remove("dragging"); });
   });
+
   document.querySelectorAll(".col").forEach(function(col){
     col.addEventListener("dragover", function(e){ e.preventDefault(); col.classList.add("drop"); });
     col.addEventListener("dragleave", function(){ col.classList.remove("drop"); });
@@ -586,6 +634,85 @@ function moveDeal(d, to){
 }
 
 /* ═══════════ Columnas: añadir, renombrar, mover, eliminar ═══════════ */
+/* Reordenar columnas arrastrando la cabecera. Se hace a mano en vez de con
+   arrastre nativo porque éste no llega a dispararse desde la cabecera. */
+let colDrag = null;
+function colDragStart(ev, id){
+  if(ev.button !== 0) return;
+  const t = ev.target;
+  if(t.closest("button") || t.tagName === "INPUT") return;   /* menú ⋯ y renombrado */
+  ev.preventDefault();
+  colDrag = {id:id, x:ev.clientX, moved:false};
+  document.addEventListener("mousemove", colDragMove);
+  document.addEventListener("mouseup", colDragEnd);
+}
+function colDragMark(){
+  if(!colDrag) return;
+  const c = document.querySelector('.col[data-stage="' + colDrag.id + '"]');
+  if(c) c.classList.add("col-dragging");
+}
+function colDragMove(ev){
+  if(!colDrag) return;
+  if(!colDrag.moved){
+    if(Math.abs(ev.clientX - colDrag.x) < 4) return;
+    colDrag.moved = true;
+    document.body.style.cursor = "grabbing";
+    closeColMenu();
+  }
+  const el = document.elementFromPoint(ev.clientX, ev.clientY);
+  const over = el && el.closest ? el.closest(".col") : null;
+  if(over && over.dataset.stage && over.dataset.stage !== colDrag.id){
+    const from = S.stages.findIndex(x => x.id === colDrag.id);
+    const at   = S.stages.findIndex(x => x.id === over.dataset.stage);
+    if(from > -1 && at > -1){
+      S.stages.splice(at, 0, S.stages.splice(from,1)[0]);
+      renderBoard();
+    }
+  }
+  colDragMark();
+}
+function colDragEnd(){
+  document.removeEventListener("mousemove", colDragMove);
+  document.removeEventListener("mouseup", colDragEnd);
+  document.body.style.cursor = "";
+  const d = colDrag;
+  colDrag = null;
+  document.querySelectorAll(".col-dragging").forEach(function(c){ c.classList.remove("col-dragging"); });
+  if(d && d.moved){ save(); toast("Orden de columnas actualizado"); }
+}
+
+/* Doble clic en el título: se sustituye por un input hasta Enter/Esc o salir */
+function editColName(ev, id){
+  ev.stopPropagation();
+  const span = ev.currentTarget;
+  const s = stage(id);
+  if(!s) return;
+  const inp = document.createElement("input");
+  inp.type = "text";
+  inp.className = "col-name-edit";
+  inp.value = s.name;
+  inp.draggable = false;
+  span.replaceWith(inp);
+  inp.focus(); inp.select();
+  let done = false;
+  function finish(keep){
+    if(done) return;
+    done = true;
+    const v = inp.value.trim();
+    if(keep && v && v !== s.name){
+      s.name = v; save(); refresh(); syncSelects(); toast("Columna renombrada");
+    }else{
+      refresh();
+    }
+  }
+  inp.addEventListener("blur", function(){ finish(true); });
+  inp.addEventListener("keydown", function(e){
+    e.stopPropagation();
+    if(e.key === "Enter"){ e.preventDefault(); finish(true); }
+    if(e.key === "Escape"){ e.preventDefault(); finish(false); }
+  });
+}
+
 let colMenuEl = null;
 function closeColMenu(){ if(colMenuEl){ colMenuEl.remove(); colMenuEl = null; } }
 function colMenu(ev, id){
@@ -1017,9 +1144,6 @@ function closeAll(){
   openId = null; addingCt = false; colEditing = null;
 }
 function syncSelects(){
-  const mf = document.getElementById("modelFilter");
-  mf.innerHTML = '<option value="">Todos los modelos</option>' +
-    S.models.map(m => '<option value="'+m.id+'"'+(m.id===modelQ?" selected":"")+'>'+esc(m.name)+'</option>').join("");
   document.getElementById("nStage").innerHTML =
     S.stages.map(s => '<option value="'+s.id+'">'+esc(s.name)+'</option>').join("");
   const srcs = [];
@@ -1042,8 +1166,11 @@ function toast(msg){
 
 /* ═══════════ Init ═══════════ */
 syncSelects();
+document.getElementById("importIn").addEventListener("change", function(e){
+  if(e.target.files && e.target.files[0]) importData(e.target.files[0]);
+  e.target.value = "";
+});
 document.getElementById("q").addEventListener("input", function(e){ q = e.target.value; refresh(); });
-document.getElementById("modelFilter").addEventListener("change", function(e){ modelQ = e.target.value; refresh(); });
 document.addEventListener("keydown", function(e){ if(e.key==="Escape") closeAll(); });
 refresh();
 </script>
