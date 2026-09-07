@@ -24,7 +24,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 
 /* ── Topbar ─────────────────────────────── */
-.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:14px;
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:12px;
   padding:12px 22px;background:var(--card);border-bottom:1px solid var(--line)}
 .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:16px;letter-spacing:-.02em}
 .brand .logo{width:26px;height:26px;border-radius:8px;background:var(--accent);color:#fff;
@@ -33,20 +33,23 @@ button{cursor:pointer}
 .spacer{flex:1}
 .search{position:relative}
 .search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--ink-3)}
-.search input{width:250px;padding:8px 12px 8px 32px;border:1px solid var(--line);
+.search input{width:230px;padding:8px 12px 8px 32px;border:1px solid var(--line);
   border-radius:10px;background:#fbfbfc;outline:none}
 .search input:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px var(--accent-soft)}
 select.sel{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fbfbfc;outline:none}
 select.sel:focus{border-color:var(--accent)}
 .btn{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:10px;
-  border:1px solid var(--line);background:#fff;font-weight:500}
+  border:1px solid var(--line);background:#fff;font-weight:500;white-space:nowrap}
 .btn:hover{background:#fafafb}
 .btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .btn-primary:hover{background:#443bd4}
 .btn-ghost{border-color:transparent;background:transparent;color:var(--ink-2)}
 .btn-ghost:hover{background:var(--line-2)}
-.avatar{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
-  font-size:11px;font-weight:600;color:#fff;flex:none}
+.btn-sm{padding:5px 10px;font-size:13px;border-radius:8px}
+.btn-danger{color:var(--red)}
+.icon-btn{display:grid;place-items:center;width:26px;height:26px;border:0;border-radius:7px;
+  background:transparent;color:var(--ink-3)}
+.icon-btn:hover{background:#e2e2e6;color:var(--ink)}
 
 /* ── Layout ─────────────────────────────── */
 .wrap{padding:20px 22px 40px}
@@ -62,17 +65,13 @@ select.sel:focus{border-color:var(--accent)}
 .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .toolbar h1{margin:0;font-size:16px;font-weight:600;letter-spacing:-.01em}
 .toolbar .count{font-size:13px;color:var(--ink-3)}
-.seg{display:flex;background:var(--line-2);border-radius:10px;padding:3px;gap:2px}
-.seg button{border:0;background:transparent;padding:6px 13px;border-radius:8px;
-  font-size:13px;font-weight:500;color:var(--ink-2)}
-.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(16,17,20,.08)}
 
 /* ── Kanban ─────────────────────────────── */
 .board{display:flex;gap:12px;align-items:flex-start;overflow-x:auto;padding-bottom:10px}
-.col{flex:0 0 258px;background:#efeff1;border-radius:var(--radius);padding:10px;
+.col{flex:0 0 262px;background:#efeff1;border-radius:var(--radius);padding:10px;
   border:1px solid transparent;transition:background .12s,border-color .12s}
 .col.drop{background:var(--accent-soft);border-color:#c7c9f7}
-.col-head{display:flex;align-items:center;gap:7px;padding:2px 4px 10px}
+.col-head{display:flex;align-items:center;gap:7px;padding:2px 2px 10px}
 .dot{width:8px;height:8px;border-radius:50%;flex:none}
 .col-head .name{font-size:13px;font-weight:600}
 .col-head .n{font-size:12px;color:var(--ink-3);background:#e2e2e6;border-radius:20px;padding:1px 7px}
@@ -85,34 +84,33 @@ select.sel:focus{border-color:var(--accent)}
 .deal .co{font-weight:600;letter-spacing:-.01em}
 .deal .meta{font-size:12px;color:var(--ink-3);margin-top:1px}
 .deal .row{display:flex;align-items:center;gap:8px;margin-top:9px}
-.deal .amt{font-weight:600;font-size:13px}
-.deal .av{width:22px;height:22px;font-size:10px;margin-left:auto}
-.tag{display:inline-block;font-size:11px;font-weight:600;padding:2px 7px;border-radius:6px}
-.tag.plan{background:var(--accent-soft);color:var(--accent)}
-.tag.new{background:var(--green-soft);color:var(--green)}
-.tag.stale{background:var(--red-soft);color:var(--red)}
+.deal .amt{font-weight:600;font-size:13px;margin-left:auto}
+.deal .foot{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:11px;color:var(--ink-3)}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;
+  padding:3px 8px;border-radius:7px;white-space:nowrap}
+.chip.none{background:var(--line-2);color:var(--ink-3)}
+.clip{display:inline-flex;align-items:center;gap:3px}
+.stale{color:var(--red);font-weight:600}
 .empty-col{font-size:12px;color:var(--ink-3);text-align:center;padding:14px 0}
+.addcol{flex:0 0 190px}
+.addcol button{width:100%;padding:11px;border:1px dashed #cfcfd4;border-radius:var(--radius);
+  background:transparent;color:var(--ink-2);font-weight:500}
+.addcol button:hover{background:#efeff1;border-color:var(--ink-3)}
 
-/* ── Lista ──────────────────────────────── */
-.tablewrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;background:var(--card);
-  border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
-th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;
-  color:var(--ink-3);font-weight:600;padding:11px 14px;background:#fbfbfc;border-bottom:1px solid var(--line)}
-td{padding:12px 14px;border-bottom:1px solid var(--line-2)}
-tbody tr:last-child td{border-bottom:0}
-tbody tr{cursor:pointer}
-tbody tr:hover{background:#fafafb}
-td.num{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
-th.num{text-align:right}
-.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;
-  padding:3px 9px;border-radius:20px;background:var(--line-2)}
+/* menú de columna */
+.menu{position:absolute;z-index:65;background:var(--card);border:1px solid var(--line);
+  border-radius:11px;box-shadow:0 12px 34px rgba(16,17,20,.16);padding:5px;min-width:186px}
+.menu button{display:flex;align-items:center;gap:9px;width:100%;text-align:left;border:0;
+  background:transparent;padding:8px 10px;border-radius:8px;font-size:13px}
+.menu button:hover{background:var(--line-2)}
+.menu button.danger{color:var(--red)}
+.menu .divider{height:1px;background:var(--line-2);margin:4px 6px}
 
 /* ── Drawer ─────────────────────────────── */
 .overlay{position:fixed;inset:0;background:rgba(16,17,20,.32);opacity:0;pointer-events:none;
   transition:opacity .18s;z-index:40}
 .overlay.on{opacity:1;pointer-events:auto}
-.drawer{position:fixed;top:0;right:0;bottom:0;width:430px;max-width:92vw;background:var(--card);
+.drawer{position:fixed;top:0;right:0;bottom:0;width:450px;max-width:94vw;background:var(--card);
   z-index:50;transform:translateX(102%);transition:transform .22s cubic-bezier(.32,.72,0,1);
   display:flex;flex-direction:column;box-shadow:-8px 0 30px rgba(16,17,20,.12)}
 .drawer.on{transform:none}
@@ -122,10 +120,44 @@ th.num{text-align:right}
 .dr-body{flex:1;overflow-y:auto;padding:16px 20px 20px}
 .dr-foot{padding:12px 20px;border-top:1px solid var(--line);display:flex;gap:8px}
 .dr-foot .btn{flex:1;justify-content:center}
-.fields{display:grid;grid-template-columns:104px 1fr;gap:9px 12px;font-size:13px}
+.fields{display:grid;grid-template-columns:118px 1fr;gap:10px 12px;font-size:13px;align-items:center}
 .fields .k{color:var(--ink-3)}
-.sec-title{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);
-  font-weight:600;margin:22px 0 10px}
+.fields select,.fields input{width:100%;padding:6px 9px;border:1px solid var(--line);
+  border-radius:9px;background:#fbfbfc;outline:none;font-size:13px}
+.fields select:focus,.fields input:focus{border-color:var(--accent);background:#fff}
+.sec-title{display:flex;align-items:center;gap:8px;font-size:11px;text-transform:uppercase;
+  letter-spacing:.05em;color:var(--ink-3);font-weight:600;margin:22px 0 10px}
+.sec-title .btn{margin-left:auto;text-transform:none;letter-spacing:0}
+
+/* contactos */
+.ct{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-2)}
+.ct:last-of-type{border-bottom:0}
+.ct .nm{font-size:13px;font-weight:600}
+.ct .nm .primary{font-size:10px;font-weight:600;color:var(--accent);background:var(--accent-soft);
+  border-radius:5px;padding:1px 5px;margin-left:6px;text-transform:uppercase;letter-spacing:.04em}
+.ct .dt{font-size:12px;color:var(--ink-3)}
+.ct .dt a{color:var(--accent);text-decoration:none}
+.ct .acts{margin-left:auto;display:flex;gap:2px}
+.inline-form{background:#fbfbfc;border:1px solid var(--line);border-radius:11px;padding:11px;margin-top:10px}
+.inline-form .f2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.inline-form input{width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:9px;
+  background:#fff;outline:none;font-size:13px;margin-bottom:8px}
+.inline-form input:focus{border-color:var(--accent)}
+.inline-form .row{display:flex;justify-content:flex-end;gap:8px}
+
+/* ofertas / adjuntos */
+.file{display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid var(--line);
+  border-radius:11px;margin-bottom:8px;background:#fbfbfc}
+.file .ic{width:30px;height:30px;border-radius:8px;background:var(--accent-soft);color:var(--accent);
+  display:grid;place-items:center;flex:none}
+.file .nm{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file .mt{font-size:11px;color:var(--ink-3)}
+.file .acts{margin-left:auto;display:flex;gap:2px;align-items:center}
+.file a.dl{color:var(--accent);text-decoration:none;font-size:12px;font-weight:600}
+.dropzone{border:1px dashed #cfcfd4;border-radius:11px;padding:14px;text-align:center;
+  color:var(--ink-3);font-size:13px;background:#fbfbfc}
+.dropzone.over{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+
 .tl{list-style:none;margin:0;padding:0 0 0 16px;border-left:2px solid var(--line-2)}
 .tl li{position:relative;padding:0 0 14px 12px}
 .tl li:last-child{padding-bottom:0}
@@ -142,12 +174,14 @@ th.num{text-align:right}
 .won-banner.w{background:var(--green-soft);color:var(--green)}
 .won-banner.l{background:var(--red-soft);color:var(--red)}
 
-/* ── Modal ──────────────────────────────── */
+/* ── Modales ────────────────────────────── */
 .modal{position:fixed;z-index:60;top:50%;left:50%;transform:translate(-50%,-48%) scale(.97);
-  width:420px;max-width:92vw;background:var(--card);border-radius:16px;padding:20px;
-  box-shadow:0 20px 60px rgba(16,17,20,.22);opacity:0;pointer-events:none;transition:opacity .16s,transform .16s}
+  width:430px;max-width:92vw;max-height:86vh;overflow-y:auto;background:var(--card);
+  border-radius:16px;padding:20px;box-shadow:0 20px 60px rgba(16,17,20,.22);
+  opacity:0;pointer-events:none;transition:opacity .16s,transform .16s}
 .modal.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
-.modal h2{margin:0 0 16px;font-size:16px;font-weight:600}
+.modal h2{margin:0 0 4px;font-size:16px;font-weight:600}
+.modal .hint{font-size:13px;color:var(--ink-3);margin:0 0 16px}
 .f{margin-bottom:12px}
 .f label{display:block;font-size:12px;font-weight:500;color:var(--ink-2);margin-bottom:5px}
 .f input,.f select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:10px;
@@ -155,15 +189,21 @@ th.num{text-align:right}
 .f input:focus,.f select:focus{border-color:var(--accent);background:#fff}
 .f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .modal-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--line);
+  border-radius:9px;background:#fff;cursor:pointer;flex:none}
+.mrow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.mrow input[type=text]{flex:1;padding:8px 11px;border:1px solid var(--line);border-radius:10px;
+  background:#fbfbfc;outline:none}
+.mrow input[type=text]:focus{border-color:var(--accent);background:#fff}
 
 .toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,14px);background:var(--ink);
   color:#fff;padding:10px 16px;border-radius:11px;font-size:13px;font-weight:500;
-  opacity:0;pointer-events:none;transition:.18s;z-index:70}
+  opacity:0;pointer-events:none;transition:.18s;z-index:80;max-width:80vw;text-align:center}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
-@media (max-width:900px){
+@media (max-width:1000px){
   .kpis{grid-template-columns:repeat(2,1fr)}
-  .search input{width:150px}
+  .search input{width:160px}
   .brand small{display:none}
 }
 @media (max-width:700px){
@@ -171,11 +211,12 @@ th.num{text-align:right}
   .search{order:3;flex:1 1 100%}
   .search input{width:100%}
   select.sel{order:4;flex:1}
-  .topbar .btn-primary{order:5}
+  .topbar .btn{order:5}
   .wrap{padding:16px 14px 32px}
   .toolbar{flex-wrap:wrap}
   .toolbar .count{flex:1 1 100%;order:5}
   .col{flex:0 0 82vw}
+  .addcol{flex:0 0 82vw}
 }
 </style>
 </head>
@@ -190,7 +231,11 @@ th.num{text-align:right}
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
     <input id="q" type="search" placeholder="Buscar empresa o contacto…" autocomplete="off">
   </div>
-  <select class="sel" id="ownerFilter"></select>
+  <select class="sel" id="modelFilter"></select>
+  <button class="btn" onclick="openModels()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="2" fill="currentColor" stroke="none"/><circle cx="7" cy="18" r="2" fill="currentColor" stroke="none"/></svg>
+    Modelos de negocio
+  </button>
   <button class="btn btn-primary" onclick="openNew()">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
     Nueva oportunidad
@@ -204,19 +249,15 @@ th.num{text-align:right}
     <h1>Pipeline</h1>
     <span class="count" id="count"></span>
     <div class="spacer"></div>
-    <div class="seg">
-      <button id="segK" class="on" onclick="setView('kanban')">Kanban</button>
-      <button id="segL" onclick="setView('lista')">Lista</button>
-    </div>
-    <button class="btn btn-ghost" onclick="reset()" title="Volver a los datos de ejemplo">Restaurar ejemplo</button>
+    <button class="btn btn-ghost" onclick="resetAll()" title="Volver a los datos de ejemplo">Restaurar ejemplo</button>
   </div>
 
   <div class="board" id="board"></div>
-  <div class="tablewrap" id="list" hidden></div>
 </div>
 
 <div class="overlay" id="overlay" onclick="closeAll()"></div>
 
+<!-- ═══════════ Ficha de oportunidad ═══════════ -->
 <aside class="drawer" id="drawer" aria-hidden="true">
   <div class="dr-head">
     <div style="display:flex;align-items:flex-start;gap:10px">
@@ -231,72 +272,137 @@ th.num{text-align:right}
   </div>
   <div class="dr-body" id="drBody"></div>
   <div class="dr-foot">
-    <button class="btn" onclick="mark('perdido')" style="color:var(--red)">Marcar perdida</button>
-    <button class="btn btn-primary" onclick="mark('ganado')">Marcar ganada</button>
+    <button class="btn btn-danger" onclick="deleteDeal()">Eliminar</button>
+    <button class="btn btn-primary" onclick="markWon()">Marcar ganada</button>
   </div>
 </aside>
 
-<div class="modal" id="modal" role="dialog" aria-modal="true">
+<!-- ═══════════ Nueva oportunidad ═══════════ -->
+<div class="modal" id="modalNew" role="dialog" aria-modal="true">
   <h2>Nueva oportunidad</h2>
+  <p class="hint">Podrás añadir más contactos y la oferta desde su ficha.</p>
   <div class="f"><label for="nCo">Empresa</label><input id="nCo" placeholder="Acme S.L."></div>
   <div class="f2">
-    <div class="f"><label for="nCt">Contacto</label><input id="nCt" placeholder="Nombre y apellido"></div>
-    <div class="f"><label for="nAmt">Valor anual (€)</label><input id="nAmt" type="number" min="0" step="100" placeholder="12000"></div>
+    <div class="f"><label for="nCt">Contacto principal</label><input id="nCt" placeholder="Nombre y apellido"></div>
+    <div class="f"><label for="nEm">Email</label><input id="nEm" type="email" placeholder="nombre@empresa.com"></div>
   </div>
   <div class="f2">
-    <div class="f"><label for="nStage">Etapa</label><select id="nStage"></select></div>
+    <div class="f"><label for="nAmt">Valor anual (€)</label><input id="nAmt" type="number" min="0" step="100" placeholder="12000"></div>
+    <div class="f"><label for="nStage">Columna</label><select id="nStage"></select></div>
+  </div>
+  <div class="f2">
+    <div class="f"><label for="nModel">Modelo de negocio</label><select id="nModel"></select></div>
     <div class="f"><label for="nOwner">Responsable</label><select id="nOwner"></select></div>
   </div>
-  <div class="f"><label for="nPlan">Plan</label><select id="nPlan">
-    <option>Starter</option><option selected>Growth</option><option>Scale</option></select></div>
   <div class="modal-foot">
     <button class="btn" onclick="closeAll()">Cancelar</button>
     <button class="btn btn-primary" onclick="createDeal()">Crear oportunidad</button>
   </div>
 </div>
 
+<!-- ═══════════ Columna (añadir / editar) ═══════════ -->
+<div class="modal" id="modalCol" role="dialog" aria-modal="true">
+  <h2 id="colTitle">Nueva columna</h2>
+  <p class="hint">El nombre y el color se aplican al pipeline completo.</p>
+  <div class="f"><label for="cName">Nombre de la columna</label><input id="cName" placeholder="Ej. Negociación"></div>
+  <div class="f"><label for="cColor">Color</label>
+    <div style="display:flex;align-items:center;gap:10px">
+      <input type="color" id="cColor" value="#4f46e5">
+      <span class="hint" style="margin:0">Se usa en el punto de la columna y en la vista lista.</span>
+    </div>
+  </div>
+  <div class="modal-foot">
+    <button class="btn" onclick="closeAll()">Cancelar</button>
+    <button class="btn btn-primary" id="colSave">Guardar</button>
+  </div>
+</div>
+
+<!-- ═══════════ Modelos de negocio ═══════════ -->
+<div class="modal" id="modalModels" role="dialog" aria-modal="true">
+  <h2>Modelos de negocio</h2>
+  <p class="hint">Crea tus propias opciones y dale un color a cada una.</p>
+  <div id="modelRows"></div>
+  <button class="btn btn-sm" onclick="addModel()" style="margin-top:6px">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    Añadir modelo
+  </button>
+  <div class="modal-foot">
+    <button class="btn btn-primary" onclick="closeAll()">Hecho</button>
+  </div>
+</div>
+
+<input type="file" id="fileIn" hidden multiple
+       accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg,.csv,.txt">
 <div class="toast" id="toast"></div>
 
 <script>
-/* ═══════════ Datos ═══════════ */
-const STAGES = [
-  {id:"lead",       name:"Lead",       color:"#9aa0a6"},
-  {id:"contactado", name:"Contactado", color:"#4f46e5"},
-  {id:"demo",       name:"Demo",       color:"#0d9488"},
-  {id:"propuesta",  name:"Propuesta",  color:"#c77700"},
-  {id:"ganado",     name:"Ganado",     color:"#0f9d58"},
-  {id:"perdido",    name:"Perdido",    color:"#d92d20"}
-];
+/* ═══════════════════════════════════════════════════════
+   Estado — columnas, modelos de negocio y oportunidades
+   ═══════════════════════════════════════════════════════ */
 const OWNERS = [
-  {id:"em", name:"Estefanía M.", color:"#4f46e5"},
-  {id:"dr", name:"Diego R.",     color:"#0d9488"},
-  {id:"lc", name:"Laura C.",     color:"#c77700"}
+  {id:"em", name:"Estefanía M."},
+  {id:"dr", name:"Diego R."},
+  {id:"lc", name:"Laura C."}
 ];
+
+function defaultStages(){
+  return [
+    {id:"lead",       name:"Lead",       color:"#9aa0a6"},
+    {id:"contactado", name:"Contactado", color:"#4f46e5"},
+    {id:"demo",       name:"Demo",       color:"#0d9488"},
+    {id:"propuesta",  name:"Propuesta",  color:"#c77700"},
+    {id:"ganado",     name:"Ganado",     color:"#0f9d58"},
+    {id:"perdido",    name:"Perdido",    color:"#d92d20"}
+  ];
+}
+function defaultModels(){
+  return [
+    {id:"saas",      name:"SaaS suscripción", color:"#4f46e5"},
+    {id:"licencia",  name:"Licencia anual",   color:"#0d9488"},
+    {id:"servicios", name:"Servicios",        color:"#c77700"},
+    {id:"marketpl",  name:"Marketplace",      color:"#7c3aed"}
+  ];
+}
+
+/* [empresa, contacto, email, cargo, valor, columna, responsable, modelo, días, origen] */
 const SEED = [
-  ["Northwind Labs","Marta Ruiz","marta@northwind.io",18000,"contactado","em","Growth",3,"Inbound"],
-  ["Acme Cloud","Javier Pons","j.pons@acme.co",42000,"propuesta","em","Scale",6,"Referido"],
-  ["Bitmark","Nuria Sanz","nuria@bitmark.es",9600,"demo","dr","Growth",2,"Inbound"],
-  ["Delfos Analytics","Pau Serra","pau@delfos.ai",24000,"demo","lc","Growth",9,"Outbound"],
-  ["Hexa Retail","Clara Vidal","clara@hexa.shop",7200,"lead","dr","Starter",1,"Inbound"],
-  ["Orbita Fintech","Iván Gómez","ivan@orbita.fi",56000,"propuesta","lc","Scale",14,"Outbound"],
-  ["Trebol Foods","Rosa Marín","rosa@trebol.com",12000,"contactado","dr","Growth",5,"Evento"],
-  ["Kappa Studio","Luis Ferrer","luis@kappa.studio",4800,"lead","em","Starter",0,"Inbound"],
-  ["Zenit Logistics","Andrés Lara","a.lara@zenit.lg",33000,"ganado","em","Scale",21,"Referido"],
-  ["Mirlo Media","Sofía Peña","sofia@mirlo.media",8400,"ganado","lc","Growth",18,"Inbound"],
-  ["Vega Health","Elena Ortiz","elena@vega.health",27500,"contactado","lc","Growth",4,"Outbound"],
-  ["Nodo Games","Marc Bosch","marc@nodo.gg",6000,"lead","dr","Starter",2,"Inbound"],
-  ["Solaris Energy","Rubén Díaz","ruben@solaris.energy",48000,"demo","em","Scale",11,"Evento"],
-  ["Pixel Forge","Aitor Ruiz","aitor@pixelforge.dev",10800,"perdido","dr","Growth",26,"Inbound"],
-  ["Cobalto Legal","Inés Navarro","ines@cobalto.legal",15600,"propuesta","dr","Growth",7,"Referido"],
-  ["Arces Group","Teresa Gil","teresa@arces.group",21000,"ganado","dr","Growth",16,"Outbound"]
+  ["Northwind Labs","Marta Ruiz","marta@northwind.io","Head of Ops",18000,"contactado","em","saas",3,"Inbound"],
+  ["Acme Cloud","Javier Pons","j.pons@acme.co","CTO",42000,"propuesta","em","licencia",6,"Referido"],
+  ["Bitmark","Nuria Sanz","nuria@bitmark.es","Product Manager",9600,"demo","dr","saas",2,"Inbound"],
+  ["Delfos Analytics","Pau Serra","pau@delfos.ai","COO",24000,"demo","lc","saas",9,"Outbound"],
+  ["Hexa Retail","Clara Vidal","clara@hexa.shop","E-commerce Lead",7200,"lead","dr","marketpl",1,"Inbound"],
+  ["Orbita Fintech","Iván Gómez","ivan@orbita.fi","CFO",56000,"propuesta","lc","licencia",14,"Outbound"],
+  ["Trebol Foods","Rosa Marín","rosa@trebol.com","Directora de compras",12000,"contactado","dr","servicios",5,"Evento"],
+  ["Kappa Studio","Luis Ferrer","luis@kappa.studio","Founder",4800,"lead","em","saas",0,"Inbound"],
+  ["Zenit Logistics","Andrés Lara","a.lara@zenit.lg","Director general",33000,"ganado","em","licencia",21,"Referido"],
+  ["Mirlo Media","Sofía Peña","sofia@mirlo.media","Head of Growth",8400,"ganado","lc","saas",18,"Inbound"],
+  ["Vega Health","Elena Ortiz","elena@vega.health","Directora médica",27500,"contactado","lc","servicios",4,"Outbound"],
+  ["Nodo Games","Marc Bosch","marc@nodo.gg","Studio Lead",6000,"lead","dr","marketpl",2,"Inbound"],
+  ["Solaris Energy","Rubén Díaz","ruben@solaris.energy","Director de operaciones",48000,"demo","em","licencia",11,"Evento"],
+  ["Pixel Forge","Aitor Ruiz","aitor@pixelforge.dev","CEO",10800,"perdido","dr","servicios",26,"Inbound"],
+  ["Cobalto Legal","Inés Navarro","ines@cobalto.legal","Socia directora",15600,"propuesta","dr","servicios",7,"Referido"],
+  ["Arces Group","Teresa Gil","teresa@arces.group","Directora financiera",21000,"ganado","dr","licencia",16,"Outbound"]
 ];
 const ACTS = {
   lead:["Lead creado desde el formulario web"],
   contactado:["Lead creado","Primer email enviado","Respuesta: quiere ver el producto"],
   demo:["Lead creado","Llamada de descubrimiento","Demo realizada con el equipo técnico"],
-  propuesta:["Lead creado","Demo realizada","Propuesta enviada","Pendiente de validar con dirección"],
-  ganado:["Demo realizada","Propuesta enviada","Contrato firmado"],
-  perdido:["Demo realizada","Propuesta enviada","Perdida: se van con un competidor más barato"]
+  propuesta:["Lead creado","Demo realizada","Oferta enviada","Pendiente de validar con dirección"],
+  ganado:["Demo realizada","Oferta enviada","Contrato firmado"],
+  perdido:["Demo realizada","Oferta enviada","Perdida: se van con un competidor más barato"]
+};
+/* Segundos contactos de ejemplo, para que se vea el multi-contacto */
+const EXTRA_CT = {
+  "Acme Cloud":       [["Rocío Vela","rocio.vela@acme.co","Directora financiera"]],
+  "Orbita Fintech":   [["Pedro Salas","pedro@orbita.fi","Head of IT"],["Ana Peris","ana@orbita.fi","Compras"]],
+  "Solaris Energy":   [["Nieves Cano","nieves@solaris.energy","Responsable de compras"]],
+  "Northwind Labs":   [["Tomás Ariza","tomas@northwind.io","CTO"]]
+};
+/* Ofertas de ejemplo: sólo metadatos, sin fichero real (data === null) */
+const EXTRA_FILES = {
+  "Acme Cloud":     [["Oferta-AcmeCloud-v2.pdf", 284000]],
+  "Orbita Fintech": [["Propuesta-Orbita-Scale.pdf", 412000]],
+  "Cobalto Legal":  [["Oferta-CobaltoLegal.pdf", 196000]]
 };
 
 function dayLabel(n){
@@ -307,51 +413,94 @@ function dayLabel(n){
 }
 function seedDeals(){
   return SEED.map(function(r,i){
-    const acts = (ACTS[r[4]]||[]).map(function(t,k,a){
-      return {t:t, d:dayLabel(r[7] + (a.length-1-k)*3)};
+    const acts = (ACTS[r[5]]||[]).map(function(t,k,a){
+      return {t:t, d:dayLabel(r[8] + (a.length-1-k)*3)};
     });
-    return {id:i+1, co:r[0], contact:r[1], email:r[2], amount:r[3], stage:r[4],
-            owner:r[5], plan:r[6], age:r[7], source:r[8], acts:acts};
+    const cts = [{name:r[1], email:r[2], role:r[3]}].concat(
+      (EXTRA_CT[r[0]]||[]).map(c => ({name:c[0], email:c[1], role:c[2]})));
+    const files = (EXTRA_FILES[r[0]]||[]).map(f =>
+      ({name:f[0], size:f[1], date:dayLabel(Math.max(1,r[8]-1)), data:null}));
+    return {id:i+1, co:r[0], contacts:cts, amount:r[4], stage:r[5],
+            owner:r[6], model:r[7], age:r[8], source:r[9], files:files, acts:acts};
   });
 }
-let deals = seedDeals();
+function defaultState(){
+  return {stages:defaultStages(), models:defaultModels(), deals:seedDeals()};
+}
+let S = defaultState();
 
 /* ═══════════ Persistencia (best effort) ═══════════ */
-const KEY = "pipe-crm-v1";
+const KEY = "pipe-crm-v2";
+let quotaWarned = false;
 try{
-  const s = localStorage.getItem(KEY);
-  if(s){ const p = JSON.parse(s); if(Array.isArray(p) && p.length) deals = p; }
+  const raw = localStorage.getItem(KEY);
+  if(raw){
+    const p = JSON.parse(raw);
+    if(p && Array.isArray(p.stages) && Array.isArray(p.deals) && p.stages.length) S = p;
+  }
 }catch(e){}
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(deals)); }catch(e){} }
-function reset(){ deals = seedDeals(); save(); refresh(); toast("Datos de ejemplo restaurados"); }
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(S)); }
+  catch(e){
+    /* Los ficheros adjuntos pueden desbordar la cuota: se guarda sin ellos */
+    try{
+      const light = JSON.parse(JSON.stringify(S));
+      light.deals.forEach(d => (d.files||[]).forEach(f => f.data = null));
+      localStorage.setItem(KEY, JSON.stringify(light));
+      if(!quotaWarned){
+        quotaWarned = true;
+        toast("Los archivos son demasiado grandes para guardarlos: sólo se recuerda su nombre");
+      }
+    }catch(e2){}
+  }
+}
+function resetAll(){
+  S = defaultState(); save(); closeAll(); refresh(); toast("Datos de ejemplo restaurados");
+}
 
 /* ═══════════ Utilidades ═══════════ */
 const eur  = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " €";
 const eurK = n => n>=1000 ? Math.round(n/1000) + "k €" : n + " €";
 const owner = id => OWNERS.find(o => o.id===id) || OWNERS[0];
-const stage = id => STAGES.find(s => s.id===id) || STAGES[0];
-const initials = n => n.split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase();
-const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const stage = id => S.stages.find(s => s.id===id) || S.stages[0];
+const model = id => S.models.find(m => m.id===id) || null;
+const esc = s => String(s == null ? "" : s)
+  .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const uid = p => p + "-" + Math.random().toString(36).slice(2,8);
+const kb = n => n>=1048576 ? (n/1048576).toFixed(1).replace(".",",")+" MB"
+                           : Math.max(1,Math.round(n/1024))+" KB";
+function modelChip(id){
+  const m = model(id);
+  if(!m) return '<span class="chip none">Sin modelo</span>';
+  return '<span class="chip" style="background:'+m.color+'1f;color:'+m.color+'">'+esc(m.name)+'</span>';
+}
 
-let view = "kanban", q = "", ownerQ = "", openId = null;
+let q = "", modelQ = "", openId = null;
 
 function visible(){
-  return deals.filter(function(d){
-    if(ownerQ && d.owner !== ownerQ) return false;
+  return S.deals.filter(function(d){
+    if(modelQ && (d.model || "") !== modelQ) return false;
     if(!q) return true;
     const s = q.toLowerCase();
-    return d.co.toLowerCase().indexOf(s) > -1 || d.contact.toLowerCase().indexOf(s) > -1;
+    if(d.co.toLowerCase().indexOf(s) > -1) return true;
+    return (d.contacts||[]).some(c =>
+      (c.name||"").toLowerCase().indexOf(s) > -1 || (c.email||"").toLowerCase().indexOf(s) > -1);
   });
 }
 
 /* ═══════════ KPIs ═══════════ */
+/* "Ganado"/"Perdido" son las dos últimas columnas por convención del pipeline:
+   se identifican por id, y si el usuario las borra los KPI se recalculan igual. */
+const isWon  = d => d.stage === "ganado";
+const isLost = d => d.stage === "perdido";
+
 function renderKpis(){
   const ds = visible();
-  const abiertas = ds.filter(d => d.stage!=="ganado" && d.stage!=="perdido");
+  const abiertas = ds.filter(d => !isWon(d) && !isLost(d));
   const pipeline = abiertas.reduce((a,d) => a+d.amount, 0);
-  const ganadas  = ds.filter(d => d.stage==="ganado");
+  const ganadas  = ds.filter(isWon);
   const cerrado  = ganadas.reduce((a,d) => a+d.amount, 0);
-  const perdidas = ds.filter(d => d.stage==="perdido").length;
+  const perdidas = ds.filter(isLost).length;
   const conv   = (ganadas.length+perdidas) ? Math.round(ganadas.length/(ganadas.length+perdidas)*100) : 0;
   const ticket = ganadas.length ? Math.round(cerrado/ganadas.length) : 0;
   const rows = [
@@ -374,33 +523,39 @@ function renderKpis(){
 /* ═══════════ Kanban ═══════════ */
 function renderBoard(){
   const ds = visible();
-  document.getElementById("board").innerHTML = STAGES.map(function(s){
+  document.getElementById("board").innerHTML = S.stages.map(function(s){
     const items = ds.filter(d => d.stage===s.id);
     const sum = items.reduce((a,d) => a+d.amount, 0);
     return '<div class="col" data-stage="'+s.id+'">'+
       '<div class="col-head"><span class="dot" style="background:'+s.color+'"></span>'+
-        '<span class="name">'+s.name+'</span><span class="n">'+items.length+'</span>'+
-        '<span class="sum">'+eurK(sum)+'</span></div>'+
+        '<span class="name">'+esc(s.name)+'</span><span class="n">'+items.length+'</span>'+
+        '<span class="sum">'+eurK(sum)+'</span>'+
+        '<button class="icon-btn" title="Opciones de la columna" onclick="colMenu(event,\''+s.id+'\')">'+
+          '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>'+
+        '</button></div>'+
       '<div class="stack">'+
         (items.length ? items.map(card).join("") : '<div class="empty-col">Arrastra aquí</div>')+
       '</div></div>';
-  }).join("");
+  }).join("") +
+  '<div class="addcol"><button onclick="openCol()">+ Añadir columna</button></div>';
   wireDnD();
 }
 function card(d){
-  const o = owner(d.owner);
-  let tag = '<span class="tag plan">'+esc(d.plan)+'</span>';
-  if(d.age===0) tag += ' <span class="tag new">Nuevo</span>';
-  else if(d.age>=12 && d.stage!=="ganado" && d.stage!=="perdido")
-    tag += ' <span class="tag stale">Sin actividad</span>';
+  const cts = d.contacts || [];
+  const main = cts[0] ? cts[0].name : "Sin contacto";
+  const more = cts.length > 1 ? ' <span style="color:var(--accent)">+'+(cts.length-1)+'</span>' : "";
+  const files = (d.files||[]).length;
+  const stale = (d.age>=12 && !isWon(d) && !isLost(d))
+    ? '<span class="stale">Sin actividad</span>' : '<span>'+dayLabel(d.age)+'</span>';
   return '<article class="deal" draggable="true" data-id="'+d.id+'" onclick="openDeal('+d.id+')">'+
     '<div class="co">'+esc(d.co)+'</div>'+
-    '<div class="meta">'+esc(d.contact)+' · '+esc(d.source)+'</div>'+
-    '<div class="row"><span class="amt">'+eur(d.amount)+'</span>'+
-      '<span class="avatar av" style="background:'+o.color+'" title="'+o.name+'">'+initials(o.name)+'</span></div>'+
-    '<div class="row" style="margin-top:8px">'+tag+
-      '<span style="margin-left:auto;font-size:11px;color:var(--ink-3)">'+dayLabel(d.age)+'</span></div>'+
-    '</article>';
+    '<div class="meta">'+esc(main)+more+' · '+esc(d.source)+'</div>'+
+    '<div class="row">'+modelChip(d.model)+'<span class="amt">'+eur(d.amount)+'</span></div>'+
+    '<div class="foot"><span>'+esc(owner(d.owner).name)+'</span><span>·</span>'+stale+
+      (files ? '<span class="clip" style="margin-left:auto" title="'+files+' archivo(s) de oferta">'+
+        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21.4 11.05 12.25 20.2a5.5 5.5 0 0 1-7.78-7.78l8.49-8.49a3.67 3.67 0 0 1 5.19 5.19l-8.49 8.49a1.83 1.83 0 0 1-2.6-2.6l7.78-7.78"/></svg>'+
+        files+'</span>' : "")+
+    '</div></article>';
 }
 function wireDnD(){
   let dragId = null;
@@ -419,92 +574,240 @@ function wireDnD(){
     col.addEventListener("drop", function(e){
       e.preventDefault(); col.classList.remove("drop");
       const id = dragId || +e.dataTransfer.getData("text/plain");
-      const d = deals.find(x => x.id===id);
+      const d = S.deals.find(x => x.id===id);
       const to = col.dataset.stage;
       if(!d || d.stage===to) return;
-      d.stage = to; d.age = 0;
-      d.acts.push({t:'Movida a "'+stage(to).name+'"', d:"hoy"});
-      save(); refresh(); toast(d.co + " → " + stage(to).name);
+      moveDeal(d, to);
     });
   });
 }
-
-/* ═══════════ Lista ═══════════ */
-function renderList(){
-  const ds = visible().slice().sort((a,b) => b.amount-a.amount);
-  document.getElementById("list").innerHTML =
-    '<table><thead><tr><th>Empresa</th><th>Contacto</th><th>Etapa</th><th>Plan</th>'+
-    '<th>Responsable</th><th>Últ. actividad</th><th class="num">Valor anual</th></tr></thead><tbody>'+
-    ds.map(function(d){
-      const o = owner(d.owner), s = stage(d.stage);
-      return '<tr onclick="openDeal('+d.id+')"><td style="font-weight:600">'+esc(d.co)+'</td>'+
-        '<td style="color:var(--ink-2)">'+esc(d.contact)+'</td>'+
-        '<td><span class="pill"><span class="dot" style="background:'+s.color+'"></span>'+s.name+'</span></td>'+
-        '<td style="color:var(--ink-2)">'+esc(d.plan)+'</td>'+
-        '<td><span style="display:inline-flex;align-items:center;gap:7px">'+
-          '<span class="avatar" style="width:22px;height:22px;font-size:10px;background:'+o.color+'">'+initials(o.name)+'</span>'+
-          o.name+'</span></td>'+
-        '<td style="color:var(--ink-3)">'+dayLabel(d.age)+'</td>'+
-        '<td class="num">'+eur(d.amount)+'</td></tr>';
-    }).join("")+'</tbody></table>';
+function moveDeal(d, to){
+  d.stage = to; d.age = 0;
+  d.acts.push({t:'Movida a "'+stage(to).name+'"', d:"hoy"});
+  save(); refresh(); toast(d.co + " → " + stage(to).name);
 }
 
-function setView(v){
-  view = v;
-  document.getElementById("segK").classList.toggle("on", v==="kanban");
-  document.getElementById("segL").classList.toggle("on", v==="lista");
-  document.getElementById("board").hidden = v!=="kanban";
-  document.getElementById("list").hidden  = v!=="lista";
-  refresh();
+/* ═══════════ Columnas: añadir, renombrar, mover, eliminar ═══════════ */
+let colMenuEl = null;
+function closeColMenu(){ if(colMenuEl){ colMenuEl.remove(); colMenuEl = null; } }
+function colMenu(ev, id){
+  ev.stopPropagation();
+  closeColMenu();
+  const i = S.stages.findIndex(s => s.id===id);
+  const m = document.createElement("div");
+  m.className = "menu";
+  m.innerHTML =
+    '<button onclick="openCol(\''+id+'\')">Renombrar y color</button>'+
+    '<button onclick="moveCol(\''+id+'\',-1)"'+(i===0?' disabled style="opacity:.4"':'')+'>Mover a la izquierda</button>'+
+    '<button onclick="moveCol(\''+id+'\',1)"'+(i===S.stages.length-1?' disabled style="opacity:.4"':'')+'>Mover a la derecha</button>'+
+    '<div class="divider"></div>'+
+    '<button class="danger" onclick="removeCol(\''+id+'\')">Eliminar columna</button>';
+  document.body.appendChild(m);
+  const r = ev.currentTarget.getBoundingClientRect();
+  m.style.top  = (r.bottom + 6) + "px";
+  m.style.left = Math.min(r.left - 150, window.innerWidth - m.offsetWidth - 12) + "px";
+  colMenuEl = m;
 }
+document.addEventListener("click", function(e){
+  if(colMenuEl && !colMenuEl.contains(e.target)) closeColMenu();
+});
+
+let colEditing = null;
+function openCol(id){
+  colEditing = id || null;
+  const s = id ? stage(id) : null;
+  document.getElementById("colTitle").textContent = s ? "Editar columna" : "Nueva columna";
+  document.getElementById("cName").value  = s ? s.name : "";
+  document.getElementById("cColor").value = s ? s.color : "#4f46e5";
+  closeColMenu();
+  document.getElementById("modalCol").classList.add("on");
+  document.getElementById("overlay").classList.add("on");
+  setTimeout(() => document.getElementById("cName").focus(), 60);
+}
+document.getElementById("colSave").addEventListener("click", function(){
+  const name  = document.getElementById("cName").value.trim();
+  const color = document.getElementById("cColor").value;
+  if(!name){ document.getElementById("cName").focus(); toast("Ponle un nombre a la columna"); return; }
+  if(colEditing){
+    const s = stage(colEditing);
+    s.name = name; s.color = color;
+    toast("Columna actualizada");
+  }else{
+    S.stages.push({id:uid("col"), name:name, color:color});
+    toast('Columna "'+name+'" añadida');
+  }
+  save(); closeAll(); refresh();
+});
+function moveCol(id, dir){
+  const i = S.stages.findIndex(s => s.id===id);
+  const j = i + dir;
+  if(i<0 || j<0 || j>=S.stages.length) return;
+  const tmp = S.stages[i]; S.stages[i] = S.stages[j]; S.stages[j] = tmp;
+  closeColMenu(); save(); refresh();
+}
+function removeCol(id){
+  closeColMenu();
+  if(S.stages.length <= 1){ toast("El pipeline necesita al menos una columna"); return; }
+  const s = stage(id);
+  const inside = S.deals.filter(d => d.stage===id);
+  const i = S.stages.findIndex(x => x.id===id);
+  const target = S.stages[i===0 ? 1 : i-1];
+  if(inside.length){
+    const ok = confirm('"'+s.name+'" tiene '+inside.length+' oportunidad(es).\n\n' +
+      'Se moverán a "'+target.name+'". ¿Eliminar la columna?');
+    if(!ok) return;
+    inside.forEach(function(d){
+      d.stage = target.id;
+      d.acts.push({t:'Movida a "'+target.name+'" al eliminar "'+s.name+'"', d:"hoy"});
+    });
+  }
+  S.stages.splice(i,1);
+  save(); refresh(); toast('Columna "'+s.name+'" eliminada');
+}
+
+/* ═══════════ Modelos de negocio ═══════════ */
+function openModels(){
+  renderModelRows();
+  document.getElementById("modalModels").classList.add("on");
+  document.getElementById("overlay").classList.add("on");
+}
+function renderModelRows(){
+  document.getElementById("modelRows").innerHTML = S.models.map(function(m){
+    const used = S.deals.filter(d => d.model===m.id).length;
+    return '<div class="mrow">'+
+      '<input type="color" value="'+m.color+'" title="Color" onchange="setModel(\''+m.id+'\',\'color\',this.value)">'+
+      '<input type="text" value="'+esc(m.name)+'" onchange="setModel(\''+m.id+'\',\'name\',this.value)">'+
+      '<span class="hint" style="margin:0;min-width:52px;text-align:right">'+used+' opor.</span>'+
+      '<button class="icon-btn" title="Eliminar" onclick="removeModel(\''+m.id+'\')">'+
+        '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></svg>'+
+      '</button></div>';
+  }).join("") || '<p class="hint">Todavía no hay modelos de negocio.</p>';
+}
+function setModel(id, field, value){
+  const m = model(id); if(!m) return;
+  if(field==="name"){
+    const v = value.trim();
+    if(!v){ renderModelRows(); return; }
+    m.name = v;
+  }else{
+    m.color = value;
+  }
+  save(); refresh(); renderModelRows(); syncSelects();
+}
+function addModel(){
+  const palette = ["#4f46e5","#0d9488","#c77700","#0f9d58","#7c3aed","#0284c7","#db2777","#65a30d"];
+  const used = S.models.map(m => m.color.toLowerCase());
+  const free = palette.find(c => used.indexOf(c) === -1) || palette[S.models.length % palette.length];
+  S.models.push({id:uid("mod"), name:"Nuevo modelo", color:free});
+  save(); renderModelRows(); syncSelects(); refresh();
+  const rows = document.querySelectorAll("#modelRows .mrow input[type=text]");
+  const last = rows[rows.length-1];
+  if(last){ last.focus(); last.select(); }
+}
+function removeModel(id){
+  const m = model(id); if(!m) return;
+  const used = S.deals.filter(d => d.model===id).length;
+  if(used && !confirm('"'+m.name+'" está en '+used+' oportunidad(es).\n\n'+
+     'Quedarán como "Sin modelo". ¿Eliminar?')) return;
+  S.deals.forEach(function(d){ if(d.model===id) d.model = null; });
+  S.models = S.models.filter(x => x.id!==id);
+  save(); renderModelRows(); syncSelects(); refresh();
+  toast('Modelo "'+m.name+'" eliminado');
+}
+
 function refresh(){
   renderKpis();
-  if(view==="kanban") renderBoard(); else renderList();
+  renderBoard();
   if(openId) renderDrawer();
 }
 
 /* ═══════════ Ficha de oportunidad ═══════════ */
 function openDeal(id){
   openId = id;
+  addingCt = false;
   renderDrawer();
   const dr = document.getElementById("drawer");
   dr.classList.add("on");
   dr.setAttribute("aria-hidden","false");
   document.getElementById("overlay").classList.add("on");
 }
-function nextStep(d){
-  const map = {
-    lead:"Enviar el primer email de contacto y calificar la necesidad.",
-    contactado:"Agendar una demo con el equipo decisor.",
-    demo:"Preparar y enviar la propuesta económica.",
-    propuesta:"Hacer seguimiento de la propuesta y resolver objeciones.",
-    ganado:"Traspasar la cuenta al equipo de onboarding.",
-    perdido:"Revisar el motivo de pérdida y reactivar en 6 meses."
-  };
-  return map[d.stage] || "";
-}
+let addingCt = false;
 function renderDrawer(){
-  const d = deals.find(x => x.id===openId);
+  const d = S.deals.find(x => x.id===openId);
   if(!d) return;
-  const o = owner(d.owner), s = stage(d.stage);
   document.getElementById("drCo").textContent = d.co;
   document.getElementById("drAmt").innerHTML = eur(d.amount) +
-    ' <span style="color:var(--ink-3);font-weight:400">· '+esc(d.plan)+' · anual</span>';
+    ' <span style="color:var(--ink-3);font-weight:400">· anual</span>';
+
   let banner = "";
-  if(d.stage==="ganado")  banner = '<div class="won-banner w">Oportunidad ganada · contrato firmado</div>';
-  if(d.stage==="perdido") banner = '<div class="won-banner l">Oportunidad perdida</div>';
+  if(isWon(d))  banner = '<div class="won-banner w">Oportunidad ganada · contrato firmado</div>';
+  if(isLost(d)) banner = '<div class="won-banner l">Oportunidad perdida</div>';
+
+  const stageSel = '<select onchange="chgStage(this.value)">' + S.stages.map(s =>
+    '<option value="'+s.id+'"'+(s.id===d.stage?" selected":"")+'>'+esc(s.name)+'</option>').join("") + '</select>';
+  const modelSel = '<select onchange="chgModel(this.value)"><option value="">Sin modelo</option>' +
+    S.models.map(m => '<option value="'+m.id+'"'+(m.id===d.model?" selected":"")+'>'+esc(m.name)+'</option>').join("") +
+    '</select>';
+  const ownerSel = '<select onchange="chgOwner(this.value)">' + OWNERS.map(o =>
+    '<option value="'+o.id+'"'+(o.id===d.owner?" selected":"")+'>'+esc(o.name)+'</option>').join("") + '</select>';
+
+  const contacts = (d.contacts||[]).map(function(c,i){
+    return '<div class="ct"><div><div class="nm">'+esc(c.name)+
+      (i===0 ? '<span class="primary">Principal</span>' : "")+'</div>'+
+      '<div class="dt">'+(c.role ? esc(c.role)+' · ' : "")+
+        (c.email ? '<a href="mailto:'+esc(c.email)+'">'+esc(c.email)+'</a>' : "")+'</div></div>'+
+      '<div class="acts">'+
+        (i>0 ? '<button class="icon-btn" title="Hacer principal" onclick="makePrimary('+i+')">'+
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 4 2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 16.4 7.2 18.9l.9-5.4L4.2 9.7l5.4-.8z"/></svg></button>' : "")+
+        '<button class="icon-btn" title="Eliminar contacto" onclick="removeCt('+i+')">'+
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></svg></button>'+
+      '</div></div>';
+  }).join("") || '<p class="hint" style="margin:0">Sin contactos todavía.</p>';
+
+  const ctForm = addingCt ?
+    '<div class="inline-form">'+
+      '<input id="ctName" placeholder="Nombre y apellido">'+
+      '<div class="f2"><input id="ctEmail" type="email" placeholder="email@empresa.com">'+
+      '<input id="ctRole" placeholder="Cargo"></div>'+
+      '<div class="row"><button class="btn btn-sm" onclick="addingCt=false;renderDrawer()">Cancelar</button>'+
+      '<button class="btn btn-sm btn-primary" onclick="saveCt()">Añadir contacto</button></div>'+
+    '</div>' : "";
+
+  const files = (d.files||[]).map(function(f,i){
+    return '<div class="file"><div class="ic">'+
+      '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M14 3v5h5"/><path d="M19 8v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7z"/></svg></div>'+
+      '<div style="min-width:0"><div class="nm">'+esc(f.name)+'</div>'+
+        '<div class="mt">'+kb(f.size)+' · '+esc(f.date)+'</div></div>'+
+      '<div class="acts">'+
+        (f.data ? '<a class="dl" href="'+f.data+'" download="'+esc(f.name)+'">Abrir</a>'
+                : '<span class="mt">no disponible</span>')+
+        '<button class="icon-btn" title="Quitar archivo" onclick="removeFile('+i+')">'+
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></svg></button>'+
+      '</div></div>';
+  }).join("");
+
   document.getElementById("drBody").innerHTML =
     '<div class="fields">'+
-      '<div class="k">Etapa</div><div><span class="pill"><span class="dot" style="background:'+s.color+'"></span>'+s.name+'</span></div>'+
-      '<div class="k">Contacto</div><div>'+esc(d.contact)+'</div>'+
-      '<div class="k">Email</div><div style="color:var(--accent)">'+esc(d.email)+'</div>'+
+      '<div class="k">Columna</div><div>'+stageSel+'</div>'+
+      '<div class="k">Modelo de negocio</div><div>'+modelSel+'</div>'+
+      '<div class="k">Responsable</div><div>'+ownerSel+'</div>'+
+      '<div class="k">Valor anual (€)</div><div><input type="number" min="0" step="100" value="'+d.amount+'" onchange="chgAmount(this.value)"></div>'+
       '<div class="k">Origen</div><div>'+esc(d.source)+'</div>'+
-      '<div class="k">Responsable</div><div><span style="display:inline-flex;align-items:center;gap:7px">'+
-        '<span class="avatar" style="width:22px;height:22px;font-size:10px;background:'+o.color+'">'+initials(o.name)+'</span>'+o.name+'</span></div>'+
       '<div class="k">Últ. actividad</div><div>'+dayLabel(d.age)+'</div>'+
     '</div>'+ banner +
+
+    '<div class="sec-title">Contactos ('+(d.contacts||[]).length+')'+
+      (addingCt ? "" : '<button class="btn btn-sm" onclick="addingCt=true;renderDrawer()">+ Añadir contacto</button>')+
+    '</div>'+ contacts + ctForm +
+
+    '<div class="sec-title">Oferta enviada'+
+      '<button class="btn btn-sm" onclick="pickFile()">+ Subir archivo</button></div>'+
+    files +
+    '<div class="dropzone" id="dz">Arrastra aquí la oferta (PDF, Word, Excel…) o usa «Subir archivo»</div>'+
+
     '<div class="sec-title">Siguiente paso</div>'+
-    '<div style="font-size:13px;color:var(--ink-2)">'+nextStep(d)+'</div>'+
+    '<div style="font-size:13px;color:var(--ink-2)">'+esc(nextStep(d))+'</div>'+
+
     '<div class="sec-title">Actividad</div>'+
     '<ul class="tl">'+
       d.acts.slice().reverse().map(function(a,i){
@@ -515,58 +818,190 @@ function renderDrawer(){
     '<div class="note-add"><input id="noteIn" placeholder="Añadir nota…" '+
       'onkeydown="if(event.key===\'Enter\')addNote()">'+
       '<button class="btn" onclick="addNote()">Añadir</button></div>';
+
+  wireDropzone();
+  if(addingCt) setTimeout(() => { const el = document.getElementById("ctName"); if(el) el.focus(); }, 40);
 }
+function nextStep(d){
+  if(isWon(d))  return "Traspasar la cuenta al equipo de onboarding.";
+  if(isLost(d)) return "Revisar el motivo de pérdida y reactivar en 6 meses.";
+  const i = S.stages.findIndex(s => s.id===d.stage);
+  const next = S.stages[i+1];
+  if((d.files||[]).length===0) return "Preparar y subir la oferta para " + d.co + ".";
+  return next ? 'Hacer seguimiento y llevarla a "'+next.name+'".'
+              : "Cerrar la operación con el contacto principal.";
+}
+
+/* — edición de campos de la ficha — */
+function cur(){ return S.deals.find(x => x.id===openId); }
+function chgStage(v){ const d = cur(); if(d && d.stage!==v) moveDeal(d, v); }
+function chgModel(v){
+  const d = cur(); if(!d) return;
+  d.model = v || null;
+  const m = model(v);
+  d.acts.push({t:"Modelo de negocio: " + (m ? m.name : "sin modelo"), d:"hoy"});
+  d.age = 0; save(); refresh(); toast("Modelo de negocio actualizado");
+}
+function chgOwner(v){
+  const d = cur(); if(!d) return;
+  d.owner = v;
+  d.acts.push({t:"Asignada a " + owner(v).name, d:"hoy"});
+  d.age = 0; save(); refresh();
+}
+function chgAmount(v){
+  const d = cur(); if(!d) return;
+  d.amount = Math.max(0, +v || 0);
+  save(); refresh(); toast("Valor actualizado");
+}
+
+/* — contactos — */
+function saveCt(){
+  const d = cur(); if(!d) return;
+  const name = document.getElementById("ctName").value.trim();
+  if(!name){ document.getElementById("ctName").focus(); toast("Falta el nombre del contacto"); return; }
+  d.contacts = d.contacts || [];
+  d.contacts.push({
+    name: name,
+    email: document.getElementById("ctEmail").value.trim(),
+    role:  document.getElementById("ctRole").value.trim()
+  });
+  d.acts.push({t:"Contacto añadido: " + name, d:"hoy"});
+  d.age = 0; addingCt = false;
+  save(); refresh(); toast("Contacto añadido");
+}
+function removeCt(i){
+  const d = cur(); if(!d) return;
+  const c = d.contacts[i]; if(!c) return;
+  d.contacts.splice(i,1);
+  d.acts.push({t:"Contacto eliminado: " + c.name, d:"hoy"});
+  save(); refresh();
+}
+function makePrimary(i){
+  const d = cur(); if(!d || !d.contacts[i]) return;
+  const c = d.contacts.splice(i,1)[0];
+  d.contacts.unshift(c);
+  d.acts.push({t:c.name + " pasa a ser el contacto principal", d:"hoy"});
+  save(); refresh();
+}
+
+/* — archivos de oferta — */
+function pickFile(){
+  const inp = document.getElementById("fileIn");
+  inp.value = "";
+  inp.click();
+}
+document.getElementById("fileIn").addEventListener("change", function(e){
+  handleFiles(e.target.files);
+});
+function handleFiles(list){
+  const d = cur();
+  if(!d || !list || !list.length) return;
+  Array.prototype.forEach.call(list, function(file){
+    const rd = new FileReader();
+    rd.onload = function(){
+      d.files = d.files || [];
+      d.files.push({name:file.name, size:file.size, date:"hoy", data:rd.result});
+      d.acts.push({t:"Oferta subida: " + file.name, d:"hoy"});
+      d.age = 0;
+      save(); refresh(); toast(file.name + " adjuntado");
+    };
+    rd.onerror = function(){ toast("No se pudo leer " + file.name); };
+    rd.readAsDataURL(file);
+  });
+}
+function removeFile(i){
+  const d = cur(); if(!d || !d.files[i]) return;
+  const f = d.files.splice(i,1)[0];
+  d.acts.push({t:"Archivo eliminado: " + f.name, d:"hoy"});
+  save(); refresh();
+}
+function wireDropzone(){
+  const dz = document.getElementById("dz");
+  if(!dz) return;
+  ["dragenter","dragover"].forEach(ev => dz.addEventListener(ev, function(e){
+    e.preventDefault(); e.stopPropagation(); dz.classList.add("over");
+  }));
+  ["dragleave","dragend"].forEach(ev => dz.addEventListener(ev, function(){ dz.classList.remove("over"); }));
+  dz.addEventListener("drop", function(e){
+    e.preventDefault(); e.stopPropagation(); dz.classList.remove("over");
+    handleFiles(e.dataTransfer.files);
+  });
+}
+
+/* — notas, ganar, eliminar — */
 function addNote(){
   const inp = document.getElementById("noteIn");
   const v = inp.value.trim();
   if(!v) return;
-  const d = deals.find(x => x.id===openId);
+  const d = cur(); if(!d) return;
   d.acts.push({t:v, d:"hoy"});
   d.age = 0;
   save(); refresh(); toast("Nota añadida");
 }
-function mark(st){
-  const d = deals.find(x => x.id===openId);
-  if(!d) return;
-  d.stage = st; d.age = 0;
-  d.acts.push({t: st==="ganado" ? "Oportunidad ganada" : "Oportunidad perdida", d:"hoy"});
-  save(); refresh();
-  toast(d.co + (st==="ganado" ? " marcada como ganada" : " marcada como perdida"));
+function markWon(){
+  const d = cur(); if(!d) return;
+  const won = S.stages.find(s => s.id==="ganado") || S.stages[S.stages.length-1];
+  d.stage = won.id; d.age = 0;
+  d.acts.push({t:"Oportunidad ganada", d:"hoy"});
+  save(); refresh(); toast(d.co + " marcada como ganada");
   closeAll();
+}
+function deleteDeal(){
+  const d = cur(); if(!d) return;
+  if(!confirm('¿Eliminar la oportunidad de "'+d.co+'"? No se puede deshacer.')) return;
+  S.deals = S.deals.filter(x => x.id!==d.id);
+  save(); closeAll(); refresh(); toast(d.co + " eliminada");
 }
 
 /* ═══════════ Nueva oportunidad ═══════════ */
 function openNew(){
-  document.getElementById("modal").classList.add("on");
+  syncSelects();
+  document.getElementById("modalNew").classList.add("on");
   document.getElementById("overlay").classList.add("on");
-  document.getElementById("nCo").focus();
+  setTimeout(() => document.getElementById("nCo").focus(), 60);
 }
 function createDeal(){
   const co = document.getElementById("nCo").value.trim();
   if(!co){ document.getElementById("nCo").focus(); toast("Falta el nombre de la empresa"); return; }
-  const ct  = document.getElementById("nCt").value.trim() || "Sin contacto";
+  const ct  = document.getElementById("nCt").value.trim();
+  const em  = document.getElementById("nEm").value.trim();
   const amt = +document.getElementById("nAmt").value || 0;
   const st  = document.getElementById("nStage").value;
   const ow  = document.getElementById("nOwner").value;
-  const pl  = document.getElementById("nPlan").value;
-  const nextId = deals.reduce((m,d) => Math.max(m,d.id), 0) + 1;
-  deals.push({
-    id:nextId, co:co, contact:ct,
-    email: ct.split(" ")[0].toLowerCase()+"@"+co.toLowerCase().replace(/[^a-z0-9]/g,"")+".com",
-    amount:amt, stage:st, owner:ow, plan:pl, age:0, source:"Manual",
-    acts:[{t:"Oportunidad creada", d:"hoy"}]
+  const md  = document.getElementById("nModel").value || null;
+  const nextId = S.deals.reduce((m,d) => Math.max(m,d.id), 0) + 1;
+  S.deals.push({
+    id:nextId, co:co,
+    contacts: ct ? [{name:ct, email:em, role:""}] : [],
+    amount:amt, stage:st, owner:ow, model:md, age:0, source:"Manual",
+    files:[], acts:[{t:"Oportunidad creada", d:"hoy"}]
   });
   save(); closeAll(); refresh(); toast(co + " añadida al pipeline");
-  ["nCo","nCt","nAmt"].forEach(function(i){ document.getElementById(i).value = ""; });
+  ["nCo","nCt","nEm","nAmt"].forEach(function(i){ document.getElementById(i).value = ""; });
 }
 
+/* ═══════════ Cierre, selects y toast ═══════════ */
 function closeAll(){
   const dr = document.getElementById("drawer");
   dr.classList.remove("on");
   dr.setAttribute("aria-hidden","true");
-  document.getElementById("modal").classList.remove("on");
+  ["modalNew","modalCol","modalModels"].forEach(function(id){
+    document.getElementById(id).classList.remove("on");
+  });
   document.getElementById("overlay").classList.remove("on");
-  openId = null;
+  closeColMenu();
+  openId = null; addingCt = false; colEditing = null;
+}
+function syncSelects(){
+  const mf = document.getElementById("modelFilter");
+  mf.innerHTML = '<option value="">Todos los modelos</option>' +
+    S.models.map(m => '<option value="'+m.id+'"'+(m.id===modelQ?" selected":"")+'>'+esc(m.name)+'</option>').join("");
+  document.getElementById("nStage").innerHTML =
+    S.stages.map(s => '<option value="'+s.id+'">'+esc(s.name)+'</option>').join("");
+  document.getElementById("nOwner").innerHTML =
+    OWNERS.map(o => '<option value="'+o.id+'">'+esc(o.name)+'</option>').join("");
+  document.getElementById("nModel").innerHTML = '<option value="">Sin modelo</option>' +
+    S.models.map(m => '<option value="'+m.id+'">'+esc(m.name)+'</option>').join("");
 }
 let tt;
 function toast(msg){
@@ -574,20 +1009,13 @@ function toast(msg){
   t.textContent = msg;
   t.classList.add("on");
   clearTimeout(tt);
-  tt = setTimeout(function(){ t.classList.remove("on"); }, 2400);
+  tt = setTimeout(function(){ t.classList.remove("on"); }, 2600);
 }
 
 /* ═══════════ Init ═══════════ */
-document.getElementById("ownerFilter").innerHTML =
-  '<option value="">Todo el equipo</option>' +
-  OWNERS.map(o => '<option value="'+o.id+'">'+o.name+'</option>').join("");
-document.getElementById("nStage").innerHTML =
-  STAGES.filter(s => s.id!=="ganado" && s.id!=="perdido")
-        .map(s => '<option value="'+s.id+'">'+s.name+'</option>').join("");
-document.getElementById("nOwner").innerHTML =
-  OWNERS.map(o => '<option value="'+o.id+'">'+o.name+'</option>').join("");
+syncSelects();
 document.getElementById("q").addEventListener("input", function(e){ q = e.target.value; refresh(); });
-document.getElementById("ownerFilter").addEventListener("change", function(e){ ownerQ = e.target.value; refresh(); });
+document.getElementById("modelFilter").addEventListener("change", function(e){ modelQ = e.target.value; refresh(); });
 document.addEventListener("keydown", function(e){ if(e.key==="Escape") closeAll(); });
 refresh();
 </script>
