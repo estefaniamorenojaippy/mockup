@@ -1,0 +1,559 @@
+{
+  "stages": [
+    {
+      "id": "cierre-perdido",
+      "name": "Cierre perdido",
+      "color": "#d92d20"
+    }
+  ],
+  "models": [],
+  "deals": [
+    {
+      "id": 1,
+      "co": "Palacio de los leones y Monasterio de San Francisco",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 38,
+      "source": "",
+      "closeDate": "2026-07-31",
+      "createdDate": "2026-07-27",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 27/07/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 31/07/2026"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "co": "Sercotel (Ayala + Montcada + Barcelona El Prat + Hotel)",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 38,
+      "source": "",
+      "closeDate": "2026-07-31",
+      "createdDate": "2026-07-27",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 27/07/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 31/07/2026"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "co": "MLL HOTELS",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 38,
+      "source": "",
+      "closeDate": "2026-07-31",
+      "createdDate": "2026-07-16",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 16/07/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 31/07/2026"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "co": "AWA Hotel Boutique (México)",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 38,
+      "source": "",
+      "closeDate": "2026-07-31",
+      "createdDate": "2026-07-14",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 14/07/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 31/07/2026"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "co": "Clara (Meta)",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 38,
+      "source": "",
+      "closeDate": "2026-07-31",
+      "createdDate": "2026-07-14",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 14/07/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 31/07/2026"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "co": "La casa de Frama",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 38,
+      "source": "",
+      "closeDate": "2026-07-31",
+      "createdDate": "2026-07-14",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 14/07/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 31/07/2026"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "co": "ILUNION AUDITORI",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 40,
+      "source": "",
+      "closeDate": "2026-07-29",
+      "createdDate": "2026-06-29",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 29/06/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 29/07/2026"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "co": "KORA GREEN CITY",
+      "contacts": [
+        {
+          "name": "Brezo Criado",
+          "email": "brezo.criado@koraliving.com",
+          "role": "PR & Social Media Manager"
+        }
+      ],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 70,
+      "source": "",
+      "closeDate": "2026-06-29",
+      "createdDate": "2026-06-29",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 29/06/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 29/06/2026"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "co": "TRUCKS CENTER SAN ROMAN",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 69,
+      "source": "",
+      "closeDate": "2026-06-30",
+      "createdDate": "2026-06-25",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 25/06/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 30/06/2026"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "co": "Hostal Abril",
+      "contacts": [
+        {
+          "name": "Montse Martín",
+          "email": "",
+          "role": ""
+        }
+      ],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 69,
+      "source": "",
+      "closeDate": "2026-06-30",
+      "createdDate": "2026-06-23",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 23/06/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 30/06/2026"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "co": "Hotel Terrafranca",
+      "contacts": [
+        {
+          "name": "Octavio Aguilar",
+          "email": "",
+          "role": ""
+        }
+      ],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 69,
+      "source": "",
+      "closeDate": "2026-06-30",
+      "createdDate": "2026-06-22",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 22/06/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 30/06/2026"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "co": "PUERTA DE BILBAO",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 69,
+      "source": "",
+      "closeDate": "2026-06-30",
+      "createdDate": "2026-06-19",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 19/06/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 30/06/2026"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "co": "Hotel Sonsoles Ávila",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 69,
+      "source": "",
+      "closeDate": "2026-06-30",
+      "createdDate": "2026-06-15",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 15/06/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 30/06/2026"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "co": "My Way · Resorts",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 69,
+      "source": "",
+      "closeDate": "2026-06-30",
+      "createdDate": "2026-06-12",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 12/06/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 30/06/2026"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "co": "Summum",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 69,
+      "source": "",
+      "closeDate": "2026-06-30",
+      "createdDate": "2026-06-12",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 12/06/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 30/06/2026"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "co": "BENALMA COSTA DEL SOL",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 46,
+      "source": "",
+      "closeDate": "2026-07-23",
+      "createdDate": "2026-06-08",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 08/06/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 23/07/2026"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "co": "Selvario 36 Hotel",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 99,
+      "source": "",
+      "closeDate": "2026-05-31",
+      "createdDate": "2026-05-25",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 25/05/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 31/05/2026"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "co": "IBEROSTAR HERITAGE GRAND MENCEY",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 99,
+      "source": "",
+      "closeDate": "2026-05-31",
+      "createdDate": "2026-05-20",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 20/05/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 31/05/2026"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "co": "Vacation Marbella",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 99,
+      "source": "",
+      "closeDate": "2026-05-31",
+      "createdDate": "2026-05-19",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 19/05/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 31/05/2026"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "co": "ILUNION",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 100,
+      "source": "",
+      "closeDate": "2026-05-30",
+      "createdDate": "2026-05-18",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 18/05/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 30/05/2026"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "co": "MIKASA BOUTIQUE HOTEL",
+      "contacts": [],
+      "amount": 0,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 170,
+      "source": "",
+      "closeDate": "2026-03-21",
+      "createdDate": "2026-02-19",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 19/02/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 21/03/2026"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "co": "Hotel Puerta de las Granadas - 1H",
+      "contacts": [],
+      "amount": 5983,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 160,
+      "source": "",
+      "closeDate": "2026-03-31",
+      "createdDate": "2026-01-26",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 26/01/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 31/03/2026"
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "co": "Turia Hotels - 3",
+      "contacts": [],
+      "amount": 33832,
+      "stage": "cierre-perdido",
+      "model": null,
+      "age": 219,
+      "source": "",
+      "closeDate": "2026-01-31",
+      "createdDate": "2026-01-26",
+      "files": [],
+      "acts": [
+        {
+          "t": "Negocio creado",
+          "d": "el 26/01/2026"
+        },
+        {
+          "t": "Cierre perdido",
+          "d": "el 31/01/2026"
+        }
+      ]
+    }
+  ]
+}
