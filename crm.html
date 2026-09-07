@@ -290,7 +290,11 @@ input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--line
     <div class="f"><label for="nAmt">Valor anual (€)</label><input id="nAmt" type="number" min="0" step="100" placeholder="12000"></div>
     <div class="f"><label for="nStage">Columna</label><select id="nStage"></select></div>
   </div>
-  <div class="f"><label for="nModel">Modelo de negocio</label><select id="nModel"></select></div>
+  <div class="f2">
+    <div class="f"><label for="nModel">Modelo de negocio</label><select id="nModel"></select></div>
+    <div class="f"><label for="nSrc">Origen</label>
+      <input id="nSrc" list="srcList" placeholder="Ej. Inbound, Referido…"></div>
+  </div>
   <div class="modal-foot">
     <button class="btn" onclick="closeAll()">Cancelar</button>
     <button class="btn btn-primary" onclick="createDeal()">Crear oportunidad</button>
@@ -328,6 +332,7 @@ input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--line
   </div>
 </div>
 
+<datalist id="srcList"></datalist>
 <input type="file" id="fileIn" hidden multiple
        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg,.csv,.txt">
 <div class="toast" id="toast"></div>
@@ -539,7 +544,7 @@ function card(d){
     ? '<span class="stale">Sin actividad</span>' : '<span>'+dayLabel(d.age)+'</span>';
   return '<article class="deal" draggable="true" data-id="'+d.id+'" onclick="openDeal('+d.id+')">'+
     '<div class="co">'+esc(d.co)+'</div>'+
-    '<div class="meta">'+esc(main)+more+' · '+esc(d.source)+'</div>'+
+    '<div class="meta">'+esc(main)+more+(d.source ? ' · '+esc(d.source) : "")+'</div>'+
     '<div class="row">'+modelChip(d.model)+'<span class="amt">'+eur(d.amount)+'</span></div>'+
     '<div class="foot">'+stale+
       (files ? '<span class="clip" style="margin-left:auto" title="'+files+' archivo(s) de oferta">'+
@@ -779,7 +784,8 @@ function renderDrawer(){
       '<div class="k">Columna</div><div>'+stageSel+'</div>'+
       '<div class="k">Modelo de negocio</div><div>'+modelSel+'</div>'+
       '<div class="k">Valor anual (€)</div><div><input type="number" min="0" step="100" value="'+d.amount+'" onchange="chgAmount(this.value)"></div>'+
-      '<div class="k">Origen</div><div>'+esc(d.source)+'</div>'+
+      '<div class="k">Origen</div><div><input type="text" list="srcList" value="'+esc(d.source||"")+
+        '" placeholder="Ej. Inbound, Referido…" onchange="chgSource(this.value)"></div>'+
       '<div class="k">Últ. actividad</div><div>'+dayLabel(d.age)+'</div>'+
     '</div>'+ banner +
 
@@ -828,6 +834,14 @@ function chgModel(v){
   const m = model(v);
   d.acts.push({t:"Modelo de negocio: " + (m ? m.name : "sin modelo"), d:"hoy"});
   d.age = 0; save(); refresh(); toast("Modelo de negocio actualizado");
+}
+function chgSource(v){
+  const d = cur(); if(!d) return;
+  const val = v.trim();
+  if(val === (d.source||"")) return;
+  d.source = val;
+  d.acts.push({t: val ? "Origen: " + val : "Origen borrado", d:"hoy"});
+  d.age = 0; save(); refresh(); syncSelects(); toast("Origen actualizado");
 }
 function chgAmount(v){
   const d = cur(); if(!d) return;
@@ -949,15 +963,16 @@ function createDeal(){
   const amt = +document.getElementById("nAmt").value || 0;
   const st  = document.getElementById("nStage").value;
   const md  = document.getElementById("nModel").value || null;
+  const src = document.getElementById("nSrc").value.trim();
   const nextId = S.deals.reduce((m,d) => Math.max(m,d.id), 0) + 1;
   S.deals.push({
     id:nextId, co:co,
     contacts: ct ? [{name:ct, email:em, role:""}] : [],
-    amount:amt, stage:st, model:md, age:0, source:"Manual",
+    amount:amt, stage:st, model:md, age:0, source:src,
     files:[], acts:[{t:"Oportunidad creada", d:"hoy"}]
   });
   save(); closeAll(); refresh(); toast(co + " añadida al pipeline");
-  ["nCo","nCt","nEm","nAmt"].forEach(function(i){ document.getElementById(i).value = ""; });
+  ["nCo","nCt","nEm","nAmt","nSrc"].forEach(function(i){ document.getElementById(i).value = ""; });
 }
 
 /* ═══════════ Cierre, selects y toast ═══════════ */
@@ -978,6 +993,12 @@ function syncSelects(){
     S.models.map(m => '<option value="'+m.id+'"'+(m.id===modelQ?" selected":"")+'>'+esc(m.name)+'</option>').join("");
   document.getElementById("nStage").innerHTML =
     S.stages.map(s => '<option value="'+s.id+'">'+esc(s.name)+'</option>').join("");
+  const srcs = [];
+  S.deals.forEach(function(d){
+    if(d.source && srcs.indexOf(d.source) === -1) srcs.push(d.source);
+  });
+  document.getElementById("srcList").innerHTML =
+    srcs.sort().map(v => '<option value="'+esc(v)+'"></option>').join("");
   document.getElementById("nModel").innerHTML = '<option value="">Sin modelo</option>' +
     S.models.map(m => '<option value="'+m.id+'">'+esc(m.name)+'</option>').join("");
 }
