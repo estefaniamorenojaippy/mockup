@@ -47,6 +47,7 @@ select.sel:focus{border-color:var(--accent)}
 .btn-ghost:hover{background:var(--line-2)}
 .btn-sm{padding:5px 10px;font-size:13px;border-radius:8px}
 .btn-danger{color:var(--red)}
+.btn-trash:hover{background:var(--red-soft);color:var(--red)}
 .icon-btn{display:grid;place-items:center;width:26px;height:26px;border:0;border-radius:7px;
   background:transparent;color:var(--ink-3)}
 .icon-btn:hover{background:#e2e2e6;color:var(--ink)}
@@ -265,6 +266,9 @@ input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--line
         <div class="co" id="drCo"></div>
         <div class="amt" id="drAmt"></div>
       </div>
+      <button class="btn btn-ghost btn-trash" onclick="deleteDeal()" title="Eliminar oportunidad" aria-label="Eliminar oportunidad">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>
+      </button>
       <button class="btn btn-ghost" onclick="closeAll()" aria-label="Cerrar">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
@@ -272,8 +276,7 @@ input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--line
   </div>
   <div class="dr-body" id="drBody"></div>
   <div class="dr-foot">
-    <button class="btn btn-danger" onclick="deleteDeal()">Eliminar</button>
-    <button class="btn btn-primary" onclick="markWon()">Marcar ganada</button>
+    <button class="btn btn-primary" onclick="closeDrawer()">Guardar</button>
   </div>
 </aside>
 
@@ -675,8 +678,8 @@ function renderModelRows(){
   document.getElementById("modelRows").innerHTML = S.models.map(function(m){
     const used = S.deals.filter(d => d.model===m.id).length;
     return '<div class="mrow">'+
-      '<input type="color" value="'+m.color+'" title="Color" onchange="setModel(\''+m.id+'\',\'color\',this.value)">'+
-      '<input type="text" value="'+esc(m.name)+'" onchange="setModel(\''+m.id+'\',\'name\',this.value)">'+
+      '<input type="color" value="'+m.color+'" title="Color" oninput="setModel(\''+m.id+'\',\'color\',this.value)">'+
+      '<input type="text" value="'+esc(m.name)+'" oninput="setModel(\''+m.id+'\',\'name\',this.value)" onblur="renderModelRows()">'+
       '<span class="hint" style="margin:0;min-width:52px;text-align:right">'+used+' opor.</span>'+
       '<button class="icon-btn" title="Eliminar" onclick="removeModel(\''+m.id+'\')">'+
         '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></svg>'+
@@ -687,12 +690,13 @@ function setModel(id, field, value){
   const m = model(id); if(!m) return;
   if(field==="name"){
     const v = value.trim();
-    if(!v){ renderModelRows(); return; }
+    if(!v) return;              /* nombre vacío: se recupera al salir del campo */
     m.name = v;
   }else{
     m.color = value;
   }
-  save(); refresh(); renderModelRows(); syncSelects();
+  /* Sin repintar las filas: el input en uso conserva el cursor */
+  save(); refreshLive(); syncSelects(); autoSaved();
 }
 function addModel(){
   const palette = ["#4f46e5","#0d9488","#c77700","#0f9d58","#7c3aed","#0284c7","#db2777","#65a30d"];
@@ -719,6 +723,17 @@ function refresh(){
   renderKpis();
   renderBoard();
   if(openId) renderDrawer();
+}
+/* Lo que se escribe en la ficha se guarda sobre la marcha: se refresca el
+   tablero pero NO la ficha, para no recrear el input y perder el cursor. */
+function refreshLive(){
+  renderKpis();
+  renderBoard();
+}
+let autoT;
+function autoSaved(){
+  clearTimeout(autoT);
+  autoT = setTimeout(function(){ toast("Guardado"); }, 800);
 }
 
 /* ═══════════ Ficha de oportunidad ═══════════ */
@@ -792,9 +807,9 @@ function renderDrawer(){
         '<button class="icon-btn" title="Editar o eliminar modelos" onclick="openModels()">'+
         '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>'+
         '</button></div>'+
-      '<div class="k">Valor anual (€)</div><div><input type="number" min="0" step="100" value="'+d.amount+'" onchange="chgAmount(this.value)"></div>'+
+      '<div class="k">Valor anual (€)</div><div><input type="number" min="0" step="100" value="'+d.amount+'" oninput="chgAmount(this.value)"></div>'+
       '<div class="k">Origen</div><div><input type="text" list="srcList" value="'+esc(d.source||"")+
-        '" placeholder="Ej. Inbound, Referido…" onchange="chgSource(this.value)"></div>'+
+        '" placeholder="Ej. Inbound, Referido…" oninput="chgSource(this.value)" onchange="logSource(this.value)"></div>'+
       '<div class="k">Últ. actividad</div><div>'+dayLabel(d.age)+'</div>'+
     '</div>'+ banner +
 
@@ -849,13 +864,23 @@ function chgSource(v){
   const val = v.trim();
   if(val === (d.source||"")) return;
   d.source = val;
+  save(); refreshLive(); syncSelects(); autoSaved();
+}
+/* En la actividad se apunta una sola vez, al salir del campo */
+function logSource(v){
+  const d = cur(); if(!d) return;
+  const val = v.trim();
+  if(val === (d.sourceLogged||"")) return;
+  d.sourceLogged = val;
   d.acts.push({t: val ? "Origen: " + val : "Origen borrado", d:"hoy"});
-  d.age = 0; save(); refresh(); syncSelects(); toast("Origen actualizado");
+  d.age = 0; save(); refreshLive();
 }
 function chgAmount(v){
   const d = cur(); if(!d) return;
   d.amount = Math.max(0, +v || 0);
-  save(); refresh(); toast("Valor actualizado");
+  document.getElementById("drAmt").innerHTML = eur(d.amount) +
+    ' <span style="color:var(--ink-3);font-weight:400">· anual</span>';
+  save(); refreshLive(); autoSaved();
 }
 
 /* — contactos — */
@@ -942,13 +967,8 @@ function addNote(){
   d.age = 0;
   save(); refresh(); toast("Nota añadida");
 }
-function markWon(){
-  const d = cur(); if(!d) return;
-  const won = S.stages.find(s => s.id==="ganado") || S.stages[S.stages.length-1];
-  d.stage = won.id; d.age = 0;
-  d.acts.push({t:"Oportunidad ganada", d:"hoy"});
-  save(); refresh(); toast(d.co + " marcada como ganada");
-  closeAll();
+function closeDrawer(){
+  closeAll(); toast("Guardado");
 }
 function deleteDeal(){
   const d = cur(); if(!d) return;
