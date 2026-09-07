@@ -290,10 +290,7 @@ input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--line
     <div class="f"><label for="nAmt">Valor anual (€)</label><input id="nAmt" type="number" min="0" step="100" placeholder="12000"></div>
     <div class="f"><label for="nStage">Columna</label><select id="nStage"></select></div>
   </div>
-  <div class="f2">
-    <div class="f"><label for="nModel">Modelo de negocio</label><select id="nModel"></select></div>
-    <div class="f"><label for="nOwner">Responsable</label><select id="nOwner"></select></div>
-  </div>
+  <div class="f"><label for="nModel">Modelo de negocio</label><select id="nModel"></select></div>
   <div class="modal-foot">
     <button class="btn" onclick="closeAll()">Cancelar</button>
     <button class="btn btn-primary" onclick="createDeal()">Crear oportunidad</button>
@@ -339,12 +336,6 @@ input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--line
 /* ═══════════════════════════════════════════════════════
    Estado — columnas, modelos de negocio y oportunidades
    ═══════════════════════════════════════════════════════ */
-const OWNERS = [
-  {id:"em", name:"Estefanía M."},
-  {id:"dr", name:"Diego R."},
-  {id:"lc", name:"Laura C."}
-];
-
 function defaultStages(){
   return [
     {id:"lead",       name:"Lead",       color:"#9aa0a6"},
@@ -364,7 +355,7 @@ function defaultModels(){
   ];
 }
 
-/* [empresa, contacto, email, cargo, valor, columna, responsable, modelo, días, origen] */
+/* [empresa, contacto, email, cargo, valor, columna, -, modelo, días, origen] */
 const SEED = [
   ["Northwind Labs","Marta Ruiz","marta@northwind.io","Head of Ops",18000,"contactado","em","saas",3,"Inbound"],
   ["Acme Cloud","Javier Pons","j.pons@acme.co","CTO",42000,"propuesta","em","licencia",6,"Referido"],
@@ -421,7 +412,7 @@ function seedDeals(){
     const files = (EXTRA_FILES[r[0]]||[]).map(f =>
       ({name:f[0], size:f[1], date:dayLabel(Math.max(1,r[8]-1)), data:null}));
     return {id:i+1, co:r[0], contacts:cts, amount:r[4], stage:r[5],
-            owner:r[6], model:r[7], age:r[8], source:r[9], files:files, acts:acts};
+            model:r[7], age:r[8], source:r[9], files:files, acts:acts};
   });
 }
 function defaultState(){
@@ -461,7 +452,6 @@ function resetAll(){
 /* ═══════════ Utilidades ═══════════ */
 const eur  = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " €";
 const eurK = n => n>=1000 ? Math.round(n/1000) + "k €" : n + " €";
-const owner = id => OWNERS.find(o => o.id===id) || OWNERS[0];
 const stage = id => S.stages.find(s => s.id===id) || S.stages[0];
 const model = id => S.models.find(m => m.id===id) || null;
 const esc = s => String(s == null ? "" : s)
@@ -551,7 +541,7 @@ function card(d){
     '<div class="co">'+esc(d.co)+'</div>'+
     '<div class="meta">'+esc(main)+more+' · '+esc(d.source)+'</div>'+
     '<div class="row">'+modelChip(d.model)+'<span class="amt">'+eur(d.amount)+'</span></div>'+
-    '<div class="foot"><span>'+esc(owner(d.owner).name)+'</span><span>·</span>'+stale+
+    '<div class="foot">'+stale+
       (files ? '<span class="clip" style="margin-left:auto" title="'+files+' archivo(s) de oferta">'+
         '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21.4 11.05 12.25 20.2a5.5 5.5 0 0 1-7.78-7.78l8.49-8.49a3.67 3.67 0 0 1 5.19 5.19l-8.49 8.49a1.83 1.83 0 0 1-2.6-2.6l7.78-7.78"/></svg>'+
         files+'</span>' : "")+
@@ -748,8 +738,6 @@ function renderDrawer(){
   const modelSel = '<select onchange="chgModel(this.value)"><option value="">Sin modelo</option>' +
     S.models.map(m => '<option value="'+m.id+'"'+(m.id===d.model?" selected":"")+'>'+esc(m.name)+'</option>').join("") +
     '</select>';
-  const ownerSel = '<select onchange="chgOwner(this.value)">' + OWNERS.map(o =>
-    '<option value="'+o.id+'"'+(o.id===d.owner?" selected":"")+'>'+esc(o.name)+'</option>').join("") + '</select>';
 
   const contacts = (d.contacts||[]).map(function(c,i){
     return '<div class="ct"><div><div class="nm">'+esc(c.name)+
@@ -790,7 +778,6 @@ function renderDrawer(){
     '<div class="fields">'+
       '<div class="k">Columna</div><div>'+stageSel+'</div>'+
       '<div class="k">Modelo de negocio</div><div>'+modelSel+'</div>'+
-      '<div class="k">Responsable</div><div>'+ownerSel+'</div>'+
       '<div class="k">Valor anual (€)</div><div><input type="number" min="0" step="100" value="'+d.amount+'" onchange="chgAmount(this.value)"></div>'+
       '<div class="k">Origen</div><div>'+esc(d.source)+'</div>'+
       '<div class="k">Últ. actividad</div><div>'+dayLabel(d.age)+'</div>'+
@@ -841,12 +828,6 @@ function chgModel(v){
   const m = model(v);
   d.acts.push({t:"Modelo de negocio: " + (m ? m.name : "sin modelo"), d:"hoy"});
   d.age = 0; save(); refresh(); toast("Modelo de negocio actualizado");
-}
-function chgOwner(v){
-  const d = cur(); if(!d) return;
-  d.owner = v;
-  d.acts.push({t:"Asignada a " + owner(v).name, d:"hoy"});
-  d.age = 0; save(); refresh();
 }
 function chgAmount(v){
   const d = cur(); if(!d) return;
@@ -967,13 +948,12 @@ function createDeal(){
   const em  = document.getElementById("nEm").value.trim();
   const amt = +document.getElementById("nAmt").value || 0;
   const st  = document.getElementById("nStage").value;
-  const ow  = document.getElementById("nOwner").value;
   const md  = document.getElementById("nModel").value || null;
   const nextId = S.deals.reduce((m,d) => Math.max(m,d.id), 0) + 1;
   S.deals.push({
     id:nextId, co:co,
     contacts: ct ? [{name:ct, email:em, role:""}] : [],
-    amount:amt, stage:st, owner:ow, model:md, age:0, source:"Manual",
+    amount:amt, stage:st, model:md, age:0, source:"Manual",
     files:[], acts:[{t:"Oportunidad creada", d:"hoy"}]
   });
   save(); closeAll(); refresh(); toast(co + " añadida al pipeline");
@@ -998,8 +978,6 @@ function syncSelects(){
     S.models.map(m => '<option value="'+m.id+'"'+(m.id===modelQ?" selected":"")+'>'+esc(m.name)+'</option>').join("");
   document.getElementById("nStage").innerHTML =
     S.stages.map(s => '<option value="'+s.id+'">'+esc(s.name)+'</option>').join("");
-  document.getElementById("nOwner").innerHTML =
-    OWNERS.map(o => '<option value="'+o.id+'">'+esc(o.name)+'</option>').join("");
   document.getElementById("nModel").innerHTML = '<option value="">Sin modelo</option>' +
     S.models.map(m => '<option value="'+m.id+'">'+esc(m.name)+'</option>').join("");
 }
