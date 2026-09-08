@@ -1094,26 +1094,31 @@ function seedDeals(){
             files:files, acts:acts};
   });
 }
+/* Sin datos de fábrica: el pipeline en blanco parte directamente de los
+   negocios reales importados de HubSpot (las mismas 9 columnas y 102
+   oportunidades que "cargarConjuntos" añadiría de todas formas sobre un
+   tablero vacío). Antes se mezclaban aquí 16 empresas inventadas de
+   ejemplo (Northwind Labs, Acme Cloud...) junto a las reales. */
 function defaultState(){
-  const stages = defaultStages();
+  const stages = [];
+  let deals = [];
+  const stPerdido = {id:"perdido", name:"Perdido", color:"#d92d20"};
+  stages.push(stPerdido);
+  deals = deals.concat(lostDeals(stPerdido.id, deals.length + 1));
+  deals = deals.concat(realDeals(REPESCA_REAL, stPerdido.id, deals.length + 1));
   stages.push({id:"interesados", name:"Interesados", color:"#0284c7"});
-  let deals = seedDeals();
-  const stP = lostStage(stages);
-  deals = deals.concat(lostDeals(stP.id, deals.length + 1));
-  const stI = findStage(stages, ["interesad"]);
-  deals = deals.concat(realDeals(INTERESADOS_REAL, stI.id, deals.length + 1));
-  const stO = findStage(stages, ["propuesta", "oferta"]);
-  deals = deals.concat(realDeals(PROPUESTA_REAL, stO.id, deals.length + 1));
+  deals = deals.concat(realDeals(INTERESADOS_REAL, "interesados", deals.length + 1));
+  stages.push({id:"propuesta", name:"Propuesta", color:"#c77700"});
+  deals = deals.concat(realDeals(PROPUESTA_REAL, "propuesta", deals.length + 1));
   stages.push({id:"renovacion", name:"Renovación pendiente", color:"#7c3aed"});
-  stages.push({id:"cliente-perdido", name:"Cliente pérdido", color:"#9f1239"});
   deals = deals.concat(realDeals(RENOVACION_REAL, "renovacion", deals.length + 1));
+  stages.push({id:"cliente-perdido", name:"Cliente pérdido", color:"#9f1239"});
   deals = deals.concat(realDeals(CLIENTE_PERDIDO_REAL, "cliente-perdido", deals.length + 1));
-  deals = deals.concat(realDeals(REPESCA_REAL, stP.id, deals.length + 1));
   stages.push({id:"reunion", name:"Reunión programada", color:"#0284c7"});
-  stages.push({id:"contrato", name:"Contrato pendiente", color:"#0d9488"});
-  stages.push({id:"clientes", name:"Clientes", color:"#0f9d58"});
   deals = deals.concat(realDeals(REUNION_REAL, "reunion", deals.length + 1));
+  stages.push({id:"contrato", name:"Contrato pendiente", color:"#0d9488"});
   deals = deals.concat(realDeals(CONTRATO_REAL, "contrato", deals.length + 1));
+  stages.push({id:"clientes", name:"Clientes", color:"#0f9d58"});
   deals = deals.concat(realDeals(CLIENTES_REAL, "clientes", deals.length + 1));
   return {stages:stages, models:defaultModels(), deals:deals};
 }
@@ -1154,6 +1159,28 @@ const CONJUNTOS = [
   {marca:"hubspot-propuesta",      lista:PROPUESTA_REAL,   patrones:["propuesta", "oferta"],
    nombre:"Propuesta",   color:"#c77700"}
 ];
+/* Quita las 16 empresas de ejemplo (Northwind Labs, Acme Cloud...) de
+   cualquier tablero que ya las tuviera guardadas, y las columnas de fábrica
+   que se queden vacías al retirarlas. Se ejecuta una sola vez por
+   navegador; no toca ningún negocio real ni nada añadido por el usuario. */
+const DEMO_MARK = "quitar-demo-inventado-v1";
+(function quitarDemo(){
+  S.imports = Array.isArray(S.imports) ? S.imports : [];
+  if(S.imports.indexOf(DEMO_MARK) > -1) return;
+  S.imports.push(DEMO_MARK);
+  const nombresFake = SEED.map(function(r){ return r[0]; });
+  const antes = S.deals.length;
+  S.deals = S.deals.filter(function(d){ return nombresFake.indexOf(d.co) === -1; });
+  ["lead","contactado","demo","ganado"].forEach(function(id){
+    const vacia = S.stages.some(s=>s.id===id) && !S.deals.some(function(d){ return d.stage===id; });
+    if(vacia) S.stages = S.stages.filter(function(s){ return s.id !== id; });
+  });
+  if(S.deals.length !== antes){
+    setTimeout(function(){ toast("Datos de ejemplo eliminados: sólo quedan tus negocios reales"); }, 700);
+  }
+  save();
+})();
+
 (function cargarConjuntos(){
   S.imports = Array.isArray(S.imports) ? S.imports : [];
   const hechos = [];
