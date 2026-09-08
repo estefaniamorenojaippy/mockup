@@ -357,9 +357,10 @@ input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--line
     <div class="f"><label for="nEm">Email</label><input id="nEm" type="email" placeholder="nombre@empresa.com"></div>
   </div>
   <div class="f2">
-    <div class="f"><label for="nAmt">Valor anual (€)</label><input id="nAmt" type="number" min="0" step="100" placeholder="12000"></div>
-    <div class="f"><label for="nStage">Columna</label><select id="nStage"></select></div>
+    <div class="f"><label for="nRoom">€/habitación</label><input id="nRoom" type="number" min="0" step="0.5" placeholder="3,5"></div>
+    <div class="f"><label for="nAmt">Valor mensual (€)</label><input id="nAmt" type="number" min="0" step="50" placeholder="1200"></div>
   </div>
+  <div class="f"><label for="nStage">Columna</label><select id="nStage"></select></div>
   <div class="f2">
     <div class="f"><label for="nModel">Modelo de negocio</label><select id="nModel"></select></div>
     <div class="f"><label for="nSrc">Origen</label>
@@ -1329,6 +1330,8 @@ function fmtDate(iso){
   const p = String(iso).split("-");
   return p.length === 3 ? p[2] + "/" + p[1] + "/" + p[0] : iso;
 }
+/* 3.5 -> "3,5"; 4 -> "4" */
+const dec = n => String(n).replace(".", ",");
 const eur  = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " €";
 const eurK = n => n>=1000 ? Math.round(n/1000) + "k €" : n + " €";
 const stage = id => S.stages.find(s => s.id===id) || S.stages[0];
@@ -1425,6 +1428,7 @@ function card(d){
   const stale = (d.age>=12 && !isWon(d) && !isLost(d))
     ? '<span class="stale">Sin actividad</span>' : '<span>'+dayLabel(d.age)+'</span>';
   const close = d.closeDate ? '<span>·</span><span>Cierre '+fmtDate(d.closeDate)+'</span>' : "";
+  const hab = d.perRoom ? '<span>·</span><span>'+dec(d.perRoom)+' €/hab</span>' : "";
   const causa = (isLost(d) && d.lostReason)
     ? '<div class="cause" title="Causa de la pérdida">'+esc(d.lostReason)+'</div>' : "";
   return '<article class="deal" draggable="true" data-id="'+d.id+'" onclick="openDeal('+d.id+')">'+
@@ -1439,7 +1443,7 @@ function card(d){
     causa+
     '<div class="row">'+(d.model ? modelChip(d.model) : "")+
       '<span class="amt">'+eur(d.amount)+'</span></div>'+
-    '<div class="foot">'+stale+close+
+    '<div class="foot">'+stale+close+hab+
       (files ? '<span class="clip" style="margin-left:auto" title="'+files+' archivo(s) de oferta">'+
         '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21.4 11.05 12.25 20.2a5.5 5.5 0 0 1-7.78-7.78l8.49-8.49a3.67 3.67 0 0 1 5.19 5.19l-8.49 8.49a1.83 1.83 0 0 1-2.6-2.6l7.78-7.78"/></svg>'+
         files+'</span>' : "")+
@@ -1766,7 +1770,7 @@ function renderDrawer(){
   if(!d) return;
   document.getElementById("drCo").textContent = d.co;
   document.getElementById("drAmt").innerHTML = eur(d.amount) +
-    ' <span style="color:var(--ink-3);font-weight:400">· anual</span>';
+    ' <span style="color:var(--ink-3);font-weight:400">· al mes</span>';
 
   let banner = "";
   if(isWon(d))  banner = '<div class="won-banner w">Oportunidad ganada · contrato firmado</div>';
@@ -1831,7 +1835,9 @@ function renderDrawer(){
           '" placeholder="¿Por qué se ha perdido?" oninput="chgReason(this.value)" '+
           'onchange="logReason(this.value)"></div>'
         : "")+
-      '<div class="k">Valor anual (€)</div><div><input type="number" min="0" step="100" value="'+d.amount+'" oninput="chgAmount(this.value)"></div>'+
+      '<div class="k">€/habitación</div><div><input type="number" min="0" step="0.5" value="'+
+        (d.perRoom || "")+'" placeholder="Ej. 3,5" oninput="chgPerRoom(this.value)"></div>'+
+      '<div class="k">Valor mensual (€)</div><div><input type="number" min="0" step="50" value="'+d.amount+'" oninput="chgAmount(this.value)"></div>'+
       '<div class="k">Fecha de cierre</div><div><input type="date" value="'+(d.closeDate||"")+
         '" oninput="chgDate(\'closeDate\',this.value)"></div>'+
       '<div class="k">Fecha de creación</div><div><input type="date" value="'+(d.createdDate||"")+
@@ -1998,11 +2004,16 @@ function logReason(v){
   pushAct(d, val ? "Causa de la pérdida: " + val : "Causa borrada");
   d.age = 0; save(); refreshLive();
 }
+function chgPerRoom(v){
+  const d = cur(); if(!d) return;
+  d.perRoom = Math.max(0, +v || 0);
+  save(); refreshLive(); autoSaved();
+}
 function chgAmount(v){
   const d = cur(); if(!d) return;
   d.amount = Math.max(0, +v || 0);
   document.getElementById("drAmt").innerHTML = eur(d.amount) +
-    ' <span style="color:var(--ink-3);font-weight:400">· anual</span>';
+    ' <span style="color:var(--ink-3);font-weight:400">· al mes</span>';
   save(); refreshLive(); autoSaved();
 }
 
@@ -2125,6 +2136,7 @@ function createDeal(){
   const ct  = document.getElementById("nCt").value.trim();
   const em  = document.getElementById("nEm").value.trim();
   const amt = +document.getElementById("nAmt").value || 0;
+  const room = +document.getElementById("nRoom").value || 0;
   const st  = document.getElementById("nStage").value;
   const md  = document.getElementById("nModel").value || null;
   const src = document.getElementById("nSrc").value.trim();
@@ -2132,11 +2144,11 @@ function createDeal(){
   S.deals.push({
     id:nextId, co:co,
     contacts: ct ? [{name:ct, email:em, role:""}] : [],
-    amount:amt, stage:st, model:md, age:0, source:src,
+    amount:amt, perRoom:room, stage:st, model:md, age:0, source:src,
     files:[], acts:[{t:"Oportunidad creada", d:"hoy"}]
   });
   save(); closeAll(); refresh(); toast(co + " añadida al pipeline");
-  ["nCo","nCt","nEm","nAmt","nSrc"].forEach(function(i){ document.getElementById(i).value = ""; });
+  ["nCo","nCt","nEm","nAmt","nRoom","nSrc"].forEach(function(i){ document.getElementById(i).value = ""; });
 }
 
 /* ═══════════ Cierre, selects y toast ═══════════ */
