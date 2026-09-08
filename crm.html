@@ -622,6 +622,96 @@ function lostDeals(stageId, firstId){
 const norm = t => String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 const lostStage = list => list.find(st => norm(st.name).indexOf("perdid") > -1);
 
+/* ═══════════ Negocios reales: Interesados y Propuesta (HubSpot) ═══════════
+   Leídos de las grabaciones INTERESADOS.mp4 y "ESPERANDO RESPUESTA.mp4"
+   (columna "Pendiente de respuesta de oferta"). Contactos y fechas tal
+   como se veían; donde el nombre no era legible se deja en blanco en
+   vez de inventarlo. */
+const INTERESADOS_REAL = [
+  { co:"Yurbban", closeDate:"2026-07-31", createdDate:"2026-07-24", age:42, source:"Outbound",
+    contacts:[{name:"Oriol Roca", email:"oriol.r@yurbban.com", role:"General Manager"}],
+    acts:[
+      {t:"Negocio creado", d:"el 24/07/2026"},
+      {t:"Correo: Re: 3 décimas en reputación online", d:"el 24/07/2026"},
+      {t:"Nota: lead llegado por mensajes en frío de LinkedIn; se pasa al departamento de innovación", d:"el 27/07/2026"}
+    ] },
+  { co:"iberik hoteles (Meta)", closeDate:"2026-07-31", createdDate:"2026-07-14", age:55, source:"",
+    contacts:[{name:"Jose Lagoa", email:"lagoajl@gmail.com", role:""}],
+    acts:[
+      {t:"Negocio creado", d:"el 14/07/2026"},
+      {t:"Nota: se envió más información por correo, pendiente de agendar la llamada", d:"el 14/07/2026"}
+    ] },
+  { co:"Leonardo Hotels", closeDate:"2026-07-31", createdDate:"2026-07-09", age:60, source:"",
+    contacts:[{name:"Albert Pedragosa", email:"albert.pedragosa@leonardo-hot…", role:"Operations Manager Barcelona"}],
+    acts:[
+      {t:"Negocio creado", d:"el 09/07/2026"},
+      {t:"Correo", d:"hace 2 meses"}
+    ] },
+  { co:"SOHO Boutique Palacio de Pombo", closeDate:"2026-07-31", createdDate:"2026-07-01", age:60, source:"",
+    contacts:[],
+    acts:[
+      {t:"Negocio creado", d:"el 01/07/2026"},
+      {t:"Nota", d:"hace 2 meses"}
+    ] }
+];
+const PROPUESTA_REAL = [
+  { co:"Barceló Carmen Granada", closeDate:"2026-07-31", createdDate:"2026-07-23", age:11, source:"",
+    contacts:[{name:"Sofia Aranguren", email:"", role:""}],
+    acts:[
+      {t:"Negocio creado", d:"el 23/07/2026"},
+      {t:"Correo", d:"hace 11 días"}
+    ] },
+  { co:"The Central House", closeDate:"2026-07-31", createdDate:"2026-07-22", age:30, source:"",
+    contacts:[{name:"Pedro Noguera", email:"", role:""}],
+    acts:[
+      {t:"Negocio creado", d:"el 22/07/2026"},
+      {t:"Correo", d:"hace 1 mes"}
+    ] },
+  { co:"Caro hotel", closeDate:"2026-07-31", createdDate:"2026-07-15", age:0, source:"",
+    contacts:[],
+    acts:[
+      {t:"Negocio creado", d:"el 15/07/2026"},
+      {t:"Correo", d:"hoy"}
+    ] },
+  { co:"IBERSOL", closeDate:"2026-07-31", createdDate:"2026-07-10", age:48, source:"",
+    contacts:[{name:"David Gutiérrez", email:"dgutierrez@ibersol.es", role:""}],
+    acts:[
+      {t:"Negocio creado", d:"el 10/07/2026"},
+      {t:"Nota: origen email", d:"el 10/07/2026"},
+      {t:"Nota: Hotel Ibersol Antemare (Sitges, Barcelona), Adults Only, 116 habitaciones", d:"el 16/07/2026"},
+      {t:"Nota: seguimiento", d:"el 21/07/2026"}
+    ] },
+  { co:"Magic Group", closeDate:"2026-06-30", createdDate:"2026-06-19", age:0, source:"",
+    contacts:[{name:"Felipe Martinez", email:"", role:""}],
+    acts:[
+      {t:"Negocio creado", d:"el 19/06/2026"},
+      {t:"Correo", d:"hoy"}
+    ] },
+  { co:"So Blue en Antibes (Niza)", closeDate:"2026-06-30", createdDate:"2026-06-08", age:25, source:"",
+    contacts:[],
+    acts:[
+      {t:"Negocio creado", d:"el 08/06/2026"},
+      {t:"Reunión", d:"hace 25 días"}
+    ] },
+  { co:"B&B Hôtel", closeDate:"2026-02-23", createdDate:"2026-02-16", age:60, source:"",
+    contacts:[],
+    acts:[
+      {t:"Negocio creado", d:"el 16/02/2026"},
+      {t:"Nota", d:"hace 2 meses"}
+    ] }
+];
+function realDeals(list, stageId, firstId){
+  return list.map(function(r, i){
+    return {
+      id: firstId + i, co:r.co, contacts:r.contacts.slice(), amount:0, stage:stageId,
+      model:null, age:r.age, source:r.source||"", closeDate:r.closeDate, createdDate:r.createdDate,
+      files:[], acts:r.acts.slice()
+    };
+  });
+}
+const findStage = (list, patrones) =>
+  patrones.map(p => list.find(st => norm(st.name).indexOf(p) > -1)).find(Boolean);
+
 function defaultStages(){
   return [
     {id:"lead",       name:"Lead",       color:"#9aa0a6"},
@@ -706,10 +796,15 @@ function seedDeals(){
 }
 function defaultState(){
   const stages = defaultStages();
-  const deals  = seedDeals();
-  const st = lostStage(stages);
-  return {stages:stages, models:defaultModels(),
-          deals: deals.concat(lostDeals(st.id, deals.length + 1))};
+  stages.push({id:"interesados", name:"Interesados", color:"#0284c7"});
+  let deals = seedDeals();
+  const stP = lostStage(stages);
+  deals = deals.concat(lostDeals(stP.id, deals.length + 1));
+  const stI = findStage(stages, ["interesad"]);
+  deals = deals.concat(realDeals(INTERESADOS_REAL, stI.id, deals.length + 1));
+  const stO = findStage(stages, ["propuesta", "oferta"]);
+  deals = deals.concat(realDeals(PROPUESTA_REAL, stO.id, deals.length + 1));
+  return {stages:stages, models:defaultModels(), deals:deals};
 }
 let S = defaultState();
 
@@ -743,6 +838,27 @@ const LOST_MARK = "hubspot-cierre-perdido";
     }, 500);
   }
   S.imports.push(LOST_MARK);
+
+  [["hubspot-interesados", INTERESADOS_REAL, ["interesad"], "Interesados", "#0284c7"],
+   ["hubspot-propuesta",   PROPUESTA_REAL,   ["propuesta", "oferta"], "Propuesta", "#c77700"]
+  ].forEach(function(cfg){
+    const marca = cfg[0], lista = cfg[1], patrones = cfg[2], nombre = cfg[3], color = cfg[4];
+    if(S.imports.indexOf(marca) > -1) return;
+    const yaEstan = S.deals.some(d => d.co === lista[0].co);
+    if(!yaEstan){
+      let col = findStage(S.stages, patrones);
+      if(!col){
+        col = {id: nombre.toLowerCase() + "-" + Date.now().toString(36), name:nombre, color:color};
+        S.stages.push(col);
+      }
+      const first = S.deals.reduce((a,d) => Math.max(a, d.id), 0) + 1;
+      S.deals = S.deals.concat(realDeals(lista, col.id, first));
+      setTimeout(function(){
+        toast(lista.length + ' negocios añadidos a "' + col.name + '"');
+      }, 500);
+    }
+    S.imports.push(marca);
+  });
   save();
 })();
 
