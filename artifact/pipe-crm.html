@@ -190,7 +190,15 @@ select.sel:focus{border-color:var(--accent)}
 .dropzone.over{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
 
 .tl{list-style:none;margin:0;padding:0 0 0 16px;border-left:2px solid var(--line-2)}
-.tl li{position:relative;padding:0 0 14px 12px}
+.tl li{position:relative;padding:0 26px 14px 12px}
+.tl li .acts{position:absolute;right:0;top:-2px;display:flex;gap:1px;opacity:0;transition:.12s}
+.tl li:hover .acts,.tl li .acts:focus-within{opacity:1}
+.tl li .acts .icon-btn{width:22px;height:22px}
+.tl-edit{display:flex;flex-direction:column;gap:6px}
+.tl-edit input{width:100%;padding:6px 9px;border:1px solid var(--accent);border-radius:8px;
+  background:#fff;outline:none;font-size:13px}
+.tl-edit .fecha{font-size:12px;color:var(--ink-3)}
+.tl-edit .row{display:flex;gap:6px;justify-content:flex-end}
 .tl li:last-child{padding-bottom:0}
 .tl li::before{content:"";position:absolute;left:-21px;top:4px;width:8px;height:8px;
   border-radius:50%;background:#c9cad0;border:2px solid #fff}
@@ -1737,6 +1745,7 @@ function autoSaved(){
 function openDeal(id){
   openId = id;
   addingCt = false;
+  editingAct = null;
   renderDrawer();
   const dr = document.getElementById("drawer");
   dr.classList.add("on");
@@ -1839,8 +1848,26 @@ function renderDrawer(){
     '<div class="sec-title">Actividad</div>'+
     '<ul class="tl">'+
       d.acts.slice().reverse().map(function(a,i){
-        return '<li'+(i===0?' class="hi"':'')+'><div class="t">'+esc(a.t)+
-               '</div><div class="d">'+esc(a.d)+'</div></li>';
+        /* La lista se pinta del revés: éste es el índice real en d.acts */
+        const real = d.acts.length - 1 - i;
+        if(real === editingAct){
+          return '<li class="hi"><div class="tl-edit">'+
+            '<input id="actTexto" value="'+esc(a.t)+'" placeholder="Qué ha pasado" onkeydown="actKey(event)">'+
+            '<input id="actFecha" value="'+esc(a.d)+'" placeholder="Cuándo (texto libre)" onkeydown="actKey(event)">'+
+            '<div class="row"><button class="btn btn-sm" onclick="cancelAct()">Cancelar</button>'+
+            '<button class="btn btn-sm btn-primary" onclick="saveAct()">Guardar</button></div>'+
+          '</div></li>';
+        }
+        return '<li'+(i===0?' class="hi"':'')+'>'+
+          '<div class="acts">'+
+            '<button class="icon-btn" title="Editar esta entrada" onclick="editAct('+real+')">'+
+              '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>'+
+            '</button>'+
+            '<button class="icon-btn" title="Eliminar esta entrada" onclick="delAct('+real+')">'+
+              '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></svg>'+
+            '</button>'+
+          '</div>'+
+          '<div class="t">'+esc(a.t)+'</div><div class="d">'+esc(a.d)+'</div></li>';
       }).join("")+
     '</ul>'+
     '<div class="note-add"><input id="noteIn" placeholder="Añadir nota…" '+
@@ -1895,6 +1922,46 @@ function chgDate(field, v){
 }
 /* Añade una línea de actividad y la mete en la lista abierta sin repintar
    la ficha: repintarla mientras se escribe se lleva el cursor por delante. */
+/* Entrada de actividad que se está editando (índice real en d.acts) */
+let editingAct = null;
+function editAct(i){
+  editingAct = i;
+  renderDrawer();
+  const el = document.getElementById("actTexto");
+  if(el){ el.focus(); el.select(); }
+}
+/* El teclado del formulario no debe llegar al manejador global: Escape ahí
+   cancelaría la edición y además cerraría la ficha. */
+function actKey(ev){
+  if(ev.key === "Enter"){ ev.preventDefault(); ev.stopPropagation(); saveAct(); }
+  if(ev.key === "Escape"){ ev.preventDefault(); ev.stopPropagation(); cancelAct(); }
+}
+function cancelAct(){
+  editingAct = null;
+  renderDrawer();
+}
+function saveAct(){
+  const d = cur();
+  if(!d || editingAct === null) return;
+  const a = d.acts[editingAct];
+  const texto = document.getElementById("actTexto").value.trim();
+  const fecha = document.getElementById("actFecha").value.trim();
+  if(!texto){ toast("La entrada necesita un texto"); return; }
+  a.t = texto;
+  a.d = fecha;
+  editingAct = null;
+  save(); refresh(); toast("Actividad actualizada");
+}
+function delAct(i){
+  const d = cur();
+  if(!d || !d.acts[i]) return;
+  d.acts.splice(i, 1);
+  if(editingAct !== null){
+    if(editingAct === i) editingAct = null;
+    else if(editingAct > i) editingAct--;
+  }
+  save(); refresh(); toast("Entrada eliminada");
+}
 function pushAct(d, texto){
   d.acts.push({t:texto, d:"hoy"});
   if(openId !== d.id) return;
@@ -2075,7 +2142,7 @@ function closeAll(){
   });
   document.getElementById("overlay").classList.remove("on");
   closeColMenu();
-  openId = null; addingCt = false; colEditing = null;
+  openId = null; addingCt = false; colEditing = null; editingAct = null;
 }
 function syncSelects(){
   document.getElementById("nStage").innerHTML =
@@ -2130,7 +2197,11 @@ document.getElementById("importIn").addEventListener("change", function(e){
   e.target.value = "";
 });
 document.getElementById("q").addEventListener("input", function(e){ q = e.target.value; refresh(); });
-document.addEventListener("keydown", function(e){ if(e.key==="Escape") closeAll(); });
+document.addEventListener("keydown", function(e){
+  if(e.key !== "Escape") return;
+  if(editingAct !== null){ cancelAct(); return; }   /* primero la edición */
+  closeAll();
+});
 /* JavaScript activo: fuera el aviso de vista previa estática */
 const noJs = document.getElementById("noJs");
 if(noJs) noJs.remove();
