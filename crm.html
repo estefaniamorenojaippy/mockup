@@ -204,6 +204,10 @@ select.sel:focus{border-color:var(--accent)}
 .f input:focus,.f select:focus{border-color:var(--accent);background:#fff}
 .f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .modal-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+/* Por encima de la ficha, que está a 50 */
+.modal-ask{z-index:70;width:400px}
+.btn-solid-danger{background:var(--red);border-color:var(--red);color:#fff}
+.btn-solid-danger:hover{background:#bf2419}
 input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--line);
   border-radius:9px;background:#fff;cursor:pointer;flex:none}
 .mrow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
@@ -364,6 +368,16 @@ input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--line
   </button>
   <div class="modal-foot">
     <button class="btn btn-primary" onclick="closeModels()">Hecho</button>
+  </div>
+</div>
+
+<div class="modal modal-ask" id="modalAsk" role="dialog" aria-modal="true"
+     aria-labelledby="askMsg">
+  <h2 id="askTitle">Confirmar</h2>
+  <p class="hint" id="askMsg"></p>
+  <div class="modal-foot">
+    <button class="btn" onclick="askDone(false)">Cancelar</button>
+    <button class="btn btn-solid-danger" id="askOk" onclick="askDone(true)">Eliminar</button>
   </div>
 </div>
 
@@ -1153,7 +1167,7 @@ function moveCol(id, dir){
   const tmp = S.stages[i]; S.stages[i] = S.stages[j]; S.stages[j] = tmp;
   closeColMenu(); save(); refresh();
 }
-function removeCol(id){
+async function removeCol(id){
   closeColMenu();
   if(S.stages.length <= 1){ toast("El pipeline necesita al menos una columna"); return; }
   const s = stage(id);
@@ -1161,8 +1175,8 @@ function removeCol(id){
   const i = S.stages.findIndex(x => x.id===id);
   const target = S.stages[i===0 ? 1 : i-1];
   if(inside.length){
-    const ok = confirm('"'+s.name+'" tiene '+inside.length+' oportunidad(es).\n\n' +
-      'Se moverán a "'+target.name+'". ¿Eliminar la columna?');
+    const ok = await ask('"'+s.name+'" tiene '+inside.length+' oportunidad(es). Se moverán a "'+
+      target.name+'". ¿Eliminar la columna?', "Eliminar columna", "Eliminar y mover");
     if(!ok) return;
     inside.forEach(function(d){
       d.stage = target.id;
@@ -1218,11 +1232,14 @@ function addModel(){
   const last = rows[rows.length-1];
   if(last){ last.focus(); last.select(); }
 }
-function removeModel(id){
+async function removeModel(id){
   const m = model(id); if(!m) return;
   const used = S.deals.filter(d => d.model===id).length;
-  if(used && !confirm('"'+m.name+'" está en '+used+' oportunidad(es).\n\n'+
-     'Quedarán como "Sin modelo". ¿Eliminar?')) return;
+  if(used){
+    const ok = await ask('"'+m.name+'" está en '+used+' oportunidad(es). Quedarán como "Sin modelo".',
+      "Eliminar modelo de negocio");
+    if(!ok) return;
+  }
   S.deals.forEach(function(d){ if(d.model===id) d.model = null; });
   S.models = S.models.filter(x => x.id!==id);
   save(); renderModelRows(); syncSelects(); refresh();
@@ -1489,10 +1506,11 @@ function addNote(){
 function closeDrawer(){
   closeAll(); toast("Guardado");
 }
-function deleteDeal(id){
+async function deleteDeal(id){
   const d = id ? S.deals.find(x => x.id===id) : cur();
   if(!d) return;
-  if(!confirm('¿Eliminar la oportunidad de "'+d.co+'"? No se puede deshacer.')) return;
+  const ok = await ask('Se eliminará "'+d.co+'". No se puede deshacer.', "Eliminar oportunidad");
+  if(!ok) return;
   const abierta = (openId === d.id);
   S.deals = S.deals.filter(x => x.id!==d.id);
   save();
@@ -1538,7 +1556,8 @@ function closeAll(){
   const dr = document.getElementById("drawer");
   dr.classList.remove("on");
   dr.setAttribute("aria-hidden","true");
-  ["modalNew","modalCol","modalModels","modalImport"].forEach(function(id){
+  if(askResolve){ const r = askResolve; askResolve = null; r(false); }
+  ["modalNew","modalCol","modalModels","modalImport","modalAsk"].forEach(function(id){
     document.getElementById(id).classList.remove("on");
   });
   document.getElementById("overlay").classList.remove("on");
@@ -1557,6 +1576,25 @@ function syncSelects(){
   document.getElementById("nModel").innerHTML = '<option value="">Sin modelo</option>' +
     S.models.map(m => '<option value="'+m.id+'">'+esc(m.name)+'</option>').join("");
 }
+/* confirm() propio: el del navegador está bloqueado dentro del visor */
+let askResolve = null;
+function ask(msg, titulo, textoOk){
+  document.getElementById("askTitle").textContent = titulo || "Confirmar";
+  document.getElementById("askMsg").textContent = msg;
+  document.getElementById("askOk").textContent = textoOk || "Eliminar";
+  document.getElementById("modalAsk").classList.add("on");
+  document.getElementById("overlay").classList.add("on");
+  return new Promise(function(res){ askResolve = res; });
+}
+function askDone(v){
+  document.getElementById("modalAsk").classList.remove("on");
+  /* Si se preguntó desde la ficha, ésta sigue abierta: mantener el fondo */
+  if(!openId) document.getElementById("overlay").classList.remove("on");
+  const res = askResolve;
+  askResolve = null;
+  if(res) res(v);
+}
+
 let tt;
 function toast(msg){
   const t = document.getElementById("toast");
