@@ -83,11 +83,18 @@ select.sel:focus{border-color:var(--accent)}
 .col-head .n{font-size:12px;color:var(--ink-3);background:#e2e2e6;border-radius:20px;padding:1px 7px}
 .col-head .sum{margin-left:auto;font-size:12px;font-weight:600;color:var(--ink-2)}
 .stack{display:flex;flex-direction:column;gap:8px;min-height:40px}
-.deal{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:11px 12px;
-  box-shadow:var(--shadow);cursor:grab;transition:box-shadow .12s,transform .12s}
+.deal{position:relative;background:var(--card);border:1px solid var(--line);border-radius:11px;
+  padding:11px 12px;box-shadow:var(--shadow);cursor:grab;transition:box-shadow .12s,transform .12s}
+.deal .del{position:absolute;top:7px;right:7px;display:grid;place-items:center;width:24px;height:24px;
+  border:0;border-radius:7px;background:transparent;color:var(--ink-3);opacity:0;transition:.12s}
+.deal:hover .del{opacity:1}
+.deal .del:hover{background:var(--red-soft);color:var(--red);opacity:1}
+.deal .del:focus-visible{opacity:1;outline:2px solid var(--accent);outline-offset:1px}
+/* En pantallas sin ratón no hay hover: siempre visible */
+@media (hover:none){ .deal .del{opacity:.75} }
 .deal:hover{box-shadow:0 2px 4px rgba(16,17,20,.07),0 4px 16px rgba(16,17,20,.07)}
 .deal.dragging{opacity:.45;transform:rotate(1.5deg)}
-.deal .co{font-weight:600;letter-spacing:-.01em}
+.deal .co{font-weight:600;letter-spacing:-.01em;padding-right:24px}
 .deal .meta{font-size:12px;color:var(--ink-3);margin-top:1px}
 .deal .row{display:flex;align-items:center;gap:8px;margin-top:9px}
 .deal .amt{font-weight:600;font-size:13px;margin-left:auto}
@@ -916,6 +923,10 @@ function card(d){
     ? '<span class="stale">Sin actividad</span>' : '<span>'+dayLabel(d.age)+'</span>';
   const close = d.closeDate ? '<span>·</span><span>Cierre '+fmtDate(d.closeDate)+'</span>' : "";
   return '<article class="deal" draggable="true" data-id="'+d.id+'" onclick="openDeal('+d.id+')">'+
+    '<button class="del" title="Eliminar oportunidad" aria-label="Eliminar '+esc(d.co)+'" '+
+      'onclick="delCard(event,'+d.id+')">'+
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>'+
+    '</button>'+
     '<div class="co">'+esc(d.co)+'</div>'+
     (main || d.source
       ? '<div class="meta">'+esc(main)+more+(main && d.source ? ' · ' : "")+esc(d.source)+'</div>'
@@ -1433,11 +1444,21 @@ function addNote(){
 function closeDrawer(){
   closeAll(); toast("Guardado");
 }
-function deleteDeal(){
-  const d = cur(); if(!d) return;
+function deleteDeal(id){
+  const d = id ? S.deals.find(x => x.id===id) : cur();
+  if(!d) return;
   if(!confirm('¿Eliminar la oportunidad de "'+d.co+'"? No se puede deshacer.')) return;
+  const abierta = (openId === d.id);
   S.deals = S.deals.filter(x => x.id!==d.id);
-  save(); closeAll(); refresh(); toast(d.co + " eliminada");
+  save();
+  if(abierta) closeAll();       /* sólo se cierra la ficha si era la suya */
+  refresh(); toast(d.co + " eliminada");
+}
+/* Papelera de la tarjeta: no debe abrir la ficha ni arrastrar */
+function delCard(ev, id){
+  ev.stopPropagation();
+  ev.preventDefault();
+  deleteDeal(id);
 }
 
 /* ═══════════ Nueva oportunidad ═══════════ */
