@@ -173,6 +173,11 @@ select.sel:focus{border-color:var(--accent)}
   border-radius:5px;padding:1px 5px;margin-left:6px;text-transform:uppercase;letter-spacing:.04em}
 .ct .dt{font-size:12px;color:var(--ink-3)}
 .ct .dt a{color:var(--accent);text-decoration:none}
+.ct .copy{border:0;background:transparent;color:var(--ink-3);padding:2px 4px;margin-left:2px;
+  border-radius:6px;vertical-align:-2px;opacity:.55;transition:.12s}
+.ct:hover .copy{opacity:1}
+.ct .copy:hover{background:var(--accent-soft);color:var(--accent)}
+.ct .copy.ok{color:var(--green);opacity:1}
 .ct .acts{margin-left:auto;display:flex;gap:2px}
 .inline-form{background:#fbfbfc;border:1px solid var(--line);border-radius:11px;padding:11px;margin-top:10px}
 .inline-form .f2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -1810,7 +1815,11 @@ function renderDrawer(){
       (i===0 ? '<span class="primary">Principal</span>' : "")+'</div>'+
       (c.role ? '<div class="dt">'+esc(c.role)+'</div>' : "")+
       '<div class="dt">'+
-        (c.email ? '<a href="mailto:'+esc(c.email)+'">'+esc(c.email)+'</a>' : "")+
+        (c.email ? '<a href="mailto:'+esc(c.email)+'">'+esc(c.email)+'</a>'+
+          '<button class="copy" data-copy="'+esc(c.email)+'" data-que="Correo" '+
+            'title="Copiar el correo" aria-label="Copiar '+esc(c.email)+'" onclick="copiar(event,this)">'+
+            '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>'+
+          '</button>' : "")+
         (c.email && c.phone ? ' · ' : "")+
         (c.phone ? '<a href="tel:'+esc(c.phone.replace(/\s/g,""))+'">'+esc(c.phone)+'</a>' : "")+
       '</div></div>'+
@@ -2237,6 +2246,42 @@ function askDone(v){
   const res = askResolve;
   askResolve = null;
   if(res) res(v);
+}
+
+/* Copiar al portapapeles. Dentro del visor la página va en un iframe y la
+   API del portapapeles puede estar cerrada, así que hay plan B. */
+function copiar(ev, btn){
+  ev.stopPropagation();
+  ev.preventDefault();
+  const texto = btn.dataset.copy || "";
+  const que = btn.dataset.que || "Texto";
+  if(!texto) return;
+  const bien = function(){
+    toast(que + " copiado");
+    btn.classList.add("ok");
+    setTimeout(function(){ btn.classList.remove("ok"); }, 1200);
+  };
+  const planB = function(){
+    const ta = document.createElement("textarea");
+    ta.value = texto;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "-1000px";
+    document.body.appendChild(ta);
+    ta.select();
+    let hecho = false;
+    try{ hecho = document.execCommand("copy"); }catch(e){}
+    ta.remove();
+    if(hecho) bien();
+    else toast("No se ha podido copiar: " + texto);
+  };
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(texto).then(bien, planB);
+      return;
+    }
+  }catch(e){}
+  planB();
 }
 
 let tt;
