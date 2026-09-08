@@ -592,10 +592,125 @@ function daysSince(iso){
   if(isNaN(t)) return 0;
   return Math.max(0, Math.round((Date.now() - t) / 86400000));
 }
+/* ═══════════ Más negocios reales de HubSpot ═══════════
+   Renovación pendiente y Cliente pérdido salen de la grabación
+   "Pendiente de renovación y cliente pérdido"; Repesca de la suya, y va
+   a la columna de Cierre perdido por indicación del usuario. */
+const RENOVACION_REAL = [
+  {"co": "OLIVIA BALMES", "amount": 0, "closeDate": "2026-05-31", "createdDate": "2026-05-26", "age": 100, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 26/05/2026"}, {"t": "Nota: nos ha pedido 2 meses de carencia", "d": "el 27/05/2026"}]},
+  {"co": "OLIVIA PLAZA", "amount": 0, "closeDate": "2026-05-31", "createdDate": "2026-05-26", "age": 100, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 26/05/2026"}]},
+  {"co": "Hoteles CASUAL 8", "amount": 33787, "closeDate": "2026-01-15", "createdDate": "2025-11-02", "age": 236, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 02/11/2025"}]}
+];
+const CLIENTE_PERDIDO_REAL = [
+  {"co": "GRAN HOTEL DON MANUEL", "amount": 0, "closeDate": "2026-05-27", "createdDate": "2026-05-26", "age": 104, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 26/05/2026"}]},
+  {"co": "Encofrados Alsina", "amount": 0, "closeDate": "2026-03-16", "createdDate": "2026-03-11", "age": 176, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 11/03/2026"}]},
+  {"co": "HOSTEL SANT JORDI", "amount": 0, "closeDate": "2026-03-16", "createdDate": "2026-02-26", "age": 176, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 26/02/2026"}]},
+  {"co": "ROYAL SON BOU", "amount": 5930, "closeDate": "2026-03-12", "createdDate": "2026-02-13", "age": 180, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 13/02/2026"}]},
+  {"co": "HIPOTELES - 2 H", "amount": 13811, "closeDate": "2026-04-08", "createdDate": "2026-02-10", "age": 153, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 10/02/2026"}]},
+  {"co": "Soler Hoteles - Cadena", "amount": 0, "closeDate": "2026-03-16", "createdDate": "2026-08-02", "age": 176, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 02/08/2026"}]},
+  {"co": "TuriHotel - 1H", "amount": 0, "closeDate": "2026-02-09", "createdDate": "2026-08-02", "age": 211, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 02/08/2026"}]},
+  {"co": "Hotel Hard Rock Marbella", "amount": 9414, "closeDate": "2026-02-26", "createdDate": "2026-02-02", "age": 194, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 02/02/2026"}]},
+  {"co": "Palacio pequeño", "amount": 0, "closeDate": "2026-02-09", "createdDate": "2026-02-02", "age": 211, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 02/02/2026"}]},
+  {"co": "EMPERADOR - 1H", "amount": 0, "closeDate": "2026-02-09", "createdDate": "2026-02-02", "age": 211, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 02/02/2026"}]},
+  {"co": "Grupo Hotelero Concept - 1 H", "amount": 18389, "closeDate": "2026-02-12", "createdDate": "2026-01-26", "age": 208, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 26/01/2026"}]},
+  {"co": "LA FARM - 1H", "amount": 5000, "closeDate": "2026-02-26", "createdDate": "2026-01-26", "age": 194, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 26/01/2026"}]},
+  {"co": "Grupo CEOS - Apartamentos", "amount": 0, "closeDate": "2026-02-04", "createdDate": "2026-01-26", "age": 216, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 26/01/2026"}]},
+  {"co": "BARTOS - 1H", "amount": 3275, "closeDate": "2026-02-24", "createdDate": "2026-01-26", "age": 196, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 26/01/2026"}]},
+  {"co": "Por MET", "amount": 0, "closeDate": "2026-02-16", "createdDate": "2026-01-26", "age": 204, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 26/01/2026"}, {"t": "Nombre del negocio no legible en la grabación: se ha usado el de la empresa", "d": ""}]},
+  {"co": "Hotel Bahía Grande - Portugal - 1H", "amount": 0, "closeDate": "2026-03-16", "createdDate": "2026-01-26", "age": 176, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 26/01/2026"}]},
+  {"co": "Hotel CARO", "amount": 6540, "closeDate": "2026-01-26", "createdDate": "2026-01-12", "age": 225, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 12/01/2026"}]},
+  {"co": "PACOCHE MURCIA - Renovación", "amount": 4289, "closeDate": "2026-03-16", "createdDate": "2026-08-01", "age": 176, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 01/08/2026"}]},
+  {"co": "Hotel TABURIENTE", "amount": 17616, "closeDate": "2026-01-26", "createdDate": "2025-12-19", "age": 225, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 19/12/2025"}]},
+  {"co": "Hotel Boutique LUNA TRIUNFO GRANADA", "amount": 2341, "closeDate": "2026-01-01", "createdDate": "", "age": 250, "source": "", "contacts": [], "acts": []},
+  {"co": "VP Plaza de España", "amount": 35884, "closeDate": "2026-02-09", "createdDate": "2025-11-02", "age": 211, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 02/11/2025"}]},
+  {"co": "SMARTRENTAL COLLECTION GRAN VÍA CAPITAL", "amount": 1500, "closeDate": "2026-02-08", "createdDate": "2025-11-10", "age": 212, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 10/11/2025"}]},
+  {"co": "CORONA DE CASTILLA - Parte INTELLIA (KIT CONSULTING)", "amount": 4800, "closeDate": "2026-06-01", "createdDate": "2025-04-15", "age": 99, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 15/04/2025"}]},
+  {"co": "Inhala Hotel Garden - Plan Conectado", "amount": 8666, "closeDate": "2026-05-18", "createdDate": "2025-04-03", "age": 113, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 03/04/2025"}]},
+  {"co": "Hotel Cullera Vacaciones 125h. Valencia (Dif. Conectado)", "amount": 4100, "closeDate": "2026-07-10", "createdDate": "2025-01-01", "age": 60, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 01/01/2025"}]}
+];
+const REPESCA_REAL = [
+  {"co": "AZZ MÉRIDA MEDEA", "amount": 0, "closeDate": "2026-07-23", "createdDate": "2026-06-23", "age": 47, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 23/06/2026"}]},
+  {"co": "CHAMARTÍN EL ÚNICO", "amount": 0, "closeDate": "2026-07-23", "createdDate": "2026-06-23", "age": 47, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 23/06/2026"}]},
+  {"co": "TURIA BADAJOZ", "amount": 0, "closeDate": "", "createdDate": "", "age": 0, "source": "", "contacts": [], "acts": []},
+  {"co": "PORT AZAFATA VALENCIA", "amount": 0, "closeDate": "2026-05-31", "createdDate": "", "age": 100, "source": "", "contacts": [], "acts": []},
+  {"co": "Magno Apartments", "amount": 0, "closeDate": "", "createdDate": "", "age": 0, "source": "", "contacts": [], "acts": []},
+  {"co": "Landmar hoteles", "amount": 0, "closeDate": "2026-05-31", "createdDate": "2026-05-18", "age": 100, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 18/05/2026"}]},
+  {"co": "CHAMARTÍN THE ONE", "amount": 0, "closeDate": "2026-05-31", "createdDate": "", "age": 100, "source": "", "contacts": [], "acts": []},
+  {"co": "Hotel Barú - 1H", "amount": 7204, "closeDate": "2026-01-31", "createdDate": "2026-01-29", "age": 220, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 29/01/2026"}]},
+  {"co": "EME Catedral Mercer Hotel", "amount": 0, "closeDate": "", "createdDate": "2026-01-26", "age": 0, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 26/01/2026"}]},
+  {"co": "DIUFAIN", "amount": 0, "closeDate": "", "createdDate": "2025-12-19", "age": 0, "source": "", "contacts": [], "acts": [{"t": "Negocio creado", "d": "el 19/12/2025"}]}
+];
 /* ═══════════ Contactos reales (HubSpot) ═══════════
    Leídos de los paneles de contacto de las grabaciones. Los negocios que
    no aparecen aquí tienen "Contactos (0)" en HubSpot. */
 const CONTACTOS = {
+  /* — Cliente pérdido, Renovación pendiente y Repesca — */
+  "Encofrados Alsina":
+    [{name:"Raquel Recasens", email:"raquel.recasens@alsina.com", role:"Directora, Alsina Formwork", phone:""}],
+  "HOSTEL SANT JORDI":
+    [{name:"Gisele Rodrigues Rodrigues", email:"gisele.rodrigues@santjordihostels.c…", role:"Responsable de Marketing", phone:"+34 616 802 400"}],
+  "ROYAL SON BOU":
+    [{name:"Tumeu Anglada", email:"tumeu.janer@royalsonbou.com", role:"Director general", phone:"+34 971 372 358"}],
+  "HIPOTELES - 2 H":
+    [{name:"Gabriel Bover Alvarado", email:"gabriel.bover@hipotels.com", role:"Director General, Hipotels Gran Conil", phone:"+34 956 49 58 36"}],
+  "Soler Hoteles - Cadena":
+    [{name:"Marcos Churin", email:"comercial@solerhoteles.com", role:"Soler Hoteles", phone:""}],
+  "TuriHotel - 1H":
+    [{name:"José Rodríguez", email:"romerorobledo17@gmail.com", role:"", phone:"+34 696 49 38 83"}],
+  "Hotel Hard Rock Marbella":
+    [{name:"Elena Arias", email:"elena.arias@hrhmarbella.com", role:"Gerente general", phone:"+34 687 94 20 24"}],
+  "Palacio pequeño":
+    [{name:"Susana Romero", email:"susana.romero@petitpalace.com", role:"Responsable de Ingresos, Petit Palace", phone:""}],
+  "EMPERADOR - 1H":
+    [{name:"José Luis Pérez", email:"joe@emperadorhotel.com", role:"Emperador", phone:""}],
+  "Grupo Hotelero Concept - 1 H":
+    [{name:"Jordi Prats", email:"jprats@concepthotelgroup.es", role:"Director Comercial, Dorado Ibiza Suites", phone:"+34 871 62 01 17"}],
+  "LA FARM - 1H":
+    [{name:"Nueve Arcontes", email:"narcones@lafarm.es", role:"Directora de Alojamiento", phone:"+34 629 338 010"}],
+  "Grupo CEOS - Apartamentos":
+    [{name:"Luis Hernández", email:"luis.hernaiz@grupoceos.com", role:"Grupo CEOS", phone:"+34 646 43 18 71"}],
+  "BARTOS - 1H":
+    [{name:"Cristian Aranda", email:"direccion@hotelbartos.com", role:"Bartos", phone:""}],
+  "Por MET":
+    [{name:"Yolanda Ayerra", email:"ayerra@bymethotels.com", role:"Por MET", phone:"+34 948 252 650"}],
+  "Hotel Bahía Grande - Portugal - 1H":
+    [{name:"Ricardo Emidio", email:"ricardo.emidio@hotelbaiagrande.com", role:"Director Comercial", phone:"+351 289 583 500"}],
+  "Hotel CARO":
+    [{name:"Juan Sánchez", email:"jsanchez@carohotel.com", role:"Director de Operaciones", phone:""}],
+  "PACOCHE MURCIA - Renovación":
+    [{name:"Alberto Torrecillas", email:"alberto.torrecillas@pacoche.es", role:"Propiedad y Jefe Dpto. Publicitario", phone:"+34 968 213 385"}],
+  "Hotel TABURIENTE":
+    [{name:"Miguel Ruiz", email:"miguel.ruiz@hoteltaburiente.com", role:"Director", phone:"+34 922 27 60 00"}],
+  "Hotel Boutique LUNA TRIUNFO GRANADA":
+    [{name:"Javier Tausia", email:"jtausia@delunahotels.com", role:"CEO, Apartamentos Luna Suites Granada", phone:"958 282 913"},
+     {name:"Carlos Pérez", email:"jrecepciontriunfogranada@delunah…", role:"Jefe de Recepción", phone:""}],
+  "VP Plaza de España":
+    [{name:"Francisco García", email:"direccionplaza@vphoteles.com", role:"Director General, VP Hoteles", phone:"+34 91 595 55 10"}],
+  "SMARTRENTAL COLLECTION GRAN VÍA CAPITAL":
+    [{name:"Susana Sánchez", email:"s.sanchez@smartrental.com", role:"Directora de Calidad", phone:"+34 683 110 027"}],
+  "CORONA DE CASTILLA - Parte INTELLIA (KIT CONSULTING)":
+    [{name:"Álvaro Barriocanal", email:"abarriocanal@hotelcoronadecastilla…", role:"CEO", phone:"+34 947 26 21 42"}],
+  "Inhala Hotel Garden - Plan Conectado":
+    [{name:"Yolanda Alonso", email:"yolanda.alonso@inhalahotel.com", role:"FO Manager / Revenue Manager", phone:"+34 914 543 969"},
+     {name:"Ernesto Gómez", email:"ernesto@inhalahotel.com", role:"Responsable TI", phone:"687 343 297"}],
+  "Hotel Cullera Vacaciones 125h. Valencia (Dif. Conectado)":
+    [{name:"Patricia Gozalo Fayos", email:"patrigozalo@gmail.com", role:"Directora de Hotel, Cullera Holiday", phone:"+34 667 41 56 86"}],
+  "AZZ MÉRIDA MEDEA":
+    [{name:"Silvia Núñez", email:"silvia.nunez@azzhoteles.com", role:"Dirección de RRHH", phone:""}],
+  "CHAMARTÍN EL ÚNICO":
+    [{name:"Ana Manzanedo", email:"ana.manzanedo@hotelchamartinth…", role:"Directora", phone:"913 344 900"},
+     {name:"María Lorena Jiménez Álvarez", email:"lorena.jimenez@hotelchamartinthe…", role:"Directora Comercial", phone:"913 344 900"}],
+  "PORT AZAFATA VALENCIA":
+    [{name:"Diego Fernández Pérez de Ponga", email:"diegofp@porthotels.es", role:"Global Director Commercial Performance", phone:""}],
+  "Landmar hoteles":
+    [{name:"Jose Maria Teixido Vendrell", email:"direccion.operaciones@landmarhotel…", role:"Director de Operaciones, Landmar Playa La Arena", phone:"+34 922 862 920"}],
+  "Hotel Barú - 1H":
+    [{name:"Pau Gallart", email:"direccion@hotelbaru.es", role:"Director", phone:"+34 619 918 212"}],
+  "EME Catedral Mercer Hotel":
+    [{name:"Pablo López Zafra", email:"direccion@emecatedralmercer.com", role:"Director", phone:"+34 954 56 00 00"}],
+  "DIUFAIN":
+    [{name:"Juan Antonio Diufain", email:"reservas@hoteldiufain.com", role:"Director", phone:""}],
+
   /* — Cierre perdido — */
   "Palacio de los leones y Monasterio de San Francisco":
     [{name:"Catalina", email:"catalina@elpalaciodelosleones.com", role:"", phone:"+34 629 63 95 92"}],
@@ -793,14 +908,18 @@ const PROPUESTA_REAL = [
 function realDeals(list, stageId, firstId){
   return list.map(function(r, i){
     return {
-      id: firstId + i, co:r.co, contacts:contactosDe(r.co), amount:0, stage:stageId,
+      id: firstId + i, co:r.co, contacts:contactosDe(r.co), amount:r.amount || 0, stage:stageId,
       model:null, age:r.age, source:r.source||"", closeDate:r.closeDate, createdDate:r.createdDate,
       files:[], acts:r.acts.slice()
     };
   });
 }
-const findStage = (list, patrones) =>
-  patrones.map(p => list.find(st => norm(st.name).indexOf(p) > -1)).find(Boolean);
+const findStage = (list, patrones, excluir) =>
+  patrones.map(p => list.find(st => {
+    const n = norm(st.name);
+    if(n.indexOf(p) === -1) return false;
+    return !(excluir || []).some(x => n.indexOf(x) > -1);
+  })).find(Boolean);
 
 function defaultStages(){
   return [
@@ -894,6 +1013,11 @@ function defaultState(){
   deals = deals.concat(realDeals(INTERESADOS_REAL, stI.id, deals.length + 1));
   const stO = findStage(stages, ["propuesta", "oferta"]);
   deals = deals.concat(realDeals(PROPUESTA_REAL, stO.id, deals.length + 1));
+  stages.push({id:"renovacion", name:"Renovación pendiente", color:"#7c3aed"});
+  stages.push({id:"cliente-perdido", name:"Cliente pérdido", color:"#9f1239"});
+  deals = deals.concat(realDeals(RENOVACION_REAL, "renovacion", deals.length + 1));
+  deals = deals.concat(realDeals(CLIENTE_PERDIDO_REAL, "cliente-perdido", deals.length + 1));
+  deals = deals.concat(realDeals(REPESCA_REAL, stP.id, deals.length + 1));
   return {stages:stages, models:defaultModels(), deals:deals};
 }
 let S = defaultState();
@@ -915,7 +1039,13 @@ try{
    funcione también en tableros donde ya se cargaron los anteriores. */
 const CONJUNTOS = [
   {marca:"hubspot-cierre-perdido", lista:LOST,             patrones:["perdid"],
-   nombre:"Pérdido",     color:"#d92d20", perdidos:true},
+   nombre:"Pérdido",     color:"#d92d20", perdidos:true, excluir:["cliente"]},
+  {marca:"hubspot-repesca",        lista:REPESCA_REAL,     patrones:["cierre perdid", "perdid"],
+   nombre:"Pérdido",     color:"#d92d20", excluir:["cliente"]},
+  {marca:"hubspot-renovacion",     lista:RENOVACION_REAL,  patrones:["renovacion"],
+   nombre:"Renovación pendiente", color:"#7c3aed"},
+  {marca:"hubspot-cliente-perdido", lista:CLIENTE_PERDIDO_REAL, patrones:["cliente perdid", "cliente perd"],
+   nombre:"Cliente pérdido", color:"#9f1239"},
   {marca:"hubspot-interesados",    lista:INTERESADOS_REAL, patrones:["interesad"],
    nombre:"Interesados", color:"#0284c7"},
   {marca:"hubspot-propuesta",      lista:PROPUESTA_REAL,   patrones:["propuesta", "oferta"],
@@ -928,7 +1058,7 @@ const CONJUNTOS = [
     if(S.imports.indexOf(c.marca) > -1) return;       /* sólo salta ESTE conjunto */
     S.imports.push(c.marca);
     if(S.deals.some(d => d.co === c.lista[0].co)) return;   /* ya estaban */
-    let col = findStage(S.stages, c.patrones);
+    let col = findStage(S.stages, c.patrones, c.excluir);
     if(!col){
       col = {id:c.marca + "-" + Date.now().toString(36), name:c.nombre, color:c.color};
       S.stages.push(col);
