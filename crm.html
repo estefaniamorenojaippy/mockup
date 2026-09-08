@@ -102,6 +102,9 @@ select.sel:focus{border-color:var(--accent)}
 .chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;
   padding:3px 8px;border-radius:7px;white-space:nowrap}
 .chip.none{background:var(--line-2);color:var(--ink-3)}
+.deal .cause{margin-top:7px;font-size:11px;font-weight:600;color:var(--red);
+  background:var(--red-soft);border-radius:7px;padding:3px 8px;display:inline-block;
+  max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .clip{display:inline-flex;align-items:center;gap:3px}
 .stale{color:var(--red);font-weight:600}
 .empty-col{font-size:12px;color:var(--ink-3);text-align:center;padding:14px 0}
@@ -393,6 +396,7 @@ input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--line
 </div>
 
 <datalist id="srcList"></datalist>
+<datalist id="causeList"></datalist>
 <input type="file" id="importIn" hidden accept=".json,application/json">
 <input type="file" id="fileIn" hidden multiple
        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg,.csv,.txt">
@@ -652,7 +656,8 @@ const SEED = [
   ["Vega Health","Elena Ortiz","elena@vega.health","Directora médica",27500,"contactado","lc","servicios",4,"Outbound"],
   ["Nodo Games","Marc Bosch","marc@nodo.gg","Studio Lead",6000,"lead","dr","marketpl",2,"Inbound"],
   ["Solaris Energy","Rubén Díaz","ruben@solaris.energy","Director de operaciones",48000,"demo","em","licencia",11,"Evento"],
-  ["Pixel Forge","Aitor Ruiz","aitor@pixelforge.dev","CEO",10800,"perdido","dr","servicios",26,"Inbound"],
+  ["Pixel Forge","Aitor Ruiz","aitor@pixelforge.dev","CEO",10800,"perdido","dr","servicios",26,"Inbound",
+   "Se van con un competidor más barato"],
   ["Cobalto Legal","Inés Navarro","ines@cobalto.legal","Socia directora",15600,"propuesta","dr","servicios",7,"Referido"],
   ["Arces Group","Teresa Gil","teresa@arces.group","Directora financiera",21000,"ganado","dr","licencia",16,"Outbound"]
 ];
@@ -695,7 +700,8 @@ function seedDeals(){
     const files = (EXTRA_FILES[r[0]]||[]).map(f =>
       ({name:f[0], size:f[1], date:dayLabel(Math.max(1,r[8]-1)), data:null}));
     return {id:i+1, co:r[0], contacts:cts, amount:r[4], stage:r[5],
-            model:r[7], age:r[8], source:r[9], files:files, acts:acts};
+            model:r[7], age:r[8], source:r[9], lostReason:r[10] || "",
+            files:files, acts:acts};
   });
 }
 function defaultState(){
@@ -981,6 +987,8 @@ function card(d){
   const stale = (d.age>=12 && !isWon(d) && !isLost(d))
     ? '<span class="stale">Sin actividad</span>' : '<span>'+dayLabel(d.age)+'</span>';
   const close = d.closeDate ? '<span>·</span><span>Cierre '+fmtDate(d.closeDate)+'</span>' : "";
+  const causa = (isLost(d) && d.lostReason)
+    ? '<div class="cause" title="Causa de la pérdida">'+esc(d.lostReason)+'</div>' : "";
   return '<article class="deal" draggable="true" data-id="'+d.id+'" onclick="openDeal('+d.id+')">'+
     '<button class="del" title="Eliminar oportunidad" aria-label="Eliminar '+esc(d.co)+'" '+
       'onclick="delCard(event,'+d.id+')">'+
@@ -990,6 +998,7 @@ function card(d){
     (main || d.source
       ? '<div class="meta">'+esc(main)+more+(main && d.source ? ' · ' : "")+esc(d.source)+'</div>'
       : "")+
+    causa+
     '<div class="row">'+(d.model ? modelChip(d.model) : "")+
       '<span class="amt">'+eur(d.amount)+'</span></div>'+
     '<div class="foot">'+stale+close+
@@ -1334,6 +1343,11 @@ function renderDrawer(){
         '<button class="icon-btn" title="Editar o eliminar modelos" onclick="openModels()">'+
         '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>'+
         '</button></div>'+
+      (isLost(d)
+        ? '<div class="k">Causa</div><div><input type="text" list="causeList" value="'+esc(d.lostReason||"")+
+          '" placeholder="¿Por qué se ha perdido?" oninput="chgReason(this.value)" '+
+          'onchange="logReason(this.value)"></div>'
+        : "")+
       '<div class="k">Valor anual (€)</div><div><input type="number" min="0" step="100" value="'+d.amount+'" oninput="chgAmount(this.value)"></div>'+
       '<div class="k">Fecha de cierre</div><div><input type="date" value="'+(d.closeDate||"")+
         '" oninput="chgDate(\'closeDate\',this.value)"></div>'+
@@ -1372,7 +1386,9 @@ function renderDrawer(){
 }
 function nextStep(d){
   if(isWon(d))  return "Traspasar la cuenta al equipo de onboarding.";
-  if(isLost(d)) return "Revisar el motivo de pérdida y reactivar en 6 meses.";
+  if(isLost(d)) return d.lostReason
+    ? "Reactivar en 6 meses si cambian las condiciones."
+    : "Anotar la causa de la pérdida, para poder analizarlas juntas.";
   const i = S.stages.findIndex(s => s.id===d.stage);
   const next = S.stages[i+1];
   if((d.files||[]).length===0) return "Preparar y subir la oferta para " + d.co + ".";
@@ -1403,13 +1419,43 @@ function logSource(v){
   const val = v.trim();
   if(val === (d.sourceLogged||"")) return;
   d.sourceLogged = val;
-  d.acts.push({t: val ? "Origen: " + val : "Origen borrado", d:"hoy"});
+  pushAct(d, val ? "Origen: " + val : "Origen borrado");
   d.age = 0; save(); refreshLive();
 }
 function chgDate(field, v){
   const d = cur(); if(!d) return;
   d[field] = v || null;
   save(); refreshLive(); autoSaved();
+}
+/* Añade una línea de actividad y la mete en la lista abierta sin repintar
+   la ficha: repintarla mientras se escribe se lleva el cursor por delante. */
+function pushAct(d, texto){
+  d.acts.push({t:texto, d:"hoy"});
+  if(openId !== d.id) return;
+  const lista = document.querySelector("#drBody .tl");
+  if(!lista) return;
+  const li = document.createElement("li");
+  li.className = "hi";
+  li.innerHTML = '<div class="t">'+esc(texto)+'</div><div class="d">hoy</div>';
+  const primera = lista.firstElementChild;
+  if(primera) primera.classList.remove("hi");
+  lista.insertBefore(li, primera);
+}
+function chgReason(v){
+  const d = cur(); if(!d) return;
+  const val = v.trim();
+  if(val === (d.lostReason||"")) return;
+  d.lostReason = val;
+  save(); refreshLive(); syncSelects(); autoSaved();
+}
+/* En la actividad se apunta una sola vez, al salir del campo */
+function logReason(v){
+  const d = cur(); if(!d) return;
+  const val = v.trim();
+  if(val === (d.reasonLogged||"")) return;
+  d.reasonLogged = val;
+  pushAct(d, val ? "Causa de la pérdida: " + val : "Causa borrada");
+  d.age = 0; save(); refreshLive();
 }
 function chgAmount(v){
   const d = cur(); if(!d) return;
@@ -1573,6 +1619,12 @@ function syncSelects(){
   });
   document.getElementById("srcList").innerHTML =
     srcs.sort().map(v => '<option value="'+esc(v)+'"></option>').join("");
+  const causas = [];
+  S.deals.forEach(function(d){
+    if(d.lostReason && causas.indexOf(d.lostReason) === -1) causas.push(d.lostReason);
+  });
+  document.getElementById("causeList").innerHTML =
+    causas.sort().map(v => '<option value="'+esc(v)+'"></option>').join("");
   document.getElementById("nModel").innerHTML = '<option value="">Sin modelo</option>' +
     S.models.map(m => '<option value="'+m.id+'">'+esc(m.name)+'</option>').join("");
 }
