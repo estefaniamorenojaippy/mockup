@@ -918,45 +918,37 @@ try{
 }catch(e){}
 /* Los negocios perdidos se añaden una única vez al tablero guardado, sin
    tocar nada de lo que el usuario ya tenga. */
-const LOST_MARK = "hubspot-cierre-perdido";
-(function addLostOnce(){
+/* Los negocios reales de HubSpot se añaden una vez cada conjunto, de forma
+   independiente: cada uno con su marca, para que añadir un conjunto nuevo
+   funcione también en tableros donde ya se cargaron los anteriores. */
+const CONJUNTOS = [
+  {marca:"hubspot-cierre-perdido", lista:LOST,             patrones:["perdid"],
+   nombre:"Pérdido",     color:"#d92d20", perdidos:true},
+  {marca:"hubspot-interesados",    lista:INTERESADOS_REAL, patrones:["interesad"],
+   nombre:"Interesados", color:"#0284c7"},
+  {marca:"hubspot-propuesta",      lista:PROPUESTA_REAL,   patrones:["propuesta", "oferta"],
+   nombre:"Propuesta",   color:"#c77700"}
+];
+(function cargarConjuntos(){
   S.imports = Array.isArray(S.imports) ? S.imports : [];
-  if(S.imports.indexOf(LOST_MARK) > -1) return;
-  const yaEstan = S.deals.some(d => d.co === LOST[0].co);
-  if(!yaEstan){
-    let col = lostStage(S.stages);
+  const hechos = [];
+  CONJUNTOS.forEach(function(c){
+    if(S.imports.indexOf(c.marca) > -1) return;       /* sólo salta ESTE conjunto */
+    S.imports.push(c.marca);
+    if(S.deals.some(d => d.co === c.lista[0].co)) return;   /* ya estaban */
+    let col = findStage(S.stages, c.patrones);
     if(!col){
-      col = {id:"perdido-" + Date.now().toString(36), name:"Pérdido", color:"#d92d20"};
+      col = {id:c.marca + "-" + Date.now().toString(36), name:c.nombre, color:c.color};
       S.stages.push(col);
     }
-    const first = S.deals.reduce((a,d) => Math.max(a, d.id), 0) + 1;
-    S.deals = S.deals.concat(lostDeals(col.id, first));
-    setTimeout(function(){
-      toast(LOST.length + ' negocios perdidos añadidos a "' + col.name + '"');
-    }, 500);
-  }
-  S.imports.push(LOST_MARK);
-
-  [["hubspot-interesados", INTERESADOS_REAL, ["interesad"], "Interesados", "#0284c7"],
-   ["hubspot-propuesta",   PROPUESTA_REAL,   ["propuesta", "oferta"], "Propuesta", "#c77700"]
-  ].forEach(function(cfg){
-    const marca = cfg[0], lista = cfg[1], patrones = cfg[2], nombre = cfg[3], color = cfg[4];
-    if(S.imports.indexOf(marca) > -1) return;
-    const yaEstan = S.deals.some(d => d.co === lista[0].co);
-    if(!yaEstan){
-      let col = findStage(S.stages, patrones);
-      if(!col){
-        col = {id: nombre.toLowerCase() + "-" + Date.now().toString(36), name:nombre, color:color};
-        S.stages.push(col);
-      }
-      const first = S.deals.reduce((a,d) => Math.max(a, d.id), 0) + 1;
-      S.deals = S.deals.concat(realDeals(lista, col.id, first));
-      setTimeout(function(){
-        toast(lista.length + ' negocios añadidos a "' + col.name + '"');
-      }, 500);
-    }
-    S.imports.push(marca);
+    const first = S.deals.reduce((a, d) => Math.max(a, d.id), 0) + 1;
+    S.deals = S.deals.concat(c.perdidos ? lostDeals(col.id, first)
+                                        : realDeals(c.lista, col.id, first));
+    hechos.push(c.lista.length + ' en "' + col.name + '"');
   });
+  if(hechos.length){
+    setTimeout(function(){ toast("Negocios añadidos: " + hechos.join(", ")); }, 500);
+  }
   save();
 })();
 
