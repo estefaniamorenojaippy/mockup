@@ -247,6 +247,17 @@ input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--line
   </button>
 </header>
 
+<!-- Visible sólo si no se ejecuta JavaScript (p. ej. en una vista previa
+     estática): el tablero se dibuja con JS y si no, la página sale vacía. -->
+<div id="noJs" style="margin:40px auto;max-width:520px;background:#fff;border:1px solid #e7e7ea;
+     border-radius:14px;padding:22px 24px;font-size:14px;line-height:1.55">
+  <strong style="display:block;font-size:16px;margin-bottom:8px">El CRM necesita abrirse en el navegador</strong>
+  Esta página construye el pipeline con JavaScript, así que en una vista previa estática
+  (o si el navegador tiene el JavaScript desactivado) se queda vacía.
+  <br><br>Abre el archivo <code>crm.html</code> con doble clic, o arrástralo a una pestaña
+  de Chrome o Edge.
+</div>
+
 <div class="wrap">
   <div class="kpis" id="kpis"></div>
 
@@ -463,6 +474,19 @@ try{
     if(p && Array.isArray(p.stages) && Array.isArray(p.deals) && p.stages.length) S = p;
   }
 }catch(e){}
+/* Red de seguridad: una oportunidad que apunte a una columna inexistente no se
+   dibujaría en ninguna parte y parecería perdida. Se recoloca en la primera. */
+(function rescueOrphans(){
+  const ids = S.stages.map(s => s.id);
+  let n = 0;
+  S.deals.forEach(function(d){
+    if(ids.indexOf(d.stage) === -1){ d.stage = S.stages[0].id; n++; }
+    if(!Array.isArray(d.contacts)) d.contacts = [];
+    if(!Array.isArray(d.files))    d.files = [];
+    if(!Array.isArray(d.acts))     d.acts = [];
+  });
+  if(n) setTimeout(function(){ toast(n + " oportunidad(es) recolocadas en la primera columna"); }, 400);
+})();
 function save(){
   try{ localStorage.setItem(KEY, JSON.stringify(S)); }
   catch(e){
@@ -1241,6 +1265,9 @@ document.getElementById("importIn").addEventListener("change", function(e){
 });
 document.getElementById("q").addEventListener("input", function(e){ q = e.target.value; refresh(); });
 document.addEventListener("keydown", function(e){ if(e.key==="Escape") closeAll(); });
+/* JavaScript activo: fuera el aviso de vista previa estática */
+const noJs = document.getElementById("noJs");
+if(noJs) noJs.remove();
 refresh();
 </script>
 </body>
