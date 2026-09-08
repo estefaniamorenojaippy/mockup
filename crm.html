@@ -379,6 +379,222 @@ input[type=color]{width:34px;height:34px;padding:2px;border:1px solid var(--line
 /* ═══════════════════════════════════════════════════════
    Estado — columnas, modelos de negocio y oportunidades
    ═══════════════════════════════════════════════════════ */
+/* ═══════════ Negocios perdidos (HubSpot · "Cierre perdido") ═══════════
+   Leídos de la grabación del tablero de HubSpot. Los dos importes suman
+   39.815 €, el total que mostraba la columna. */
+const LOST = [
+    {
+      "co": "Palacio de los leones y Monasterio de San Francisco",
+      "amount": 0,
+      "closeDate": "2026-07-31",
+      "createdDate": "2026-07-27",
+      "contacts": []
+    },
+    {
+      "co": "Sercotel (Ayala + Montcada + Barcelona El Prat + Hotel)",
+      "amount": 0,
+      "closeDate": "2026-07-31",
+      "createdDate": "2026-07-27",
+      "contacts": []
+    },
+    {
+      "co": "MLL HOTELS",
+      "amount": 0,
+      "closeDate": "2026-07-31",
+      "createdDate": "2026-07-16",
+      "contacts": []
+    },
+    {
+      "co": "AWA Hotel Boutique (México)",
+      "amount": 0,
+      "closeDate": "2026-07-31",
+      "createdDate": "2026-07-14",
+      "contacts": []
+    },
+    {
+      "co": "Clara (Meta)",
+      "amount": 0,
+      "closeDate": "2026-07-31",
+      "createdDate": "2026-07-14",
+      "contacts": []
+    },
+    {
+      "co": "La casa de Frama",
+      "amount": 0,
+      "closeDate": "2026-07-31",
+      "createdDate": "2026-07-14",
+      "contacts": []
+    },
+    {
+      "co": "ILUNION AUDITORI",
+      "amount": 0,
+      "closeDate": "2026-07-29",
+      "createdDate": "2026-06-29",
+      "contacts": []
+    },
+    {
+      "co": "KORA GREEN CITY",
+      "amount": 0,
+      "closeDate": "2026-06-29",
+      "createdDate": "2026-06-29",
+      "contacts": [
+        {
+          "name": "Brezo Criado",
+          "email": "brezo.criado@koraliving.com",
+          "role": "PR & Social Media Manager"
+        }
+      ]
+    },
+    {
+      "co": "TRUCKS CENTER SAN ROMAN",
+      "amount": 0,
+      "closeDate": "2026-06-30",
+      "createdDate": "2026-06-25",
+      "contacts": []
+    },
+    {
+      "co": "Hostal Abril",
+      "amount": 0,
+      "closeDate": "2026-06-30",
+      "createdDate": "2026-06-23",
+      "contacts": [
+        {
+          "name": "Montse Martín",
+          "email": "",
+          "role": ""
+        }
+      ]
+    },
+    {
+      "co": "Hotel Terrafranca",
+      "amount": 0,
+      "closeDate": "2026-06-30",
+      "createdDate": "2026-06-22",
+      "contacts": [
+        {
+          "name": "Octavio Aguilar",
+          "email": "",
+          "role": ""
+        }
+      ]
+    },
+    {
+      "co": "PUERTA DE BILBAO",
+      "amount": 0,
+      "closeDate": "2026-06-30",
+      "createdDate": "2026-06-19",
+      "contacts": []
+    },
+    {
+      "co": "Hotel Sonsoles Ávila",
+      "amount": 0,
+      "closeDate": "2026-06-30",
+      "createdDate": "2026-06-15",
+      "contacts": []
+    },
+    {
+      "co": "My Way · Resorts",
+      "amount": 0,
+      "closeDate": "2026-06-30",
+      "createdDate": "2026-06-12",
+      "contacts": []
+    },
+    {
+      "co": "Summum",
+      "amount": 0,
+      "closeDate": "2026-06-30",
+      "createdDate": "2026-06-12",
+      "contacts": []
+    },
+    {
+      "co": "BENALMA COSTA DEL SOL",
+      "amount": 0,
+      "closeDate": "2026-07-23",
+      "createdDate": "2026-06-08",
+      "contacts": []
+    },
+    {
+      "co": "Selvario 36 Hotel",
+      "amount": 0,
+      "closeDate": "2026-05-31",
+      "createdDate": "2026-05-25",
+      "contacts": []
+    },
+    {
+      "co": "IBEROSTAR HERITAGE GRAND MENCEY",
+      "amount": 0,
+      "closeDate": "2026-05-31",
+      "createdDate": "2026-05-20",
+      "contacts": []
+    },
+    {
+      "co": "Vacation Marbella",
+      "amount": 0,
+      "closeDate": "2026-05-31",
+      "createdDate": "2026-05-19",
+      "contacts": []
+    },
+    {
+      "co": "ILUNION",
+      "amount": 0,
+      "closeDate": "2026-05-30",
+      "createdDate": "2026-05-18",
+      "contacts": []
+    },
+    {
+      "co": "MIKASA BOUTIQUE HOTEL",
+      "amount": 0,
+      "closeDate": "2026-03-21",
+      "createdDate": "2026-02-19",
+      "contacts": []
+    },
+    {
+      "co": "Hotel Puerta de las Granadas - 1H",
+      "amount": 5983,
+      "closeDate": "2026-03-31",
+      "createdDate": "2026-01-26",
+      "contacts": []
+    },
+    {
+      "co": "Turia Hotels - 3",
+      "amount": 33832,
+      "closeDate": "2026-01-31",
+      "createdDate": "2026-01-26",
+      "contacts": []
+    }
+  ];
+
+/* Días desde la fecha de cierre: se usa como "última actividad" */
+function daysSince(iso){
+  const t = Date.parse(iso);
+  if(isNaN(t)) return 0;
+  return Math.max(0, Math.round((Date.now() - t) / 86400000));
+}
+function lostDeals(stageId, firstId){
+  return LOST.map(function(r, i){
+    return {
+      id: firstId + i,
+      co: r.co,
+      contacts: r.contacts.slice(),
+      amount: r.amount,
+      stage: stageId,
+      model: null,
+      age: daysSince(r.closeDate),
+      source: "",
+      closeDate: r.closeDate,
+      createdDate: r.createdDate,
+      files: [],
+      acts: [
+        {t:"Negocio creado", d:"el " + fmtDate(r.createdDate)},
+        {t:"Cierre perdido", d:"el " + fmtDate(r.closeDate)}
+      ]
+    };
+  });
+}
+/* Nombre sin tildes y en minúsculas, para reconocer "Perdido"/"Pérdido" */
+const norm = t => String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+const lostStage = list => list.find(st => norm(st.name).indexOf("perdid") > -1);
+
 function defaultStages(){
   return [
     {id:"lead",       name:"Lead",       color:"#9aa0a6"},
@@ -460,7 +676,11 @@ function seedDeals(){
   });
 }
 function defaultState(){
-  return {stages:defaultStages(), models:defaultModels(), deals:seedDeals()};
+  const stages = defaultStages();
+  const deals  = seedDeals();
+  const st = lostStage(stages);
+  return {stages:stages, models:defaultModels(),
+          deals: deals.concat(lostDeals(st.id, deals.length + 1))};
 }
 let S = defaultState();
 
@@ -474,6 +694,29 @@ try{
     if(p && Array.isArray(p.stages) && Array.isArray(p.deals) && p.stages.length) S = p;
   }
 }catch(e){}
+/* Los negocios perdidos se añaden una única vez al tablero guardado, sin
+   tocar nada de lo que el usuario ya tenga. */
+const LOST_MARK = "hubspot-cierre-perdido";
+(function addLostOnce(){
+  S.imports = Array.isArray(S.imports) ? S.imports : [];
+  if(S.imports.indexOf(LOST_MARK) > -1) return;
+  const yaEstan = S.deals.some(d => d.co === LOST[0].co);
+  if(!yaEstan){
+    let col = lostStage(S.stages);
+    if(!col){
+      col = {id:"perdido-" + Date.now().toString(36), name:"Pérdido", color:"#d92d20"};
+      S.stages.push(col);
+    }
+    const first = S.deals.reduce((a,d) => Math.max(a, d.id), 0) + 1;
+    S.deals = S.deals.concat(lostDeals(col.id, first));
+    setTimeout(function(){
+      toast(LOST.length + ' negocios perdidos añadidos a "' + col.name + '"');
+    }, 500);
+  }
+  S.imports.push(LOST_MARK);
+  save();
+})();
+
 /* Red de seguridad: una oportunidad que apunte a una columna inexistente no se
    dibujaría en ninguna parte y parecería perdida. Se recoloca en la primera. */
 (function rescueOrphans(){
@@ -612,8 +855,8 @@ function visible(){
    se identifican por id, y si el usuario las borra los KPI se recalculan igual. */
 /* Se decide por el nombre de la columna: así sigue funcionando cuando el
    usuario las renombra o crea las suyas ("Cierre perdido", "Cliente"…). */
-const isWon  = d => /ganad/i.test(stage(d.stage).name);
-const isLost = d => /perdid/i.test(stage(d.stage).name);
+const isWon  = d => norm(stage(d.stage).name).indexOf("ganad") > -1;
+const isLost = d => norm(stage(d.stage).name).indexOf("perdid") > -1;
 
 function renderKpis(){
   const ds = visible();
