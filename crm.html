@@ -68,7 +68,10 @@ select.sel:focus{border-color:var(--accent)}
 .toolbar .count{font-size:13px;color:var(--ink-3)}
 
 /* ── Kanban ─────────────────────────────── */
-.board{display:flex;gap:12px;align-items:flex-start;overflow-x:auto;padding-bottom:10px}
+.board{display:flex;gap:12px;align-items:flex-start;overflow-x:auto;padding-bottom:10px;
+  scrollbar-width:thin;cursor:grab}
+.board.panning{cursor:grabbing;scroll-behavior:auto;user-select:none}
+.board.panning .deal{pointer-events:none}
 .col{flex:0 0 262px;background:#efeff1;border-radius:var(--radius);padding:10px;
   border:1px solid transparent;transition:background .12s,border-color .12s}
 .col.drop{background:var(--accent-soft);border-color:#c7c9f7}
@@ -597,12 +600,107 @@ function daysSince(iso){
   if(isNaN(t)) return 0;
   return Math.max(0, Math.round((Date.now() - t) / 86400000));
 }
+/* ═══════════ Contactos reales (HubSpot) ═══════════
+   Leídos de los paneles de contacto de las grabaciones. Los negocios que
+   no aparecen aquí tienen "Contactos (0)" en HubSpot. */
+const CONTACTOS = {
+  /* — Cierre perdido — */
+  "Palacio de los leones y Monasterio de San Francisco":
+    [{name:"Catalina", email:"catalina@elpalaciodelosleones.com", role:"", phone:"+34 629 63 95 92"}],
+  "Clara (Meta)":
+    [{name:"Clara Esgue", email:"claraesgue@gmail.com", role:"", phone:""}],
+  "ILUNION AUDITORI":
+    [{name:"Álvaro Díaz-Munió", email:"adiaz-munio@ilunionhotels.com",
+      role:"Director Zona Norte Ilunion Hoteles", phone:"619 722 876"}],
+  "KORA GREEN CITY":
+    [{name:"Brezo Criado", email:"brezo.criado@koraliving.com",
+      role:"PR & Social Media Manager", phone:"688 729 285"}],
+  "TRUCKS CENTER SAN ROMAN":
+    [{name:"Vanesa Martín Martín", email:"vmartin@andamur.com",
+      role:"Directora de hotel", phone:"670 557 974"}],
+  "Hostal Abril":
+    [{name:"Montse Martín", email:"hostalabril@hotmail.com", role:"Propietaria", phone:""}],
+  "Hotel Terrafranca":
+    [{name:"Octavio Aguilar", email:"octavio@terrafranca.es", role:"CEO", phone:""}],
+  "Hotel Sonsoles Ávila":
+    [{name:"Esther Aguilar de Juana", email:"direccion@hotelsonsolesavila.com", role:"", phone:""}],
+  "My Way · Resorts":
+    [{name:"Alejandro Tugues", email:"alejandrotugues@myway-hotels.com",
+      role:"Director of Revenue Management", phone:""}],
+  "Summum":
+    [{name:"Biel Martí", email:"bielmarti@summumhg.com",
+      role:"Director comercial", phone:"634 932 166"}],
+  "BENALMA COSTA DEL SOL":
+    [{name:"Araceli Budia", email:"araceli.budia@palladiumhotelgroup.c…",
+      role:"Global Digital & Guest Experience Sr. Manager", phone:"+34 910 21 41 44"}],
+  "Selvario 36 Hotel":
+    [{name:"Alberto Bueno", email:"lideralojamiento@selvario36hotel.com", role:"", phone:""}],
+  "IBEROSTAR HERITAGE GRAND MENCEY":
+    [{name:"Mar Mercadal", email:"mar.mercadal@iberostar.com",
+      role:"Global Sales and Market Development", phone:"660 360 737"}],
+  "Vacation Marbella":
+    [{name:"Borja Rodríguez", email:"borja@vacationmarbella.com", role:"CEO", phone:""}],
+  "ILUNION":
+    [{name:"Elena Álvarez de Corral", email:"elenaalvarez@ilunionhotels.com", role:"", phone:""}],
+  "MIKASA BOUTIQUE HOTEL":
+    [{name:"María Rodríguez", email:"maria.rodriguez@mikasaibiza.com", role:"", phone:""}],
+  "Hotel Puerta de las Granadas - 1H":
+    [{name:"Conchita Tovar", email:"ctovar@hotelpuertadelasgranadas.co…",
+      role:"Directora", phone:"+34 670 674 181"}],
+  "Turia Hotels - 3":
+    [{name:"Lorena Guillem", email:"experiencia@turiahotels.es", role:"", phone:""},
+     {name:"Toni Arnedo Rodríguez", email:"direccion.valencia@turiahotels.es",
+      role:"Director de operaciones", phone:"+34 610 202 129"}],
+
+  /* — Interesados — */
+  "Yurbban":
+    [{name:"Oriol Roca", email:"oriol.r@yurbban.com",
+      role:"General Manager", phone:"+34 616 934 655"}],
+  "iberik hoteles (Meta)":
+    [{name:"Jose Lagoa", email:"lagoajl@gmail.com", role:"", phone:""}],
+  "Leonardo Hotels":
+    [{name:"Albert Pedragosa", email:"albert.pedragosa@leonardo-hot…",
+      role:"Operations Manager Barcelona", phone:"+34 933 188 970"}],
+  "SOHO Boutique Palacio de Pombo":
+    [{name:"Luis Arjona", email:"larjona@sohohoteles.com",
+      role:"Director de operaciones", phone:"+34 655 109 523"}],
+
+  /* — Propuesta (pendiente de respuesta de oferta) — */
+  "Barceló Carmen Granada":
+    [{name:"Sofia Aranguren", email:"carmengranada.sdh@barcelo.com",
+      role:"Barceló Nura", phone:"+34 958 258 300"}],
+  "The Central House":
+    [{name:"Pedro Noguera", email:"pnoguera@grouptch.com",
+      role:"Director de operaciones", phone:"+34 915 968 175"}],
+  "Caro hotel":
+    [{name:"Santiago Máñez", email:"santiago@carohotel.com",
+      role:"Director", phone:"+34 963 059 000"},
+     {name:"Cari Gutiérrez", email:"carigutierrez@carohotel.com",
+      role:"Subdirectora", phone:"963 059 000"}],
+  "IBERSOL":
+    [{name:"David Gutiérrez", email:"dgutierrez@ibersol.es",
+      role:"Ibersol Sorra d Or", phone:""}],
+  "Magic Group":
+    [{name:"Felipe Martínez", email:"felipe_martinez/hcb@hoteles-costa…",
+      role:"Director de operaciones regional", phone:"647 389 360"}],
+  "So Blue en Antibes (Niza)":
+    [{name:"Sara Flores Sen", email:"sflores@grpr.com",
+      role:"Group Head of Revenue Management", phone:""}],
+  "B&B Hôtel":
+    [{name:"Sonia Salas", email:"sonia.salas@hotelbb.com",
+      role:"Chief Customer Officer, B&B Hôtels France", phone:"+34 653 94 45 15"},
+     {name:"Alejandro García", email:"hotelmanager.murcia@hotelbb.com",
+      role:"B&B Hôtels France", phone:""}]
+};
+const contactosDe = co =>
+  (CONTACTOS[co] || []).map(c => ({name:c.name, email:c.email, role:c.role, phone:c.phone}));
+
 function lostDeals(stageId, firstId){
   return LOST.map(function(r, i){
     return {
       id: firstId + i,
       co: r.co,
-      contacts: r.contacts.slice(),
+      contacts: contactosDe(r.co),
       amount: r.amount,
       stage: stageId,
       model: null,
@@ -703,7 +801,7 @@ const PROPUESTA_REAL = [
 function realDeals(list, stageId, firstId){
   return list.map(function(r, i){
     return {
-      id: firstId + i, co:r.co, contacts:r.contacts.slice(), amount:0, stage:stageId,
+      id: firstId + i, co:r.co, contacts:contactosDe(r.co), amount:0, stage:stageId,
       model:null, age:r.age, source:r.source||"", closeDate:r.closeDate, createdDate:r.createdDate,
       files:[], acts:r.acts.slice()
     };
@@ -859,6 +957,26 @@ const LOST_MARK = "hubspot-cierre-perdido";
     }
     S.imports.push(marca);
   });
+  save();
+})();
+
+/* Los contactos se leyeron después de cargar los negocios: se rellenan una
+   vez sobre lo que ya hubiera guardado, sin pisar los que haya escrito el
+   usuario a mano. */
+const CONTACT_MARK = "hubspot-contactos-v1";
+(function ponerContactos(){
+  S.imports = Array.isArray(S.imports) ? S.imports : [];
+  if(S.imports.indexOf(CONTACT_MARK) > -1) return;
+  let n = 0;
+  S.deals.forEach(function(d){
+    const reales = contactosDe(d.co);
+    if(!reales.length) return;
+    if((d.contacts || []).length >= reales.length) return;
+    d.contacts = reales;
+    n++;
+  });
+  S.imports.push(CONTACT_MARK);
+  if(n) setTimeout(function(){ toast("Contactos rellenados en " + n + " oportunidades"); }, 900);
   save();
 })();
 
@@ -1156,6 +1274,45 @@ function moveDeal(d, to){
 }
 
 /* ═══════════ Columnas: añadir, renombrar, mover, eliminar ═══════════ */
+/* Arrastrar el fondo del tablero para desplazarse a lo ancho: las columnas
+   no caben en pantalla y así no hace falta buscar la barra de scroll. */
+(function panBoard(){
+  const board = document.getElementById("board");
+  let pan = null;
+  board.addEventListener("pointerdown", function(e){
+    if(e.pointerType !== "mouse" || e.button !== 0) return;   /* táctil: scroll nativo */
+    /* No robar el gesto a las tarjetas, la cabecera ni los controles */
+    if(e.target.closest(".deal, .col-head, button, input, select, a, .menu")) return;
+    pan = {x:e.clientX, left:board.scrollLeft, moved:false};
+  });
+  board.addEventListener("pointermove", function(e){
+    if(!pan) return;
+    const dx = e.clientX - pan.x;
+    if(!pan.moved){
+      if(Math.abs(dx) < 4) return;
+      pan.moved = true;
+      board.classList.add("panning");
+      board.setPointerCapture(e.pointerId);
+    }
+    board.scrollLeft = pan.left - dx;
+  });
+  function fin(){
+    if(!pan) return;
+    pan = null;
+    board.classList.remove("panning");
+  }
+  board.addEventListener("pointerup", fin);
+  board.addEventListener("pointercancel", fin);
+  board.addEventListener("lostpointercapture", fin);
+  /* Rueda del ratón en horizontal si el gesto ya es lateral */
+  board.addEventListener("wheel", function(e){
+    if(Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;       /* ya es horizontal */
+    if(!e.shiftKey) return;                                   /* shift+rueda */
+    board.scrollLeft += e.deltaY;
+    e.preventDefault();
+  }, {passive:false});
+})();
+
 /* Reordenar columnas arrastrando la cabecera. Se hace a mano en vez de con
    arrastre nativo porque éste no llega a dispararse desde la cabecera. */
 let colDrag = null;
@@ -1419,8 +1576,12 @@ function renderDrawer(){
   const contacts = (d.contacts||[]).map(function(c,i){
     return '<div class="ct"><div><div class="nm">'+esc(c.name)+
       (i===0 ? '<span class="primary">Principal</span>' : "")+'</div>'+
-      '<div class="dt">'+(c.role ? esc(c.role)+' · ' : "")+
-        (c.email ? '<a href="mailto:'+esc(c.email)+'">'+esc(c.email)+'</a>' : "")+'</div></div>'+
+      (c.role ? '<div class="dt">'+esc(c.role)+'</div>' : "")+
+      '<div class="dt">'+
+        (c.email ? '<a href="mailto:'+esc(c.email)+'">'+esc(c.email)+'</a>' : "")+
+        (c.email && c.phone ? ' · ' : "")+
+        (c.phone ? '<a href="tel:'+esc(c.phone.replace(/\s/g,""))+'">'+esc(c.phone)+'</a>' : "")+
+      '</div></div>'+
       '<div class="acts">'+
         (i>0 ? '<button class="icon-btn" title="Hacer principal" onclick="makePrimary('+i+')">'+
           '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 4 2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 16.4 7.2 18.9l.9-5.4L4.2 9.7l5.4-.8z"/></svg></button>' : "")+
@@ -1434,6 +1595,7 @@ function renderDrawer(){
       '<input id="ctName" placeholder="Nombre y apellido">'+
       '<div class="f2"><input id="ctEmail" type="email" placeholder="email@empresa.com">'+
       '<input id="ctRole" placeholder="Cargo"></div>'+
+      '<input id="ctPhone" placeholder="Teléfono">'+
       '<div class="row"><button class="btn btn-sm" onclick="addingCt=false;renderDrawer()">Cancelar</button>'+
       '<button class="btn btn-sm btn-primary" onclick="saveCt()">Añadir contacto</button></div>'+
     '</div>' : "";
@@ -1590,7 +1752,8 @@ function saveCt(){
   d.contacts.push({
     name: name,
     email: document.getElementById("ctEmail").value.trim(),
-    role:  document.getElementById("ctRole").value.trim()
+    role:  document.getElementById("ctRole").value.trim(),
+    phone: document.getElementById("ctPhone").value.trim()
   });
   d.acts.push({t:"Contacto añadido: " + name, d:"hoy"});
   d.age = 0; addingCt = false;
