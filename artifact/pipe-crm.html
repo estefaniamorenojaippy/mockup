@@ -1116,9 +1116,21 @@ function defaultState(){
 }
 let S = defaultState();
 
-/* ═══════════ Persistencia (best effort) ═══════════ */
+/* ═══════════ Persistencia ═══════════════════════════════════════════
+   Dos capas:
+   1) localStorage — caché inmediata, local a ESTE navegador. Siempre
+      disponible (incluso abriendo el .html suelto, sin conexión).
+   2) la base de datos del Artifact ("db") — un único documento
+      compartido por cualquier navegador o dispositivo que abra la
+      misma página publicada. Cuando existe, manda ella: es la razón de
+      que antes "cada navegador viera una versión distinta". */
 const KEY = "pipe-crm-v2";
 let quotaWarned = false;
+/* Declaradas ya aquí: save() (llamada más abajo, antes de que termine
+   este bloque) usa dbRef a través de scheduleDbSave(). */
+let dbRef = null;
+let dbTimer = null;
+let dbSyncing = false;   /* evita que nuestra propia escritura se recargue a sí misma */
 try{
   const raw = localStorage.getItem(KEY);
   if(raw){
@@ -1126,8 +1138,7 @@ try{
     if(p && Array.isArray(p.stages) && Array.isArray(p.deals) && p.stages.length) S = p;
   }
 }catch(e){}
-/* Los negocios perdidos se añaden una única vez al tablero guardado, sin
-   tocar nada de lo que el usuario ya tenga. */
+
 /* Los negocios reales de HubSpot se añaden una vez cada conjunto, de forma
    independiente: cada uno con su marca, para que añadir un conjunto nuevo
    funcione también en tableros donde ya se cargaron los anteriores. */
@@ -1151,30 +1162,34 @@ const CONJUNTOS = [
   {marca:"hubspot-propuesta",      lista:PROPUESTA_REAL,   patrones:["propuesta", "oferta"],
    nombre:"Propuesta",   color:"#c77700"}
 ];
-/* Quita las 16 empresas de ejemplo (Northwind Labs, Acme Cloud...) de
-   cualquier tablero que ya las tuviera guardadas, y las columnas de fábrica
-   que se queden vacías al retirarlas. Se ejecuta una sola vez por
-   navegador; no toca ningún negocio real ni nada añadido por el usuario. */
-const DEMO_MARK = "quitar-demo-inventado-v1";
-(function quitarDemo(){
-  S.imports = Array.isArray(S.imports) ? S.imports : [];
-  if(S.imports.indexOf(DEMO_MARK) > -1) return;
-  S.imports.push(DEMO_MARK);
-  const nombresFake = SEED.map(function(r){ return r[0]; });
-  const antes = S.deals.length;
-  S.deals = S.deals.filter(function(d){ return nombresFake.indexOf(d.co) === -1; });
-  ["lead","contactado","demo","ganado"].forEach(function(id){
-    const vacia = S.stages.some(s=>s.id===id) && !S.deals.some(function(d){ return d.stage===id; });
-    if(vacia) S.stages = S.stages.filter(function(s){ return s.id !== id; });
-  });
-  if(S.deals.length !== antes){
-    setTimeout(function(){ toast("Datos de ejemplo eliminados: sólo quedan tus negocios reales"); }, 700);
-  }
-  save();
-})();
+const DEMO_MARK    = "quitar-demo-inventado-v1";
+const CONTACT_MARK = "hubspot-contactos-v1";
+const ORIGEN_MARK  = "origen-en-actividad-v1";
 
-(function cargarConjuntos(){
+/* Todas las migraciones "de una vez" sobre el S actual, en orden. Cada una
+   se guarda marcada en S.imports, así que repetir la llamada (por ejemplo
+   tras cargar la copia de la base de datos) no repite nada dos veces. */
+function runMigrations(){
   S.imports = Array.isArray(S.imports) ? S.imports : [];
+
+  /* Quita las 16 empresas de ejemplo (Northwind Labs, Acme Cloud...) de
+     cualquier tablero que ya las tuviera guardadas, y las columnas de
+     fábrica que se queden vacías al retirarlas. No toca ningún negocio
+     real ni nada añadido por el usuario. */
+  if(S.imports.indexOf(DEMO_MARK) === -1){
+    S.imports.push(DEMO_MARK);
+    const nombresFake = SEED.map(function(r){ return r[0]; });
+    const antes = S.deals.length;
+    S.deals = S.deals.filter(function(d){ return nombresFake.indexOf(d.co) === -1; });
+    ["lead","contactado","demo","ganado"].forEach(function(id){
+      const vacia = S.stages.some(s=>s.id===id) && !S.deals.some(function(d){ return d.stage===id; });
+      if(vacia) S.stages = S.stages.filter(function(s){ return s.id !== id; });
+    });
+    if(S.deals.length !== antes){
+      setTimeout(function(){ toast("Datos de ejemplo eliminados: sólo quedan tus negocios reales"); }, 700);
+    }
+  }
+
   const hechos = [];
   CONJUNTOS.forEach(function(c){
     if(S.imports.indexOf(c.marca) > -1) return;       /* sólo salta ESTE conjunto */
@@ -1193,56 +1208,50 @@ const DEMO_MARK = "quitar-demo-inventado-v1";
   if(hechos.length){
     setTimeout(function(){ toast("Negocios añadidos: " + hechos.join(", ")); }, 500);
   }
-  save();
-})();
 
-/* Los contactos se leyeron después de cargar los negocios: se rellenan una
-   vez sobre lo que ya hubiera guardado, sin pisar los que haya escrito el
-   usuario a mano. */
-const CONTACT_MARK = "hubspot-contactos-v1";
-(function ponerContactos(){
-  S.imports = Array.isArray(S.imports) ? S.imports : [];
-  if(S.imports.indexOf(CONTACT_MARK) > -1) return;
-  let n = 0;
-  S.deals.forEach(function(d){
-    const reales = contactosDe(d.co);
-    if(!reales.length) return;
-    if((d.contacts || []).length >= reales.length) return;
-    d.contacts = reales;
-    n++;
-  });
-  S.imports.push(CONTACT_MARK);
-  if(n) setTimeout(function(){ toast("Contactos rellenados en " + n + " oportunidades"); }, 900);
-  save();
-})();
+  /* Los contactos se leyeron después de cargar los negocios: se rellenan
+     sobre lo que ya hubiera, sin pisar los que haya escrito el usuario. */
+  if(S.imports.indexOf(CONTACT_MARK) === -1){
+    S.imports.push(CONTACT_MARK);
+    let n = 0;
+    S.deals.forEach(function(d){
+      const reales = contactosDe(d.co);
+      if(!reales.length) return;
+      if((d.contacts || []).length >= reales.length) return;
+      d.contacts = reales;
+      n++;
+    });
+    if(n) setTimeout(function(){ toast("Contactos rellenados en " + n + " oportunidades"); }, 900);
+  }
 
-/* Antes el origen se apuntaba como una línea más del historial; ahora es la
-   primera entrada, derivada del campo. Se quitan las líneas duplicadas. */
-const ORIGEN_MARK = "origen-en-actividad-v1";
-(function limpiarOrigen(){
-  S.imports = Array.isArray(S.imports) ? S.imports : [];
-  if(S.imports.indexOf(ORIGEN_MARK) > -1) return;
-  S.deals.forEach(function(d){
-    if(!Array.isArray(d.acts)) return;
-    d.acts = d.acts.filter(a => !/^Origen: |^Origen borrado$/.test(a.t || ""));
-  });
-  S.imports.push(ORIGEN_MARK);
-  save();
-})();
+  /* Antes el origen se apuntaba como una línea más del historial; ahora es
+     la primera entrada, derivada del campo. Se quitan las duplicadas. */
+  if(S.imports.indexOf(ORIGEN_MARK) === -1){
+    S.imports.push(ORIGEN_MARK);
+    S.deals.forEach(function(d){
+      if(!Array.isArray(d.acts)) return;
+      d.acts = d.acts.filter(a => !/^Origen: |^Origen borrado$/.test(a.t || ""));
+    });
+  }
 
-/* Red de seguridad: una oportunidad que apunte a una columna inexistente no se
-   dibujaría en ninguna parte y parecería perdida. Se recoloca en la primera. */
-(function rescueOrphans(){
-  const ids = S.stages.map(s => s.id);
-  let n = 0;
+  /* Red de seguridad: una oportunidad que apunte a una columna inexistente
+     no se dibujaría en ninguna parte y parecería perdida. Se recoloca en
+     la primera, y se sanean listas ausentes. */
+  const idsCols = S.stages.map(s => s.id);
+  let recolocadas = 0;
   S.deals.forEach(function(d){
-    if(ids.indexOf(d.stage) === -1){ d.stage = S.stages[0].id; n++; }
+    if(idsCols.indexOf(d.stage) === -1){ d.stage = S.stages[0].id; recolocadas++; }
     if(!Array.isArray(d.contacts)) d.contacts = [];
     if(!Array.isArray(d.files))    d.files = [];
     if(!Array.isArray(d.acts))     d.acts = [];
   });
-  if(n) setTimeout(function(){ toast(n + " oportunidad(es) recolocadas en la primera columna"); }, 400);
-})();
+  if(recolocadas){
+    setTimeout(function(){ toast(recolocadas + " oportunidad(es) recolocadas en la primera columna"); }, 400);
+  }
+}
+runMigrations();
+save();   /* guarda ya el resultado de las migraciones en localStorage */
+
 function save(){
   try{ localStorage.setItem(KEY, JSON.stringify(S)); }
   catch(e){
@@ -1257,7 +1266,89 @@ function save(){
       }
     }catch(e2){}
   }
+  scheduleDbSave();
 }
+
+/* ═══════════ Base de datos compartida (capacidad "db") ═══════════════
+   Cuando el Artifact concede "db", un único documento hace de fuente de
+   verdad para cualquier navegador o dispositivo: al abrir se trae ese
+   documento (si es más reciente/existe, sustituye a lo local) y cada
+   cambio se sube con un pequeño retraso, para no disparar una escritura
+   por cada tecla. Si no hay "db" (archivo local, o vista sin la
+   capacidad), el CRM sigue funcionando sólo con localStorage, como
+   antes. */
+const DB_PATH = "pipeline/board";
+let dbSizeWarned = false;
+/* Un documento de la base compartida no puede pasar de 256 KB: mucho
+   menos que el margen habitual de localStorage. Los archivos adjuntos
+   (que van en base64 y pueden pesar varios MB) se excluyen de lo que se
+   sube a la nube: siguen intactos en localStorage de este navegador,
+   sólo no viajan a otros dispositivos. */
+function paraNube(){
+  const copia = JSON.parse(JSON.stringify(S));
+  let recortado = false;
+  copia.deals.forEach(function(d){
+    (d.files || []).forEach(function(f){
+      if(f.data){ f.data = null; recortado = true; }
+    });
+  });
+  return {copia:copia, recortado:recortado};
+}
+function scheduleDbSave(){
+  if(!dbRef) return;
+  clearTimeout(dbTimer);
+  dbTimer = setTimeout(function(){
+    const r = paraNube();
+    dbSyncing = true;
+    dbRef.set(r.copia).then(function(){
+      if(r.recortado && !dbSizeWarned){
+        dbSizeWarned = true;
+        toast("Los archivos adjuntos no viajan a otros dispositivos: pesan demasiado para la nube compartida");
+      }
+    }).catch(function(){ /* se reintentará con el próximo cambio */ })
+      .finally(function(){ dbSyncing = false; });
+  }, 700);
+}
+
+(async function initDb(){
+  if(!(window.claude && typeof window.claude.use === "function")) return;
+  let db;
+  try{ db = await window.claude.use("db"); }catch(e){ db = null; }
+  if(!db) return;   /* vista sin la capacidad (p. ej. el .html local): seguimos sólo con localStorage */
+  dbRef = db.doc(DB_PATH);
+  dbRef.onSnapshot(function(snap){
+    if(dbSyncing) return;               /* eco de nuestra propia escritura reciente */
+    if(!snap.exists){
+      /* primera vez que se usa: sube lo que ya tengamos (local o de fábrica) */
+      scheduleDbSave();
+      return;
+    }
+    const datos = snap.data();
+    if(!datos || !Array.isArray(datos.stages) || !Array.isArray(datos.deals)) return;
+    /* Los archivos no viajan por la nube (pesan demasiado): si este navegador
+       ya tenía el contenido guardado en local para alguno, se recupera aquí
+       en vez de perderlo al sustituir S por la versión compartida. */
+    const archivosLocales = {};
+    S.deals.forEach(function(d){
+      (d.files || []).forEach(function(f){
+        if(f.data) archivosLocales[d.id + "|" + f.name + "|" + f.date] = f.data;
+      });
+    });
+    S = datos;
+    S.deals.forEach(function(d){
+      (d.files || []).forEach(function(f){
+        if(!f.data){
+          const guardado = archivosLocales[d.id + "|" + f.name + "|" + f.date];
+          if(guardado) f.data = guardado;
+        }
+      });
+    });
+    runMigrations();
+    try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){}
+    if(openId !== null && !S.deals.some(d => d.id === openId)) openId = null;
+    refresh();
+  }, function(){ /* revoked / unavailable: se sigue trabajando en local */ });
+})();
 /* ── Guardar un archivo ──────────────────────────────────────────────
    Publicado como Artifact, el visor no deja que la página descargue por
    su cuenta: hay que pasar por la capacidad "downloads", que pide
