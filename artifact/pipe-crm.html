@@ -112,6 +112,8 @@ select.sel:focus{border-color:var(--accent)}
 .deal .row{display:flex;align-items:center;gap:8px;margin-top:9px}
 .deal .amt{font-weight:600;font-size:13px;margin-left:auto}
 .deal .foot{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:11px;color:var(--ink-3)}
+.deal .foot:empty{display:none}
+.deal .perroom{margin-top:7px;font-size:11px;font-weight:600;color:var(--ink-2)}
 .chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;
   padding:3px 8px;border-radius:7px;white-space:nowrap}
 .chip.none{background:var(--line-2);color:var(--ink-3)}
@@ -1417,10 +1419,10 @@ function card(d){
   const main = cts[0] ? cts[0].name : "";
   const more = cts.length > 1 ? ' <span style="color:var(--accent)">+'+(cts.length-1)+'</span>' : "";
   const files = (d.files||[]).length;
-  const stale = (d.age>=12 && !isWon(d) && !isLost(d))
-    ? '<span class="stale">Sin actividad</span>' : '<span>'+dayLabel(d.age)+'</span>';
-  const close = d.closeDate ? '<span>·</span><span>Cierre '+fmtDate(d.closeDate)+'</span>' : "";
-  const hab = d.perRoom ? '<span>·</span><span>'+dec(d.perRoom)+' €/hab</span>' : "";
+  /* La última actividad, salvo cuando es de hoy: ahí no dice nada */
+  const stale = (d.age>=12 && !isWon(d) && !isLost(d)) ? '<span class="stale">Sin actividad</span>'
+              : (d.age > 0 ? '<span>'+dayLabel(d.age)+'</span>' : "");
+  const hab = d.perRoom ? '<div class="perroom">'+dec(d.perRoom)+' €/hab</div>' : "";
   const causa = (isLost(d) && d.lostReason)
     ? '<div class="cause" title="Causa de la pérdida">'+esc(d.lostReason)+'</div>' : "";
   return '<article class="deal" draggable="true" data-id="'+d.id+'" onclick="openDeal('+d.id+')">'+
@@ -1435,7 +1437,8 @@ function card(d){
     causa+
     '<div class="row">'+(d.model ? modelChip(d.model) : "")+
       '<span class="amt">'+eur(d.amount)+'</span></div>'+
-    '<div class="foot">'+stale+close+hab+
+    hab+
+    '<div class="foot">'+stale+
       (files ? '<span class="clip" style="margin-left:auto" title="'+files+' archivo(s) de oferta">'+
         '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21.4 11.05 12.25 20.2a5.5 5.5 0 0 1-7.78-7.78l8.49-8.49a3.67 3.67 0 0 1 5.19 5.19l-8.49 8.49a1.83 1.83 0 0 1-2.6-2.6l7.78-7.78"/></svg>'+
         files+'</span>' : "")+
