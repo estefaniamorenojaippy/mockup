@@ -4044,7 +4044,7 @@ select.res-f-field{appearance:none;cursor:pointer;
       <div class="ini-chat-header" id="iniChatHeader"></div>
       <div class="ini-chat-messages" id="iniChatMsgs"></div>
       <div class="ini-chat-input">
-        <input type="text" id="iniChatInput" placeholder="Pregúntale a Jai: ¿qué puedo hacer para mejorar las reseñas de familias?" onkeydown="if(event.key==='Enter')sendIniChat()">
+        <input type="text" id="iniChatInput" placeholder="Pregúntale a Jai: ¿qué puedo hacer para solucionar el ruido?" onkeydown="if(event.key==='Enter')sendIniChat()">
         <button onclick="sendIniChat()" aria-label="Enviar">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/></svg>
         </button>
@@ -6956,35 +6956,29 @@ function hideInsHotel(){
 let jaiSeq = 0;
 function jaiMascot(size = 40, waving = false){
   const g = "jaiG" + (++jaiSeq);
+  // La jota de Jaippy: el gancho de la letra hace de sonrisa y los ojos van
+  // dentro de la curva, así el icono se lee igual a 26 px que a 76.
   return `
   <svg class="jai" width="${size}" height="${size}" viewBox="0 0 64 64" role="img" aria-label="Jai, el asistente de Jaippy">
     <defs>
-      <radialGradient id="${g}" cx="38%" cy="32%" r="72%">
-        <stop offset="0" stop-color="#FFE07A"/>
-        <stop offset="55%" stop-color="#FFC93C"/>
+      <linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#FFD03B"/>
         <stop offset="100%" stop-color="#FFA13B"/>
-      </radialGradient>
+      </linearGradient>
     </defs>
-    <g stroke="#FFA13B" stroke-width="4" stroke-linecap="round" opacity=".85">
-      <path d="M32 3.5v5"/><path d="M32 55.5v5"/><path d="M3.5 32h5"/><path d="M55.5 32h5"/>
-      <path d="M12.2 12.2l3.6 3.6"/><path d="M48.2 48.2l3.6 3.6"/>
-      <path d="M51.8 12.2l-3.6 3.6"/><path d="M15.8 48.2l-3.6 3.6"/>
-    </g>
-    <circle cx="32" cy="32" r="20.5" fill="url(#${g})"/>
-    <circle cx="25.5" cy="29.5" r="2.7" fill="#191919"/>
-    <circle cx="38.5" cy="29.5" r="2.7" fill="#191919"/>
-    <circle cx="26.4" cy="28.5" r=".9" fill="#fff"/>
-    <circle cx="39.4" cy="28.5" r=".9" fill="#fff"/>
-    <ellipse cx="21" cy="35.6" rx="3.1" ry="1.9" fill="#E8734A" opacity=".28"/>
-    <ellipse cx="43" cy="35.6" rx="3.1" ry="1.9" fill="#E8734A" opacity=".28"/>
-    <path d="M26.4 37.4c1.7 2.7 3.6 4 5.6 4s3.9-1.3 5.6-4"
-          fill="none" stroke="#191919" stroke-width="2.6" stroke-linecap="round"/>
-    ${waving ? `<path d="M50.5 39.5c2.6-1 4.6.4 4.2 2.6-.4 2.2-2.6 3.4-4.9 2.6"
-          fill="#FFC93C" stroke="#FFA13B" stroke-width="1.6" stroke-linejoin="round"/>` : ""}
+    <circle cx="32" cy="32" r="28" fill="url(#${g})"/>
+    <path d="M42 15v18a11 11 0 0 1-22 0" fill="none" stroke="#fff"
+          stroke-width="6.5" stroke-linecap="round"/>
+    <circle cx="26.5" cy="27" r="3.1" fill="#191919"/>
+    <circle cx="36" cy="27" r="3.1" fill="#191919"/>
+    <circle cx="27.4" cy="26" r="1" fill="#fff"/>
+    <circle cx="36.9" cy="26" r="1" fill="#fff"/>
+    ${waving ? `<path d="M52 38.5c3-1.2 5.3.4 4.8 3s-3 3.9-5.6 3"
+          fill="#FFD03B" stroke="#FFA13B" stroke-width="1.8" stroke-linejoin="round"/>` : ""}
   </svg>`;
 }
 const JAI_SUGS = [
-  "¿Qué hago para mejorar las reseñas de familias?",
+  "¿Qué puedo hacer para solucionar el ruido?",
   "Ideas de coste cero para el check-in",
   "¿Cómo subo la nota del desayuno?"
 ];
