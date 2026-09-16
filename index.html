@@ -3184,16 +3184,10 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
 
 /* Rejilla del plan */
 .hweek-plan{padding:22px 24px 26px;margin-top:16px;border:1px solid var(--line);border-radius:16px;background:var(--cotton)}
-.hweek-plan-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.hweek-plan-head{margin-bottom:2px}
 .hweek-plan-goal{font-size:1.05rem;font-weight:600;color:var(--midnight)}
 .hweek-plan-goal small{font-size:.78rem;font-weight:400;color:var(--ink-faint);margin-left:9px}
 .hweek-plan-desc{font-size:.78rem;color:var(--ink-faint);margin-top:3px}
-.hweek-plan-new{
-  border:1px solid var(--line-strong);background:var(--cotton);border-radius:999px;cursor:pointer;
-  padding:9px 15px;font:700 .7rem/1 "Instrument Sans",sans-serif;letter-spacing:.06em;
-  text-transform:uppercase;color:var(--charcoal);
-}
-.hweek-plan-new:hover{border-color:var(--midnight)}
 .hweek-plan-nav{display:flex;justify-content:center;margin:22px 0 16px}
 .hweek-plan-nav .hweek-nav{margin:0}
 .hweek-pill{
@@ -8059,11 +8053,8 @@ function renderHwPlan(){
 
   document.getElementById("hwPlan").innerHTML = `
     <div class="hweek-plan-head">
-      <div>
-        <p class="hweek-plan-goal">Objetivo: ${fmtNum(HW_PLAN.goal, 1)}<small>${HW_PLAN.days} días</small></p>
-        <p class="hweek-plan-desc">Sin descripción</p>
-      </div>
-      <button class="hweek-plan-new" onclick="toast('Crear un nuevo plan (mockup)')">Crea un nuevo plan</button>
+      <p class="hweek-plan-goal">Objetivo: ${fmtNum(HW_PLAN.goal, 1)}<small>${HW_PLAN.days} días</small></p>
+      <p class="hweek-plan-desc">Sin descripción</p>
     </div>
     <div class="hweek-plan-nav">
       <div class="hweek-nav">
