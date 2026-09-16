@@ -1730,8 +1730,8 @@ svg{display:block}
 .hrec-grid .ini-card{border-radius:12px}
 /* Las recomendadas de la Home usan la misma tarjeta, con su propia rejilla
    para que no se aplasten dentro del panel del paso. */
-.hrec-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
-@media(max-width:1180px){.hrec-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.hrec-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media(max-width:1180px){.hrec-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.hrec-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .hrec-grid .ini-card{flex-direction:column;align-items:stretch;text-align:left}
 .ini-art{width:100%;flex-shrink:0;aspect-ratio:3/2;background:var(--ivory)}
@@ -9029,7 +9029,7 @@ const STEPS = [
     tagTone:"t-good", tagPrefix:"Potencia",
     open:"Ver 5 iniciativas recomendadas", close:"Ocultar iniciativas",
     panelLbl:"Validadas en hoteles similares al tuyo",
-    recIds:[2, 3, 8, 16, 17]
+    recIds:[2, 8, 16, 17]
   },
   {
     n:2, tone:"warn", notes:[7,8],
@@ -9049,7 +9049,7 @@ const STEPS = [
     tagTone:"t-warn", tagPrefix:"Soluciona",
     open:"Ver 5 iniciativas recomendadas", close:"Ocultar iniciativas",
     panelLbl:"Validadas en hoteles similares al tuyo",
-    recIds:[1, 19, 20, 7, 15]
+    recIds:[1, 19, 20, 7]
   },
   {
     n:3, tone:"bad", notes:[1,2,3,4,5,6],
