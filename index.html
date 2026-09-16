@@ -3371,6 +3371,145 @@ select.res-f-field{appearance:none;cursor:pointer;
 .res-table .res-t-num{font-weight:700;color:var(--midnight)}
 .res-table .res-tags{gap:5px}
 .res-empty{padding:40px 0;text-align:center;font-size:.86rem;color:var(--ink-faint)}
+/* ═══════════ Informe de evolución: secciones nuevas ═══════════ */
+.tglyph{display:block;flex-shrink:0}
+
+/* 1. Progreso del plan, con el lenguaje de la Home */
+.rpt3-plan{padding:26px 30px 22px;margin-bottom:18px}
+.rpt3-plan-row{display:flex;align-items:center;gap:26px}
+@media(max-width:860px){.rpt3-plan-row{flex-wrap:wrap;gap:18px}}
+.rpt3-target{width:80px;height:80px;flex-shrink:0}
+.rpt3-target svg{width:100%;height:100%}
+.rpt3-plan-text{flex-shrink:0;min-width:210px}
+.rpt3-plan-l1{font-size:1rem;color:var(--midnight);line-height:1.2}
+.rpt3-plan-l1 b{font-size:1.5rem;font-weight:700;margin-left:4px}
+.rpt3-plan-l1 b.up{color:var(--good)}
+.rpt3-plan-l1 b.down{color:var(--bad)}
+.rpt3-plan-l2{font-size:.95rem;color:var(--midnight);margin-top:4px}
+.rpt3-bar-col{flex:1;min-width:200px;display:flex;flex-direction:column;gap:11px}
+.rpt3-bar-pill{
+  display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:999px;
+  background:var(--cotton);border:1px solid var(--line);
+}
+.rpt3-bar-track{flex:1;display:block;height:17px;border-radius:999px;background:var(--ivory);overflow:hidden;position:relative}
+.rpt3-bar-fill{
+  display:block;height:100%;border-radius:999px;background:var(--amber);
+  background-image:repeating-linear-gradient(-45deg, rgba(255,255,255,.42) 0 5px, transparent 5px 10px);
+}
+.rpt3-bar-prev{position:absolute;top:-3px;width:2px;height:23px;background:#B5AFA7;border-radius:1px}
+.rpt3-dates{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:0 4px}
+.rpt3-date{display:flex;flex-direction:column;gap:2px}
+.rpt3-date.is-goal{text-align:right}
+.rpt3-date span{font-size:.66rem;color:var(--ink-faint)}
+.rpt3-date b{font-size:.82rem;font-weight:700;color:var(--midnight)}
+.rpt3-date.is-goal b{color:#C77800}
+.rpt3-next{font-size:2rem;font-weight:700;color:var(--midnight);flex-shrink:0}
+.rpt3-plan-sep{height:1px;background:var(--line);margin:22px 0 18px}
+
+/* Reseñas conseguidas frente al plan */
+.rpt3-res{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.rpt3-res-fig{flex-shrink:0;min-width:180px}
+.rpt3-res-lbl{font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--olive)}
+.rpt3-res-num{font-size:1.95rem;font-weight:700;color:var(--midnight);line-height:1;margin-top:7px;font-variant-numeric:tabular-nums}
+.rpt3-res-num small{font-size:.95rem;font-weight:600;color:var(--ink-faint)}
+.rpt3-res-bar{flex:1;min-width:220px}
+.rpt3-res-track{height:12px;border-radius:7px;background:var(--ivory);overflow:hidden}
+.rpt3-res-fill{display:block;height:100%;border-radius:7px;background:var(--sunrise)}
+.rpt3-res-cap{display:flex;justify-content:space-between;font-size:.74rem;color:var(--ink-faint);margin-top:7px}
+.rpt3-res-cap b{font-weight:700;color:var(--midnight)}
+.rpt3-res-note{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;
+  font-size:.76rem;font-weight:700;flex-shrink:0;
+}
+.rpt3-res-note.ok{background:var(--good-bg);color:var(--good)}
+.rpt3-res-note.no{background:var(--bad-bg);color:var(--bad)}
+
+/* 2. Las tres cifras */
+.rpt3-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px}
+@media(max-width:940px){.rpt3-kpis{grid-template-columns:1fr}}
+.rpt3-kpi{text-align:center}
+.rpt3-kpi-h{font-size:1rem;font-weight:700;color:var(--midnight);font-family:"Instrument Sans",sans-serif}
+.rpt3-kpi-sub{font-size:.75rem;color:var(--ink-faint);line-height:1.45;margin:6px auto 14px;max-width:330px}
+.rpt3-kpi-val{display:flex;align-items:center;justify-content:center;gap:11px}
+.rpt3-kpi-ico{color:var(--midnight);flex-shrink:0}
+.rpt3-kpi-num{font-size:1.75rem;font-weight:700;color:var(--midnight);line-height:1;font-variant-numeric:tabular-nums}
+.rpt3-kpi-num small{font-size:.9rem;font-weight:600}
+.rpt3-kpi-delta{
+  display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:7px;
+  font-size:.74rem;font-weight:700;
+}
+.rpt3-kpi-delta.up{background:var(--good-bg);color:var(--good)}
+.rpt3-kpi-delta.down{background:var(--bad-bg);color:var(--bad)}
+/* Las barras se cambian por la línea del año al pasar el cursor */
+.rpt3-plot{position:relative;margin-top:14px;height:180px}
+.rpt3-plot svg{width:100%;height:100%;display:block;overflow:visible;
+  position:absolute;inset:0;transition:opacity .22s}
+.rpt3-plot .rpt3-line-svg{opacity:0}
+.rpt3-kpi:hover .rpt3-bars-svg{opacity:0}
+.rpt3-kpi:hover .rpt3-line-svg{opacity:1}
+.rpt3-axis{font-family:"Instrument Sans",sans-serif;font-size:8px;fill:#A9A5A0}
+.rpt3-vlbl{font-family:"Instrument Sans",sans-serif;font-size:9.5px;font-weight:700;fill:var(--midnight)}
+.rpt3-grid{stroke:#EFEFEF;stroke-width:1}
+.rpt3-hint{
+  font-size:.7rem;color:var(--ink-faint);margin-top:8px;opacity:1;transition:opacity .22s;
+}
+.rpt3-kpi:hover .rpt3-hint{opacity:0}
+
+/* 3. Tabla de iniciativas */
+.rpt3-initable{overflow-x:auto;margin:18px 0 6px}
+.rpt3-it{width:100%;border-collapse:collapse;min-width:520px}
+.rpt3-it th{
+  text-align:right;padding:8px 10px;border-bottom:1px solid var(--line);
+  font-size:.64rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--olive);white-space:nowrap;
+}
+.rpt3-it th:first-child{text-align:left}
+.rpt3-it td{padding:11px 10px;border-bottom:1px solid var(--line);font-size:.82rem;color:var(--charcoal);text-align:right;
+  font-variant-numeric:tabular-nums}
+.rpt3-it td:first-child{text-align:left}
+.rpt3-it tr:last-child td{border-bottom:none}
+.rpt3-it-name{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--midnight)}
+.rpt3-it-ico{
+  width:28px;height:28px;border-radius:9px;background:var(--ivory);color:var(--midnight);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.rpt3-it-st{display:inline-flex;padding:3px 9px;border-radius:999px;font-size:.7rem;font-weight:700}
+.rpt3-it-st.validada{background:var(--good-bg);color:var(--good)}
+.rpt3-it-st.descartada{background:var(--bad-bg);color:var(--bad)}
+.rpt3-it-st.en-prueba{background:#FFF4E3;color:#B87309}
+.rpt3-it-imp.up{color:var(--good);font-weight:700}
+.rpt3-it-imp.down{color:var(--bad);font-weight:700}
+
+/* 4. Top empleados */
+.rpt3-emp{margin-top:18px;display:flex;flex-direction:column;gap:3px}
+.rpt3-emp-row{display:grid;grid-template-columns:22px 1fr 1fr 62px 54px;gap:12px;align-items:center;padding:8px 0}
+@media(max-width:760px){.rpt3-emp-row{grid-template-columns:22px 1fr 52px 48px}.rpt3-emp-bar{display:none}}
+.rpt3-emp-pos{font-size:.76rem;font-weight:700;color:var(--ink-faint);text-align:center}
+.rpt3-emp-who{display:flex;align-items:center;gap:10px;min-width:0}
+.rpt3-emp-av{
+  width:28px;height:28px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.68rem;font-weight:700;color:#fff;
+}
+.rpt3-emp-name{font-size:.84rem;font-weight:600;color:var(--midnight);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rpt3-emp-dept{font-size:.72rem;color:var(--ink-faint)}
+.rpt3-emp-bar{height:8px;border-radius:5px;background:var(--ivory);overflow:hidden}
+.rpt3-emp-bar i{display:block;height:100%;border-radius:5px;background:var(--amber)}
+.rpt3-emp-n{font-size:.84rem;font-weight:700;color:var(--midnight);text-align:right;font-variant-numeric:tabular-nums}
+.rpt3-emp-n small{font-size:.7rem;font-weight:500;color:var(--ink-faint);margin-left:3px}
+.rpt3-emp-score{
+  font-size:.78rem;font-weight:700;text-align:center;padding:3px 0;border-radius:7px;
+  background:var(--good-bg);color:var(--good);
+}
+
+/* Rango personalizado de fechas */
+.rpt3-range{display:flex;align-items:center;gap:8px}
+.rpt3-range[hidden]{display:none}
+.rpt3-range input{
+  height:38px;padding:0 11px;border:1px solid var(--line-strong);border-radius:9px;background:#fff;
+  font:400 .8rem/1 "Instrument Sans",sans-serif;color:var(--midnight);
+}
+.rpt3-range input:focus{outline:none;border-color:var(--amber)}
+.rpt3-range span{font-size:.78rem;color:var(--ink-faint)}
 </style>
 </head>
 <body>
@@ -4181,7 +4320,13 @@ select.res-f-field{appearance:none;cursor:pointer;
             <option value="14">Julio 2026</option>
             <option value="13">Junio 2026</option>
             <option value="12">Mayo 2026</option>
+            <option value="custom">Personalizar fechas…</option>
           </select>
+        </div>
+        <div class="rpt3-range" id="rptCustomRange" hidden>
+          <input type="date" id="rptFrom" value="2026-08-01" onchange="renderInforme()" aria-label="Desde">
+          <span>–</span>
+          <input type="date" id="rptTo" value="2026-08-31" onchange="renderInforme()" aria-label="Hasta">
         </div>
         <span class="rpt2-bar-note" id="rptRange"></span>
       </div>
@@ -4203,74 +4348,34 @@ select.res-f-field{appearance:none;cursor:pointer;
 
     <div id="rptDoc">
 
-      <!-- 1. Estado del plan de reseñas -->
-      <section class="card rpt2-hero" data-rsec="plan" id="rptPlan"></section>
-
-      <!-- 2. Nota, conversión y consistencia — el año completo al pasar el cursor -->
-      <section class="card rpt2-sec" data-rsec="cifras">
-        <div class="rpt2-metrics" id="rptKpis"></div>
+      <!-- 1. Progreso del plan, con el mismo lenguaje que la Home -->
+      <section class="card rpt3-plan" data-rsec="plan">
+        <div class="rpt3-plan-row" id="rptPlanRow"></div>
+        <div class="rpt3-plan-sep"></div>
+        <div class="rpt3-res" id="rptPlanRes"></div>
       </section>
 
-      <!-- 3. Iniciativas validadas y descartadas -->
+      <!-- 2. Las tres cifras del periodo -->
+      <section class="card rpt2-sec" data-rsec="cifras">
+        <div class="rpt3-kpis" id="rptKpis"></div>
+      </section>
+
+      <!-- 3. Evolución de iniciativas -->
       <section class="card rpt2-sec" data-rsec="inis">
         <div class="rpt2-inis-head">
-          <h3 class="rpt2-h">Iniciativas</h3>
+          <h3 class="rpt2-h">Evolución de iniciativas</h3>
           <div class="rpt2-tallies" id="rptInisStrip"></div>
         </div>
+        <div class="rpt3-initable" id="rptIniTable"></div>
         <div class="rpt2-inis" id="rptInis"></div>
       </section>
 
-      <!-- Opcional: resumen ejecutivo -->
-      <section class="card rpt2-sec" data-rsec="exec">
-        <h3 class="rpt2-h">Resumen ejecutivo</h3>
-        <p class="rpt2-sub">Qué ha pasado, por qué y qué hacer a continuación.</p>
-        <div class="rpt-exec" id="rptExec" style="margin-top:18px"></div>
+      <!-- 4. Quién está consiguiendo las reseñas -->
+      <section class="card rpt2-sec" data-rsec="emp">
+        <h3 class="rpt2-h">Top empleados por reseñas conseguidas</h3>
+        <p class="rpt2-sub">Reseñas del periodo en las que el huésped menciona a cada persona del equipo.</p>
+        <div class="rpt3-emp" id="rptEmp"></div>
       </section>
-
-      <!-- Opcional: evolución semanal + proyección -->
-      <section class="card rpt2-sec" data-rsec="evol">
-        <h3 class="rpt2-h">Evolución de la nota, semana a semana</h3>
-        <p class="rpt2-sub">Nota de cada semana del periodo y proyección hasta el final del plan si se mantiene el ritmo actual.</p>
-        <div id="rptEvolChart" class="rpt-evol"></div>
-        <div class="rpt-proj" id="rptProj"></div>
-      </section>
-
-      <!-- Opcional: comparativa con hoteles similares -->
-      <section class="card rpt2-sec" data-rsec="bench">
-        <h3 class="rpt2-h">Cómo estás frente a hoteles similares</h3>
-        <p class="rpt2-sub">Hoteles de tu misma categoría, ubicación y perfil de huésped.</p>
-        <div class="rpt-bench" id="rptBench"></div>
-      </section>
-
-      <!-- Opcional: valoraciones conseguidas por nota -->
-      <section class="card rpt2-sec" data-rsec="rings">
-        <span class="rpt2-from">Desde Home</span>
-        <h3 class="rpt2-h">Valoraciones conseguidas</h3>
-        <p class="rpt2-sub">Consigue más valoraciones excelentes y mantén el resto dentro del límite para seguir mejorando tu nota.</p>
-        <div class="hpw-cards" id="rptScoreCards" style="margin-top:18px"></div>
-      </section>
-
-      <!-- Opcional: conversión por iniciativa -->
-      <section class="card rpt2-sec" data-rsec="tags">
-        <span class="rpt2-from">Desde Iniciativas</span>
-        <article class="initiatives" style="margin-top:0">
-          <h3 class="rpt2-h">Conversión por iniciativa</h3>
-          <div class="init-meta">
-            <span class="period-pill small">18 may - 9 ago 2026</span>
-            <span class="init-tags">Nº etiquetas utilizadas → 15</span>
-          </div>
-          <div class="init-head">
-            <span>Etiqueta</span><span>Reservas</span><span>Conversión</span><span>Puntuación media</span>
-          </div>
-          <div id="initRows"></div>
-        </article>
-      </section>
-
-      <!-- Opcionales clonadas de otras pestañas -->
-      <div class="rpt2-slot" data-rsec="nac"  id="rptSlotNac"></div>
-      <div class="rpt2-slot" data-rsec="perf" id="rptSlotPerf"></div>
-      <div class="rpt2-slot" data-rsec="comp" id="rptSlotComp"></div>
-      <div class="rpt2-slot" data-rsec="menc" id="rptSlotMenc"></div>
 
     </div>
   </div>
@@ -5905,21 +6010,52 @@ function getRoomProfile(t, i){
 }
 
 const TAG_ICONS = ["🍫","✉️","💧","🥐","🛏️","🌿","📱","📞","🧹","⬆️","🕐","🚿","🔌","📶","🗺️"];
-/* Siluetas cerradas para que el mismo trazado sirva sin relleno (pendiente) y
-   con relleno (hecha). El emoji se conserva como clave del filtro por etiqueta. */
-const INIT_GLYPH = {
-  "🍫":{n:"Bombones", d:'<path d="M3.5 8.5h17v3h-17z"/><path d="M5 11.5h14v8.2a1.3 1.3 0 0 1-1.3 1.3H6.3A1.3 1.3 0 0 1 5 19.7z"/>'},
-  "✉️":{n:"Carta de bienvenida", d:'<path d="M3 5.5h18a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-11a1 1 0 0 1 1-1z"/><path d="m2.6 7 9.4 6.2L21.4 7" fill="none"/>'},
-  "⬆️":{n:"Upgrade", d:'<path d="M12 2.8 20 11h-4.2v9.2H8.2V11H4z"/>'},
-  "📞":{n:"Llamada de check-in", d:'<path d="M6.4 3h3.1l1.7 4.2-2.1 1.5a12.4 12.4 0 0 0 6.2 6.2l1.5-2.1 4.2 1.7v3.1a2 2 0 0 1-2 2A16.6 16.6 0 0 1 4.4 5a2 2 0 0 1 2-2z"/>'}
+/* Siluetas planas de las iniciativas. Sustituyen a los emojis en el azulejo,
+   en el informe y en el selector de "Crear iniciativa": el emoji se conserva
+   solo como clave, porque es lo que guardan los datos y los filtros.
+   Los trazados son cerrados para que el mismo dibujo sirva sin relleno
+   (pendiente) y relleno (hecha). */
+const TAG_GLYPH = {
+  "🍫":{n:"Bombones",            d:'<path d="M3.5 8.5h17v3h-17z"/><path d="M5 11.5h14v8.2a1.3 1.3 0 0 1-1.3 1.3H6.3A1.3 1.3 0 0 1 5 19.7z"/>'},
+  "✉️":{n:"Carta",               d:'<path d="M3 5.5h18a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-11a1 1 0 0 1 1-1z"/><path d="m2.8 6.8 9.2 6.1 9.2-6.1" fill="none"/>'},
+  "⬆️":{n:"Upgrade",             d:'<path d="M12 2.8 20 11h-4.2v9.2H8.2V11H4z"/>'},
+  "📞":{n:"Llamada",             d:'<path d="M6.4 3h3.1l1.7 4.2-2.1 1.5a12.4 12.4 0 0 0 6.2 6.2l1.5-2.1 4.2 1.7v3.1a2 2 0 0 1-2 2A16.6 16.6 0 0 1 4.4 5a2 2 0 0 1 2-2z"/>'},
+  "💧":{n:"Agua",                d:'<path d="M12 2.6c0 0 6.6 7 6.6 11.3a6.6 6.6 0 1 1-13.2 0C5.4 9.6 12 2.6 12 2.6z"/>'},
+  "🥂":{n:"Brindis",             d:'<path d="M7.5 3h9l-1.3 6a3.3 3.3 0 0 1-6.4 0z"/><path d="M12 12.5v7M8.5 20.5h7" fill="none"/>'},
+  "🥐":{n:"Desayuno",            d:'<path d="M3.4 17.5h17.2A8.6 8.6 0 0 0 3.4 17.5z"/><path d="M2 20.2h20M12 5.4v2.6" fill="none"/>'},
+  "🎂":{n:"Celebración",         d:'<path d="M4.5 12.4h15a1 1 0 0 1 1 1v6.3a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1v-6.3a1 1 0 0 1 1-1z"/><path d="M12 6.4v3.4" fill="none"/><path d="M12 2.6a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6z"/>'},
+  "🛏️":{n:"Cama",                d:'<path d="M3 18.5V7.2a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v11.3z"/><path d="M3 13.6h18M7.4 10.8h4" fill="none"/>'},
+  "🌿":{n:"Ritual",              d:'<path d="M12 21c0-6.2 3.1-10.2 8.2-11.3C19.1 15.9 16 19 12 21z"/><path d="M12 21C12 14.8 8.9 10.8 3.8 9.7 4.9 15.9 8 19 12 21z"/>'},
+  "📱":{n:"Móvil",               d:'<path d="M7.6 2.4h8.8a2 2 0 0 1 2 2v15.2a2 2 0 0 1-2 2H7.6a2 2 0 0 1-2-2V4.4a2 2 0 0 1 2-2z"/><path d="M10.7 18.6h2.6" fill="none"/>'},
+  "🧹":{n:"Limpieza",            d:'<path d="M14.6 2.6 9 11.8l4.2 2.6 5.6-9.2z"/><path d="M9 11.8 4.2 20.6l10.2-3.1z"/>'},
+  "🕐":{n:"Horario",             d:'<path d="M12 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18z"/><path d="M12 6.8V12l3.4 2" fill="none"/>'},
+  "🚿":{n:"Ducha",               d:'<path d="M4.6 3v6.4a4.6 4.6 0 0 0 4.6 4.6h9.8" fill="none"/><path d="M8 17.4h.01M12 17.4h.01M16 17.4h.01M10 20.6h.01M14 20.6h.01" fill="none"/>'},
+  "🔌":{n:"Enchufe",             d:'<path d="M9 2.4v5.4M15 2.4v5.4" fill="none"/><path d="M6.4 7.8h11.2v3.1a5.6 5.6 0 0 1-11.2 0z"/><path d="M12 16.5v5.1" fill="none"/>'},
+  "📶":{n:"Cobertura",           d:'<path d="M2.8 9.2a13.2 13.2 0 0 1 18.4 0M6.4 12.8a8.2 8.2 0 0 1 11.2 0M9.8 16.4a3.6 3.6 0 0 1 4.4 0" fill="none"/><path d="M12 18.6a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6z"/>'},
+  "🗺️":{n:"Mapa",                d:'<path d="m2.6 6 6-2.6 6.8 2.9 6-2.6v14.4l-6 2.6-6.8-2.9-6 2.6z"/><path d="M8.6 3.4v15.4M15.4 6.3v15.4" fill="none"/>'},
+  "🧘":{n:"Yoga",                d:'<path d="M12 2.6a2.4 2.4 0 1 1 0 4.8 2.4 2.4 0 0 1 0-4.8z"/><path d="M12 8.8c-2.6 0-4.6 2-4.6 4.5 0 .9.3 1.8.3 1.8l-4 3.8h16.6l-4-3.8s.3-.9.3-1.8c0-2.5-2-4.5-4.6-4.5z"/>'},
+  "🎮":{n:"Entretenimiento",     d:'<path d="M7 7.4h10a4.6 4.6 0 0 1 0 9.2H7a4.6 4.6 0 0 1 0-9.2z"/><path d="M6.6 12h3.4M8.3 10.3v3.4" fill="none"/><path d="M16 10.4h.01M18 13h.01" fill="none"/>'},
+  "🍩":{n:"Dulce",               d:'<path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm0 6.2a2.8 2.8 0 1 1 0 5.6 2.8 2.8 0 0 1 0-5.6z"/>'},
+  "🍓":{n:"Fruta",               d:'<path d="M12 7.2c3.9 0 6.9 3 6.9 6.6S15.6 21 12 21s-6.9-3.6-6.9-7.2S8.1 7.2 12 7.2z"/><path d="M12 7.2V3.4M9 4.4l3 2.8 3-2.8" fill="none"/>'},
+  "🧀":{n:"Producto local",      d:'<path d="M3 13.4 14 6.4l7 3.6v7.4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>'},
+  "🍾":{n:"Botella",             d:'<path d="M10 2.4h4v4.3c0 .8.3 1.5.9 2l1 1c.7.7 1.1 1.7 1.1 2.7v8.1a1.5 1.5 0 0 1-1.5 1.5h-7a1.5 1.5 0 0 1-1.5-1.5v-8.1c0-1 .4-2 1.1-2.7l1-1c.6-.5.9-1.2.9-2z"/>'},
+  "🤸":{n:"Actividad",           d:'<path d="M12 2.4a2.3 2.3 0 1 1 0 4.6 2.3 2.3 0 0 1 0-4.6z"/><path d="M12 7.4v5.8M7.8 21l4.2-7.8 4.2 7.8M5.8 11l6.2 2.2L18.2 11" fill="none"/>'},
+  "✅":{n:"Todo bien",           d:'<path d="M12 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18z"/><path d="m8 12.3 2.8 2.8 5.4-5.4" fill="none"/>'},
+  "🍷":{n:"Copa",                d:'<path d="M7 3h10v3.8a5 5 0 0 1-10 0z"/><path d="M12 11.8v7.8M8.5 20.6h7" fill="none"/>'},
+  "🏷️":{n:"Etiqueta",            d:'<path d="M3 10.4V4.6A1.6 1.6 0 0 1 4.6 3h5.8c.5 0 1 .2 1.4.6l8 8a2 2 0 0 1 0 2.8l-5.4 5.4a2 2 0 0 1-2.8 0l-8-8a2 2 0 0 1-.6-1.4z"/><path d="M7.4 6.2a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6z" fill="none"/>'}
 };
-function initGlyph(icon, done){
-  const g = INIT_GLYPH[icon];
-  if (!g) return `<span class="tile-init${done ? " done" : ""}">${icon}</span>`;
-  return `<span class="tile-init${done ? " done" : ""}" title="${g.n}${done ? " · hecha" : " · pendiente"}">
-    <svg viewBox="0 0 24 24" width="12" height="12" fill="${done ? "currentColor" : "none"}"
-      stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">${g.d}</svg></span>`;
+/* size en px; filled decide si la silueta va rellena o solo de contorno */
+function tagGlyph(icon, size = 16, filled = false, cls = ""){
+  const g = TAG_GLYPH[icon] || TAG_GLYPH["🏷️"];
+  return `<svg class="tglyph ${cls}" width="${size}" height="${size}" viewBox="0 0 24 24"
+    fill="${filled ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.6"
+    stroke-linejoin="round" stroke-linecap="round" role="img" aria-label="${g.n}">${g.d}</svg>`;
 }
+function initGlyph(icon, done){
+  const g = TAG_GLYPH[icon] || TAG_GLYPH["🏷️"];
+  return `<span class="tile-init${done ? " done" : ""}" title="${g.n} · ${done ? "hecha" : "pendiente"}">${tagGlyph(icon, 12, done)}</span>`;
+}
+
 function getRoomInitiatives(t, idx){
   const seed = (t.n * 7 + idx * 3) % 100;
   const inits = [];
@@ -7612,7 +7748,7 @@ function renderTagPanel(){
     return `
       <div class="tag-row">
         <span class="tag-cell tag-name-cell">
-          <span class="tag-icon" style="background:${color}1a">${getTagIcon(name)}</span>
+          <span class="tag-icon" style="background:${color}1a;color:${color}">${tagGlyph(getTagIcon(name), 16)}</span>
           <span class="tag-label" title="${name}">${name}</span>
           <span class="tag-actions">
             <button class="tag-act" onclick="editTag('${esc}')" aria-label="Editar iniciativa" title="Editar">
@@ -7922,11 +8058,11 @@ let tagAssignedProfiles = [];
 
 function renderTagIcons(){
   document.getElementById("tagIconGrid").innerHTML = TAG_MODAL_ICONS.map(ic =>
-    `<button type="button" class="tag-icon-opt${ic === tagSelectedIcon ? " selected" : ""}" onclick="selectTagIcon('${ic}')">${ic}</button>`
+    `<button type="button" class="tag-icon-opt${ic === tagSelectedIcon ? " selected" : ""}" onclick="selectTagIcon('${ic}')" title="${(TAG_GLYPH[ic]||{}).n || ""}">${tagGlyph(ic, 18)}</button>`
   ).join("");
   const preview = document.getElementById("tagIconPreview");
   if (tagSelectedIcon) {
-    preview.innerHTML = `<span class="has-icon">${tagSelectedIcon}</span>`;
+    preview.innerHTML = `<span class="has-icon">${tagGlyph(tagSelectedIcon, 18)}</span>`;
   } else {
     preview.textContent = "Icono";
   }
@@ -8087,10 +8223,6 @@ const hpwRings = notes =>
   notes.map(n => hpwCard(HPW_SCORES.find(r => r.score === n))).join("");
 
 document.getElementById("hpScoreCards").innerHTML = HPW_SCORES.map(hpwCard).join("");
-
-// Informe de evolución: ring-cards idénticas a la home
-document.getElementById("rptScoreCards").innerHTML =
-  document.getElementById("hpScoreCards").innerHTML;
 
 /* Home: progreso hacia la siguiente décima (8,7 → 8,8).
    La nota real internamente tiene decimales (8,74) aunque el badge redondeado muestre "8,7";
@@ -8329,166 +8461,6 @@ function toggleHweek(){
 }
 renderHwPrev(); renderHwSel(); renderHwPlan();
 
-/* ═══════════ Informe de evolución: evolución semanal, proyección y comparativa ═══
-   La serie va en la escala del propio informe (Índice Jaippy, 9,1x contra el
-   objetivo 9,2). No se reutiliza la del pop-up de la home porque esa va en la
-   escala 8,7x y contradiría el KPI que hay justo encima. */
-const RPT_GOAL = 9.2;          // objetivo del plan
-const RPT_REVIEWS = 607;       // reseñas del periodo, base para el cálculo
-const RPT_WEEKS_LEFT = 8;      // semanas del 9 ago al 4 oct de 2026
-const RPT_SERIES = [
-  ["18 may",9.142],["25 may",9.138],["01 jun",9.145],["08 jun",9.131],
-  ["15 jun",9.126],["22 jun",9.134],["29 jun",9.121],["06 jul",9.118],
-  ["13 jul",9.109],["20 jul",9.112],["27 jul",9.104],["03 ago",9.108],
-  ["09 ago",9.113]
-];
-
-/* Pendiente por mínimos cuadrados: la proyección sale de los datos, no a mano. */
-function rptSlope(vals){
-  const n = vals.length, mx = (n - 1) / 2;
-  const my = vals.reduce((a,b) => a + b, 0) / n;
-  let num = 0, den = 0;
-  vals.forEach((v,i) => { num += (i - mx) * (v - my); den += (i - mx) ** 2; });
-  return num / den;
-}
-const RPT_LAST = RPT_SERIES[RPT_SERIES.length - 1][1];
-const RPT_SLOPE = rptSlope(RPT_SERIES.map(p => p[1]));
-const RPT_PROJ = RPT_LAST + RPT_SLOPE * RPT_WEEKS_LEFT;
-/* Reseñas de 10 que faltan para que la media suba de la actual al objetivo. */
-const RPT_TENS = Math.ceil(RPT_REVIEWS * (RPT_GOAL - RPT_LAST) / (10 - RPT_GOAL));
-
-function renderRptEvol(){
-  const el = document.getElementById("rptEvolChart");
-  if (!el) return;
-  const W = 880, H = 300, ML = 52, MR = 78, MT = 16, MB = 34;
-  const PW = W - ML - MR, PH = H - MT - MB;
-  const yMin = 9.05, yMax = 9.22;
-  const total = RPT_SERIES.length - 1 + RPT_WEEKS_LEFT;
-  const x = i => ML + i / total * PW;
-  const y = v => MT + (yMax - v) / (yMax - yMin) * PH;
-
-  const grid = [9.05,9.10,9.15,9.20].map(v => `
-    <line class="rpt-evol-grid" x1="${ML}" x2="${W-MR}" y1="${y(v)}" y2="${y(v)}"/>
-    <text class="rpt-evol-lbl" x="${ML-10}" y="${y(v)+4}" text-anchor="end">${fmtNum(v,2)}</text>`).join("");
-
-  const goal = `
-    <line class="rpt-evol-goal" x1="${ML}" x2="${W-MR}" y1="${y(RPT_GOAL)}" y2="${y(RPT_GOAL)}"/>
-    <text class="rpt-evol-tag" x="${W-MR+8}" y="${y(RPT_GOAL)+4}" fill="var(--good)">Objetivo ${fmtNum(RPT_GOAL,1)}</text>`;
-
-  const path = RPT_SERIES.map((p,i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(p[1]).toFixed(1)}`).join(" ");
-  const last = RPT_SERIES.length - 1;
-  const proj = `M${x(last).toFixed(1)},${y(RPT_LAST).toFixed(1)} L${x(total).toFixed(1)},${y(RPT_PROJ).toFixed(1)}`;
-
-  const dots = RPT_SERIES.map((p,i) =>
-    `<circle cx="${x(i).toFixed(1)}" cy="${y(p[1]).toFixed(1)}" r="${i === last ? 4 : 2.6}"
-             fill="${i === last ? "var(--saffron)" : "var(--amber)"}"/>`).join("");
-
-  const step = 2;
-  const xl = RPT_SERIES.map((p,i) => i).filter(i => i % step === 0 || i === last).map(i =>
-    `<text class="rpt-evol-lbl" x="${x(i).toFixed(1)}" y="${H-10}" text-anchor="middle">${RPT_SERIES[i][0]}</text>`).join("");
-
-  el.innerHTML = `
-    <svg class="rpt-evol-svg" viewBox="0 0 ${W} ${H}" role="img"
-         aria-label="Evolución semanal de la nota, de ${fmtNum(RPT_SERIES[0][1],3)} a ${fmtNum(RPT_LAST,3)}">
-      ${grid}${goal}
-      <path class="rpt-evol-line" d="${path}"/>
-      <path class="rpt-evol-proj" d="${proj}"/>
-      ${dots}
-      <circle cx="${x(total).toFixed(1)}" cy="${y(RPT_PROJ).toFixed(1)}" r="3.4" fill="var(--bad)"/>
-      <text class="rpt-evol-tag" x="${(x(total)+8).toFixed(1)}" y="${(y(RPT_PROJ)+4).toFixed(1)}" fill="var(--bad)">${fmtNum(RPT_PROJ,2)}</text>
-      ${xl}
-      <text class="rpt-evol-lbl" x="${x(total).toFixed(1)}" y="${H-10}" text-anchor="middle">04 oct</text>
-    </svg>
-    <div class="rpt-legend">
-      <span><i style="border-color:var(--amber)"></i> Nota real</span>
-      <span><i style="border-color:var(--bad);border-top-style:dashed"></i> Proyección al ritmo actual</span>
-      <span><i style="border-color:var(--good);border-top-style:dashed"></i> Objetivo del plan</span>
-    </div>`;
-
-  document.getElementById("rptProj").innerHTML = `
-    <span class="rpt-proj-fig">${fmtNum(RPT_PROJ,2)}</span>
-    <p class="rpt-proj-txt">
-      Es la nota a la que llegarías el <b>4 de octubre</b> si mantienes el ritmo de las últimas
-      ${RPT_SERIES.length} semanas: <b>${fmtNum(RPT_GOAL - RPT_PROJ,2)} puntos por debajo</b> del objetivo.
-      Para alcanzar el ${fmtNum(RPT_GOAL,1)} necesitas <b>${RPT_TENS} reseñas de 10</b> más sobre las
-      ${RPT_REVIEWS} del periodo.
-    </p>`;
-}
-
-/* Comparativa con hoteles similares (categoría, ubicación y perfil de huésped). */
-const RPT_BENCH = [
-  {m:"Nota media",   mine:9.113, avg:8.94, top:9.41, min:8.6, max:9.6, d:3, suf:""},
-  {m:"Conversión",   mine:26.18, avg:22.8, top:34.5, min:15,  max:40,  d:1, suf:"%"},
-  {m:"Consistencia", mine:46.39, avg:41.1, top:58.0, min:30,  max:65,  d:1, suf:"%"}
-];
-function renderRptBench(){
-  const el = document.getElementById("rptBench");
-  if (!el) return;
-  const pos = (v,b) => Math.max(0, Math.min(100, (v - b.min) / (b.max - b.min) * 100));
-  const rows = RPT_BENCH.map(b => {
-    const dif = b.mine - b.avg;
-    return `
-      <div class="rpt-bench-row">
-        <span class="rpt-bench-cell rpt-bench-metric">${b.m}</span>
-        <span class="rpt-bench-cell rpt-bench-mine">${fmtNum(b.mine, b.d)}${b.suf}</span>
-        <span class="rpt-bench-cell">
-          <span class="rpt-bench-scale">
-            <span class="rpt-bench-avg" style="left:${pos(b.avg,b)}%" title="Media: ${fmtNum(b.avg,b.d)}${b.suf}"></span>
-            <span class="rpt-bench-dot" style="left:${pos(b.mine,b)}%"></span>
-          </span>
-        </span>
-        <span class="rpt-bench-cell rpt-bench-delta ${dif >= 0 ? "up" : "down"}">
-          ${dif >= 0 ? "+" : ""}${fmtNum(dif, b.d)}${b.suf}
-        </span>
-      </div>`;
-  }).join("");
-  el.innerHTML = `
-    <div class="rpt-bench-grid">
-      <div class="rpt-bench-row">
-        <span class="rpt-bench-head">Métrica</span>
-        <span class="rpt-bench-head">Tu hotel</span>
-        <span class="rpt-bench-head">Frente a la media</span>
-        <span class="rpt-bench-head">Diferencia</span>
-      </div>
-      ${rows}
-    </div>
-    <p class="rpt-bench-note">
-      Estás por encima de la media en las tres métricas, pero el <b>top 10%</b> de hoteles similares
-      llega a <b>${fmtNum(RPT_BENCH[0].top,2)}</b> de nota y a un <b>${fmtNum(RPT_BENCH[1].top,1)}%</b> de conversión:
-      ahí está el margen que te separa del objetivo.
-    </p>`;
-}
-
-/* Resumen ejecutivo: qué ha pasado, por qué y qué hacer. */
-function renderRptExec(){
-  const el = document.getElementById("rptExec");
-  if (!el) return;
-  const caida = RPT_SERIES[0][1] - RPT_LAST;
-  el.innerHTML = `
-    <div class="rpt-exec-cell is-what">
-      <p class="rpt-exec-lbl"><span class="dot"></span>Qué ha pasado</p>
-      <p class="rpt-exec-txt">La nota ha bajado de <b>${fmtNum(RPT_SERIES[0][1],3)}</b> a
-        <b>${fmtNum(RPT_LAST,3)}</b> en ${RPT_SERIES.length} semanas
-        (<b>−${fmtNum(caida,3)}</b>), y el plan va <b>15 semanas por detrás</b> de lo previsto.</p>
-    </div>
-    <div class="rpt-exec-cell is-why">
-      <p class="rpt-exec-lbl"><span class="dot"></span>Por qué</p>
-      <p class="rpt-exec-txt">La conversión ha caído un <b>16,4%</b> (31,3% → 26,2%): dejan reseña
-        muchos menos huéspedes, así que la mejora de consistencia (<b>+2,0%</b>) no llega a notarse
-        en la media.</p>
-    </div>
-    <div class="rpt-exec-cell is-do">
-      <p class="rpt-exec-lbl"><span class="dot"></span>Qué hacer</p>
-      <p class="rpt-exec-txt">Recuperar conversión es la palanca con más recorrido: te faltan
-        <b>${RPT_TENS} reseñas de 10</b> para el ${fmtNum(RPT_GOAL,1)}. Amplía las iniciativas ya
-        validadas antes de abrir nuevas pruebas.</p>
-    </div>`;
-}
-
-renderRptExec();
-renderRptEvol();
-renderRptBench();
-
 /* ═══════════ Administrar empleados ═══════════
    Los nombres llegan enmascarados desde el PMS (protección de datos): solo se ve
    la inicial y la longitud. Los inactivos se pintan atenuados. */
@@ -8642,17 +8614,6 @@ const INIT = [
 ];
 const arrowUp = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M10 7h7v7"/></svg>';
 const arrowDown = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7l10 10"/><path d="M17 10v7h-7"/></svg>';
-document.getElementById("initRows").innerHTML = INIT.map(r => `
-  <div class="init-row">
-    <span>
-      <span class="tag" style="background:${r.bg};color:${r.ink}">${r.tag}</span>
-      ${r.sub ? `<span class="tag-sub">${r.sub}</span>` : ""}
-    </span>
-    <span class="init-res"><b>${r.res}</b><small>${r.pctTotal}</small></span>
-    <span class="init-val pos">${r.conv}${arrowUp}</span>
-    <span class="init-val ${r.up ? "pos" : "neg"}">${r.score}${r.up ? arrowUp : arrowDown}</span>
-  </div>`).join("");
-
 /* Home: etiqueta que mejores puntuaciones genera. Se deriva del mismo array de
    iniciativas (INIT), ordenado por nota, para no duplicar cifras. */
 (function renderHomeTag(){
@@ -9463,108 +9424,202 @@ const RPT_MONTHS = [
 const RPT_UP   = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M10 7h7v7"/></svg>';
 const RPT_DOWN = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7l10 10"/><path d="M17 10v7h-7"/></svg>';
 
-/* Las tres cifras del informe. Cada una dibuja los doce meses que terminan en el
-   mes seleccionado; al pasar el cursor se lee el valor de cada uno. */
-const RPT_METRICS = [
-  {key:"punt", label:"Nota",         dec:3, unit:""},
-  {key:"conv", label:"Conversión",   dec:2, unit:"%"},
-  {key:"cons", label:"Consistencia", dec:2, unit:"%"}
-];
-const RPT_CW = 300, RPT_CH = 90, RPT_CPAD = 8, RPT_CTOP = 12, RPT_CBOT = 10;
+/* ── 1. Progreso del plan ──────────────────────────────────────────────────
+   Habla el mismo idioma que la Home: el tramo hacia la próxima décima. Por eso
+   la serie va en la escala de Booking (8,7x) y no en la del Índice Jaippy. */
+const RPT_PLAN = {
+  12:{nota:8.712, res:571, obj:560},
+  13:{nota:8.726, res:596, obj:600},
+  14:{nota:8.745, res:602, obj:640},
+  15:{nota:8.740, res:607, obj:650}
+};
+const RPT_DIANA = `
+  <svg viewBox="0 0 120 120" role="img" aria-label="Diana del plan">
+    <g fill="none" stroke="var(--midnight)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+      <g stroke="var(--amber)" stroke-width="4.4"><path d="M69 21 65 31"/><path d="M83 15 80 26"/><path d="M108 45 99 49"/></g>
+      <path d="M100 44a38 38 0 0 1-7 50" stroke-width="2.2"/>
+      <circle cx="52" cy="68" r="33" fill="#fff"/>
+      <circle cx="52" cy="68" r="24.5" stroke="var(--amber)" stroke-width="9"/>
+      <circle cx="52" cy="68" r="14" stroke-width="2.2"/>
+      <circle cx="52" cy="68" r="6" fill="var(--amber)" stroke="none"/>
+      <g transform="rotate(-45 52 68)">
+        <path d="M52 68h60" stroke-width="3"/>
+        <path d="M94 68 103 56h14l-9 12z" fill="var(--amber)" stroke-width="2.2"/>
+        <path d="M94 68 103 80h14l-9-12z" fill="var(--amber)" stroke-width="2.2"/>
+      </g>
+    </g>
+  </svg>`;
 
-function rptMetricCard(m, idx){
-  const win = RPT_MONTHS.slice(Math.max(0, idx - 11), idx + 1);
-  const vals = win.map(x => x[m.key]);
-  const cur = vals[vals.length - 1], prev = vals.length > 1 ? vals[vals.length - 2] : cur;
-  const d = cur - prev;
-  const dir = d > 0.0005 ? "up" : d < -0.0005 ? "down" : "flat";
-  const color = dir === "down" ? "var(--bad)" : "var(--good)";
-  const min = Math.min(...vals), max = Math.max(...vals), span = (max - min) || 1;
-  const x = i => RPT_CPAD + i * (RPT_CW - RPT_CPAD * 2) / Math.max(1, vals.length - 1);
-  const y = v => RPT_CTOP + (RPT_CH - RPT_CTOP - RPT_CBOT) * (1 - (v - min) / span);
-  const pts = vals.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
-  const bandW = (RPT_CW - RPT_CPAD * 2) / Math.max(1, vals.length - 1);
-  const hits = vals.map((v, i) => `
-    <rect class="rpt2-hit" data-i="${i}" x="${(x(i) - bandW/2).toFixed(1)}" y="0"
-      width="${bandW.toFixed(1)}" height="${RPT_CH}" fill="transparent"/>`).join("");
-  const data = win.map((w, i) =>
-    `${w.lbl}|${fmtNum(vals[i], m.dec)}${m.unit}|${x(i).toFixed(1)}|${y(vals[i]).toFixed(1)}`).join("~");
-  return `
-    <article class="rpt2-metric">
-      <p class="rpt2-metric-lbl">${m.label}</p>
-      <div class="rpt2-metric-top">
-        <span class="rpt2-metric-num">${fmtNum(cur, m.dec)}${m.unit ? `<small>${m.unit}</small>` : ""}</span>
-        <span class="rpt2-metric-delta ${dir}">
-          ${dir === "up" ? RPT_UP : dir === "down" ? RPT_DOWN : ""}
-          ${dir === "flat" ? "=" : (d > 0 ? "+" : "−") + fmtNum(Math.abs(d), m.dec)}
+function renderRptPlan(idx){
+  const row = document.getElementById("rptPlanRow");
+  if (!row) return;
+  const p = RPT_PLAN[idx], prev = RPT_PLAN[idx - 1];
+  const pct = (p.nota - HP_BASE) / (HP_TARGET - HP_BASE) * 100;
+  const prevPct = prev ? (prev.nota - HP_BASE) / (HP_TARGET - HP_BASE) * 100 : null;
+  const d = prevPct === null ? 0 : pct - prevPct;
+  const up = d >= 0;
+  row.innerHTML = `
+    <div class="rpt3-target">${RPT_DIANA}</div>
+    <div class="rpt3-plan-text">
+      <p class="rpt3-plan-l1">${prevPct === null ? "Estás al" : up ? "Has avanzado" : "Has retrocedido"}
+        <b class="${prevPct === null ? "" : up ? "up" : "down"}">${prevPct === null ? fmtNum(pct,0) + "%" : (up ? "+" : "−") + fmtNum(Math.abs(d), 1) + " pts"}</b></p>
+      <p class="rpt3-plan-l2">${prevPct === null ? "de alcanzar la próxima décima"
+        : `este mes · estás al <b>${fmtNum(pct, 0)}%</b> de la próxima décima`}</p>
+    </div>
+    <div class="rpt3-bar-col">
+      <span class="rpt3-bar-pill">
+        <span class="rpt3-bar-track">
+          <span class="rpt3-bar-fill" style="width:${pct.toFixed(1)}%"></span>
+          ${prevPct === null ? "" : `<span class="rpt3-bar-prev" style="left:${prevPct.toFixed(1)}%" title="Mes anterior: ${fmtNum(prevPct,0)}%"></span>`}
         </span>
+      </span>
+      <div class="rpt3-dates">
+        <span class="rpt3-date"><span>Nota del mes</span><b>${fmtNum(p.nota, 3)}</b></span>
+        <span class="rpt3-date is-goal"><span>Próxima décima</span><b>${fmtNum(HP_TARGET, 2)}</b></span>
       </div>
-      <div class="rpt2-chart" data-points="${data}" data-w="${RPT_CW}">
-        <svg viewBox="0 0 ${RPT_CW} ${RPT_CH}" preserveAspectRatio="none" role="img"
-             aria-label="${m.label}, últimos ${vals.length} meses">
-          <polygon points="${RPT_CPAD},${RPT_CH} ${pts} ${RPT_CW - RPT_CPAD},${RPT_CH}" fill="${color}" opacity=".08"/>
-          <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2.2"
-            stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
-          <line class="rpt2-cursor" x1="0" x2="0" y1="0" y2="${RPT_CH}" stroke="var(--line-strong)"
-            stroke-width="1" vector-effect="non-scaling-stroke" opacity="0"/>
-          <circle class="rpt2-dot" r="3.5" cx="0" cy="0" fill="${color}" opacity="0"/>
-          ${hits}
-        </svg>
-        <span class="rpt2-tip"></span>
-      </div>
-      <div class="rpt2-metric-axis"><span>${win[0].short}</span><span>${win[win.length-1].short}</span></div>
-    </article>`;
+    </div>
+    <span class="rpt3-next">${fmtNum(HP_TARGET, 1)}</span>`;
+
+  const res = document.getElementById("rptPlanRes");
+  const rPct = Math.min(100, p.res / p.obj * 100);
+  const ok = p.res >= p.obj;
+  res.innerHTML = `
+    <div class="rpt3-res-fig">
+      <p class="rpt3-res-lbl">Reseñas del plan</p>
+      <p class="rpt3-res-num">${p.res}<small> de ${p.obj}</small></p>
+    </div>
+    <div class="rpt3-res-bar">
+      <div class="rpt3-res-track"><span class="rpt3-res-fill" style="width:${rPct.toFixed(1)}%"></span></div>
+      <div class="rpt3-res-cap"><span><b>${fmtNum(rPct, 0)}%</b> del objetivo del mes</span>
+        <span>${ok ? "objetivo superado" : `faltan ${p.obj - p.res}`}</span></div>
+    </div>
+    <span class="rpt3-res-note ${ok ? "ok" : "no"}">${ok ? "En plan" : "Por debajo del plan"}</span>`;
 }
 
-/* Un único listener por gráfica: mueve la guía, el punto y la etiqueta. */
-function rptBindCharts(){
-  document.querySelectorAll("#rptKpis .rpt2-chart").forEach(box => {
-    const pts = box.dataset.points.split("~").map(s => s.split("|"));
-    const W = +box.dataset.w;
-    const line = box.querySelector(".rpt2-cursor");
-    const dot = box.querySelector(".rpt2-dot");
-    const tip = box.querySelector(".rpt2-tip");
-    box.querySelectorAll(".rpt2-hit").forEach(hit => {
-      hit.addEventListener("mouseenter", () => {
-        const [lbl, val, px, py] = pts[+hit.dataset.i];
-        line.setAttribute("x1", px); line.setAttribute("x2", px); line.style.opacity = 1;
-        dot.setAttribute("cx", px); dot.setAttribute("cy", py); dot.style.opacity = 1;
-        tip.innerHTML = `<b>${val}</b><span>${lbl}</span>`;
-        const pct = px / W * 100;
-        // en los extremos se ancla al borde para no salirse de la tarjeta
-        const anchor = pct < 18 ? 18 : pct > 82 ? 82 : 50;
-        tip.style.left = pct.toFixed(2) + "%";
-        tip.style.setProperty("--ax", anchor + "%");
-        tip.classList.add("is-on");
-      });
-    });
-    box.addEventListener("mouseleave", () => {
-      line.style.opacity = 0; dot.style.opacity = 0; tip.classList.remove("is-on");
-    });
-  });
-}
+/* ── 2. Las tres cifras ────────────────────────────────────────────────────
+   Barras del periodo anterior contra el actual; al pasar el cursor, la línea
+   de los doce meses que terminan en el mes elegido. */
+const RPT_KPIS = [
+  {key:"punt", h:"Índice Jaippy", dec:3, unit:"", max:10,  step:2,
+   sub:"Métrica que muestra, con 3 decimales de precisión, la puntuación de Booking.com.",
+   ico:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="2.5" width="19" height="19" rx="5" fill="var(--amber)"/><path d="M15 7v7a3.5 3.5 0 0 1-7 0" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>'},
+  {key:"conv", h:"Conversión", dec:2, unit:"%", max:100, step:20,
+   sub:"Porcentaje de reservas que dejan una reseña en Booking.com.",
+   ico:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="4.5" width="19" height="15" rx="3" stroke="var(--midnight)" stroke-width="1.8"/><path d="m12 8.4 1.4 2.9 3.1.4-2.3 2.2.6 3.1-2.8-1.5-2.8 1.5.6-3.1-2.3-2.2 3.1-.4z" fill="var(--amber)"/></svg>'},
+  {key:"cons", h:"Consistencia", dec:2, unit:"%", max:100, step:20,
+   sub:"Probabilidad de que un huésped te ponga una reseña de 10.",
+   ico:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="4.5" width="19" height="15" rx="3" stroke="var(--midnight)" stroke-width="1.8"/><path d="M7.5 9v6M11.8 9.6h2.8a1.6 1.6 0 0 1 1.6 1.6v1.6a1.6 1.6 0 0 1-1.6 1.6h-2.8a1.6 1.6 0 0 1-1.6-1.6v-1.6a1.6 1.6 0 0 1 1.6-1.6z" stroke="var(--amber)" stroke-width="1.9" stroke-linecap="round"/></svg>'}
+];
 
+function rptBars(prev, cur, o){
+  const W = 300, H = 168, PL = 34, PB = 26, PT = 18;
+  const ph = H - PB - PT, x0 = PL + 16, bw = 76;
+  let grid = "", ticks = "";
+  for (let v = 0; v <= o.max; v += o.step){
+    const y = PT + ph * (1 - v / o.max);
+    grid += `<line class="rpt3-grid" x1="${PL}" y1="${y}" x2="${W - 6}" y2="${y}"/>`;
+    ticks += `<text class="rpt3-axis" x="${PL - 6}" y="${y + 3}" text-anchor="end">${fmtNum(v, 0)}${o.unit ? " %" : ""}</text>`;
+  }
+  const bar = (v, x, fill) => {
+    const h = ph * v / o.max;
+    return `<rect x="${x}" y="${PT + ph - h}" width="${bw}" height="${h}" fill="${fill}"/>`;
+  };
+  const lbl = (v, x) => `<text class="rpt3-vlbl" x="${x + bw/2}" y="${PT + ph * (1 - v/o.max) - 6}" text-anchor="middle">${fmtNum(v, o.dec > 2 ? 3 : 1)}${o.unit ? " %" : ""}</text>`;
+  const xa = x0, xb = x0 + bw + 52;
+  return `<svg class="rpt3-bars-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.h}: periodo anterior y actual">
+    ${grid}${ticks}
+    ${bar(prev, xa, "#E6DAC9")}${bar(cur, xb, "var(--amber)")}
+    ${lbl(prev, xa)}${lbl(cur, xb)}
+    <line x1="${PL}" y1="${PT + ph}" x2="${W - 6}" y2="${PT + ph}" stroke="#D9D9D9"/>
+    <text class="rpt3-axis" x="${xa + bw/2}" y="${H - 9}" text-anchor="middle">Periodo anterior</text>
+    <text class="rpt3-axis" x="${xb + bw/2}" y="${H - 9}" text-anchor="middle">Periodo actual</text>
+  </svg>`;
+}
+function rptLine(vals, months, o){
+  const W = 300, H = 168, PL = 34, PB = 26, PT = 18;
+  const ph = H - PB - PT;
+  const min = Math.min(...vals), max = Math.max(...vals), span = (max - min) || 1;
+  const x = i => PL + 8 + i * (W - PL - 16) / Math.max(1, vals.length - 1);
+  const y = v => PT + ph * (1 - (v - min) / span);
+  const pts = vals.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+  const dots = vals.map((v, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="2.4" fill="var(--amber)"/>`).join("");
+  return `<svg class="rpt3-line-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.h}: evolución de los últimos meses">
+    <line class="rpt3-grid" x1="${PL}" y1="${PT}" x2="${W - 6}" y2="${PT}"/>
+    <line class="rpt3-grid" x1="${PL}" y1="${PT + ph}" x2="${W - 6}" y2="${PT + ph}"/>
+    <text class="rpt3-axis" x="${PL - 6}" y="${PT + 3}" text-anchor="end">${fmtNum(max, o.dec > 2 ? 2 : 0)}</text>
+    <text class="rpt3-axis" x="${PL - 6}" y="${PT + ph + 3}" text-anchor="end">${fmtNum(min, o.dec > 2 ? 2 : 0)}</text>
+    <polygon points="${PL + 8},${PT + ph} ${pts} ${W - 8},${PT + ph}" fill="var(--amber)" opacity=".12"/>
+    <polyline points="${pts}" fill="none" stroke="var(--amber)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    ${dots}
+    <text class="rpt3-axis" x="${x(0).toFixed(1)}" y="${H - 9}" text-anchor="middle">${months[0]}</text>
+    <text class="rpt3-axis" x="${x(vals.length - 1).toFixed(1)}" y="${H - 9}" text-anchor="middle">${months[months.length - 1]}</text>
+  </svg>`;
+}
 function renderRptKpis(idx){
   const el = document.getElementById("rptKpis");
   if (!el) return;
-  el.innerHTML = RPT_METRICS.map(m => rptMetricCard(m, idx)).join("");
-  rptBindCharts();
+  const m = RPT_MONTHS[idx], prevM = RPT_MONTHS[idx - 1] || m;
+  const win = RPT_MONTHS.slice(Math.max(0, idx - 11), idx + 1);
+  el.innerHTML = RPT_KPIS.map(o => {
+    const cur = m[o.key], prev = prevM[o.key];
+    const pctD = prev ? (cur - prev) / prev * 100 : 0;
+    const up = pctD >= 0;
+    return `
+    <article class="rpt3-kpi">
+      <h3 class="rpt3-kpi-h">${o.h}</h3>
+      <p class="rpt3-kpi-sub">${o.sub}</p>
+      <div class="rpt3-kpi-val">
+        <span class="rpt3-kpi-ico">${o.ico}</span>
+        <span class="rpt3-kpi-num">${fmtNum(cur, o.dec)}${o.unit ? `<small>${o.unit}</small>` : ""}</span>
+        <span class="rpt3-kpi-delta ${up ? "up" : "down"}">${up ? "+" : "−"}${fmtNum(Math.abs(pctD), 2)}% ${up ? RPT_UP : RPT_DOWN}</span>
+      </div>
+      <div class="rpt3-plot">
+        ${rptBars(prev, cur, o)}
+        ${rptLine(win.map(w => w[o.key]), win.map(w => w.short), o)}
+      </div>
+      <p class="rpt3-hint">Pasa el cursor para ver la evolución de los últimos ${win.length} meses</p>
+    </article>`;
+  }).join("");
 }
 
-/* Cierre de iniciativas: se lee del mismo estado que la tabla "Mis iniciativas" */
+/* ── 3. Evolución de iniciativas ─────────────────────────────────────────── */
+function renderRptIniTable(){
+  const el = document.getElementById("rptIniTable");
+  if (!el) return;
+  const rows = Object.keys(TAG_STATS)
+    .map(n => ({n, s:TAG_STATS[n], st:getTagState(n)}))
+    .filter(r => r.s.res > 0)
+    .sort((a, b) => b.s.res - a.s.res)
+    .slice(0, 8);
+  const stLbl = {"validada":"Validada", "descartada":"Descartada", "en-prueba":"En prueba"};
+  el.innerHTML = `
+    <table class="rpt3-it">
+      <thead><tr><th>Iniciativa</th><th>Estado</th><th>Huéspedes</th><th>Conversión</th><th>Nota media</th><th>Impacto</th></tr></thead>
+      <tbody>${rows.map(r => {
+        const imp = typeof r.s.imp === "number" ? r.s.imp : null;
+        return `<tr>
+          <td><span class="rpt3-it-name"><span class="rpt3-it-ico">${tagGlyph(getTagIcon(r.n), 16)}</span>${r.n}</span></td>
+          <td><span class="rpt3-it-st ${r.st}">${stLbl[r.st]}</span></td>
+          <td>${r.s.res}</td>
+          <td>${r.s.pct ? fmtNum(r.s.pct, 2) + " %" : "—"}</td>
+          <td>${r.s.punt != null ? fmtNum(r.s.punt, 1) : "—"}</td>
+          <td class="rpt3-it-imp ${imp === null ? "" : imp >= 0 ? "up" : "down"}">${imp === null ? "—" : (imp >= 0 ? "+" : "−") + fmtNum(Math.abs(imp), 2)}</td>
+        </tr>`;
+      }).join("")}</tbody>
+    </table>`;
+}
+
+/* Cierre de iniciativas: mismo estado que la tabla de "Mis iniciativas" */
 function rptIniRow(name){
-  const s = TAG_STATS[name] || {};
-  const imp = typeof s.imp === "number" ? s.imp : null;
-  const impCls = imp === null ? "" : imp >= 0 ? "up" : "down";
-  const impTxt = imp === null ? "—" : `${imp >= 0 ? "+" : "−"}${fmtNum(Math.abs(imp), 2)}`;
+  const st = TAG_STATS[name] || {};
+  const imp = typeof st.imp === "number" ? st.imp : null;
   return `
     <div class="rpt2-ini-row">
-      <span class="rpt2-ini-ico">${getTagIcon(name)}</span>
+      <span class="rpt2-ini-ico">${tagGlyph(getTagIcon(name), 15)}</span>
       <span class="rpt2-ini-name" title="${name}">${name}</span>
-      <span class="rpt2-ini-imp ${impCls}">${impTxt}</span>
+      <span class="rpt2-ini-imp ${imp === null ? "" : imp >= 0 ? "up" : "down"}">${imp === null ? "—" : (imp >= 0 ? "+" : "−") + fmtNum(Math.abs(imp), 2)}</span>
     </div>`;
 }
-
 function renderRptInis(){
   const el = document.getElementById("rptInis");
   if (!el) return;
@@ -9593,106 +9648,73 @@ function renderRptInis(){
   el.innerHTML = col("ok", "Validadas", val) + col("no", "Descartadas", des);
 }
 
-/* Estado del plan: una frase, un anillo de progreso y la tendencia del mes */
-function renderRptPlan(idx){
-  const el = document.getElementById("rptPlan");
+/* ── 4. Top empleados por reseñas conseguidas ────────────────────────────── */
+function renderRptEmp(){
+  const el = document.getElementById("rptEmp");
   if (!el) return;
-  const m = RPT_MONTHS[idx], prev = RPT_MONTHS[idx - 1];
-  const cumplido = m.punt >= RPT_GOAL;
-  const falta = RPT_GOAL - m.punt;
-  const base = RPT_MONTHS[Math.max(0, idx - 11)].punt;
-  const pct = Math.max(0, Math.min(100, (m.punt - base) / (RPT_GOAL - base) * 100));
-  const dPunt = prev ? m.punt - prev.punt : 0;
-  const mejora = dPunt > 0;
-  const R = 42, C = 2 * Math.PI * R, len = pct / 100 * C;
-  el.innerHTML = `
-    <div class="rpt2-hero-txt">
-      <span class="rpt2-plan-badge ${cumplido ? "ok" : "no"}">
-        ${cumplido ? "Plan cumplido" : "Plan no cumplido"}
-      </span>
-      <p class="rpt2-hero-line">
-        ${cumplido
-          ? `Cierras <b>${m.lbl.toLowerCase()}</b> en <b>${fmtNum(m.punt, 3)}</b>, por encima del objetivo de 9,20.`
-          : `Cierras <b>${m.lbl.toLowerCase()}</b> en <b>${fmtNum(m.punt, 3)}</b>, a <b>${fmtNum(falta, 3)}</b> del objetivo de 9,20.`}
-      </p>
-      ${prev ? `<span class="rpt2-trend ${mejora ? "up" : "down"}">
-        ${mejora ? RPT_UP : RPT_DOWN}
-        ${mejora ? "Mejorando" : "Empeorando"} respecto a ${prev.lbl.toLowerCase()}
-      </span>` : ""}
-    </div>
-    <div class="rpt2-ring">
-      <svg viewBox="0 0 100 100" role="img" aria-label="${fmtNum(pct, 0)}% del recorrido hacia el objetivo">
-        <circle cx="50" cy="50" r="${R}" fill="none" stroke="var(--track)" stroke-width="9"/>
-        <circle cx="50" cy="50" r="${R}" fill="none" stroke="${cumplido ? "var(--good)" : "var(--amber)"}"
-          stroke-width="9" stroke-linecap="round" transform="rotate(-90 50 50)"
-          stroke-dasharray="${len.toFixed(1)} ${(C - len).toFixed(1)}"/>
-      </svg>
-      <span class="rpt2-ring-num">${fmtNum(pct, 0)}<small>%</small></span>
-      <span class="rpt2-ring-lbl">del recorrido</span>
-    </div>`;
+  const max = EMP_MENTIONS[0].n;
+  el.innerHTML = EMP_MENTIONS.slice(0, 8).map((m, i) => {
+    const e = EMPLOYEES[m.e];
+    if (!e) return "";
+    // nota media plausible y estable: los más mencionados puntúan algo mejor
+    const nota = 9.6 - (i * 0.09) - ((m.n % 3) * 0.05);
+    return `
+      <div class="rpt3-emp-row">
+        <span class="rpt3-emp-pos">${i + 1}</span>
+        <span class="rpt3-emp-who">
+          <span class="rpt3-emp-av" style="background:${INI_C_COLORS[i % INI_C_COLORS.length]}">${e.alias.substring(0,2).toUpperCase()}</span>
+          <span style="min-width:0">
+            <span class="rpt3-emp-name">${e.name}</span>
+            <span class="rpt3-emp-dept">${e.dept}</span>
+          </span>
+        </span>
+        <span class="rpt3-emp-bar"><i style="width:${(m.n / max * 100).toFixed(1)}%"></i></span>
+        <span class="rpt3-emp-n">${m.n}<small>reseñas</small></span>
+        <span class="rpt3-emp-score">${fmtNum(nota, 1)}</span>
+      </div>`;
+  }).join("");
 }
 
 function renderInforme(){
   const sel = document.getElementById("rptMonth");
   if (!sel) return;
-  const idx = +sel.value;
+  const custom = sel.value === "custom";
+  document.getElementById("rptCustomRange").hidden = !custom;
+  const idx = custom ? RPT_MONTHS.length - 1 : +sel.value;
   const m = RPT_MONTHS[idx];
-  document.getElementById("rptRange").textContent = `${m.dias} · ${m.res} reseñas`;
+  document.getElementById("rptRange").textContent = custom
+    ? rptCustomLabel()
+    : `${m.dias} · ${m.res} reseñas`;
   renderRptPlan(idx);
   renderRptKpis(idx);
   renderRptInis();
+  renderRptIniTable();
+  renderRptEmp();
+}
+/* Rango a medida: mientras no esté completo se avisa en vez de mentir con un dato */
+function rptCustomLabel(){
+  const a = document.getElementById("rptFrom").value, b = document.getElementById("rptTo").value;
+  if (!a || !b) return "Elige las dos fechas del periodo";
+  const f = s => s.split("-").reverse().join("/");
+  const dias = Math.round((new Date(b) - new Date(a)) / 86400000) + 1;
+  return dias > 0 ? `${f(a)} – ${f(b)} · ${dias} días` : "La fecha de fin va después de la de inicio";
 }
 
 /* ─── Personalización: qué secciones entran en el informe ─── */
 const RPT_SECTIONS = [
-  {id:"plan",   label:"Estado del plan de reseñas",         lock:true},
-  {id:"cifras", label:"Nota, conversión y consistencia",    lock:true},
-  {id:"inis",   label:"Iniciativas validadas y descartadas", lock:true},
-  {id:"exec",   label:"Resumen ejecutivo",                  on:false},
-  {id:"evol",   label:"Evolución semanal y proyección",     on:false},
-  {id:"bench",  label:"Comparativa con hoteles similares",  on:false},
-  {id:"rings",  label:"Valoraciones conseguidas por nota",  on:false, from:"Home"},
-  {id:"tags",   label:"Conversión por iniciativa",          on:false, from:"Iniciativas"},
-  {id:"nac",    label:"Nacionalidades que mejor te puntúan", on:false, from:"Analíticas", clone:"anSecGeo",      slot:"rptSlotNac"},
-  {id:"perf",   label:"Perfiles de cliente",                on:false, from:"Analíticas", clone:"anSecProfiles", slot:"rptSlotPerf"},
-  {id:"comp",   label:"Competencia",                        on:false, from:"Analíticas", clone:"anSecComp",     slot:"rptSlotComp"},
-  {id:"menc",   label:"Top usuarios mencionados",           on:false, from:"Usuarios",   clone:"empSecChart",   slot:"rptSlotMenc",
-   sub:"Los diez usuarios más mencionados por los huéspedes en las reseñas del periodo."}
+  {id:"plan",   label:"Progreso del plan",                 lock:true},
+  {id:"cifras", label:"Índice, conversión y consistencia", on:true},
+  {id:"inis",   label:"Evolución de iniciativas",           on:true},
+  {id:"emp",    label:"Top empleados por reseñas",          on:true}
 ];
 const rptOn = {};
 RPT_SECTIONS.forEach(s => rptOn[s.id] = s.lock ? true : !!s.on);
-
-/* Los bloques traídos de otras pestañas se copian sin ids ni interacción:
-   dentro del informe son una foto fija, no un panel manejable. */
-function rptFillClone(sec){
-  const slot = document.getElementById(sec.slot);
-  // el gráfico de menciones solo se pinta al abrir Usuarios: lo forzamos antes de copiarlo
-  if (sec.clone === "empSecChart" && !document.getElementById("empChart").children.length) renderEmpChart();
-  const src = document.getElementById(sec.clone);
-  if (!slot) return;
-  slot.innerHTML = "";
-  if (!src) return;
-  const copy = src.cloneNode(true);
-  copy.removeAttribute("id");
-  copy.querySelectorAll("[id]").forEach(n => n.removeAttribute("id"));
-  copy.querySelectorAll("[onclick]").forEach(n => n.removeAttribute("onclick"));
-  // los subtítulos que invitan a interactuar no tienen sentido en un informe estático
-  if (sec.sub){ const s = copy.querySelector(".blk-sub, .geo-sub"); if (s) s.textContent = sec.sub; }
-  const tag = document.createElement("span");
-  tag.className = "rpt2-from";
-  tag.textContent = "Desde " + sec.from;
-  copy.insertBefore(tag, copy.firstChild);
-  slot.appendChild(copy);
-}
 
 function applyRptSections(){
   RPT_SECTIONS.forEach(sec => {
     const el = document.querySelector(`#rptDoc [data-rsec="${sec.id}"]`);
     if (!el) return;
     el.hidden = !rptOn[sec.id];
-    if (!sec.clone) return;
-    if (rptOn[sec.id]) rptFillClone(sec);
-    else { const s = document.getElementById(sec.slot); if (s) s.innerHTML = ""; }
   });
 }
 
