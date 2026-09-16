@@ -3404,25 +3404,16 @@ select.res-f-field{appearance:none;cursor:pointer;
 .rpt3-date b{font-size:.82rem;font-weight:700;color:var(--midnight)}
 .rpt3-date.is-goal b{color:#C77800}
 .rpt3-next{font-size:2rem;font-weight:700;color:var(--midnight);flex-shrink:0}
-.rpt3-plan-sep{height:1px;background:var(--line);margin:22px 0 18px}
-
-/* Reseñas conseguidas frente al plan */
-.rpt3-res{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
-.rpt3-res-fig{flex-shrink:0;min-width:180px}
-.rpt3-res-lbl{font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--olive)}
-.rpt3-res-num{font-size:1.95rem;font-weight:700;color:var(--midnight);line-height:1;margin-top:7px;font-variant-numeric:tabular-nums}
-.rpt3-res-num small{font-size:.95rem;font-weight:600;color:var(--ink-faint)}
-.rpt3-res-bar{flex:1;min-width:220px}
-.rpt3-res-track{height:12px;border-radius:7px;background:var(--ivory);overflow:hidden}
-.rpt3-res-fill{display:block;height:100%;border-radius:7px;background:var(--sunrise)}
-.rpt3-res-cap{display:flex;justify-content:space-between;font-size:.74rem;color:var(--ink-faint);margin-top:7px}
-.rpt3-res-cap b{font-weight:700;color:var(--midnight)}
-.rpt3-res-note{
-  display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;
-  font-size:.76rem;font-weight:700;flex-shrink:0;
+.rpt3-chg{
+  display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:5px 11px;border-radius:999px;
+  font-size:.78rem;
 }
-.rpt3-res-note.ok{background:var(--good-bg);color:var(--good)}
-.rpt3-res-note.no{background:var(--bad-bg);color:var(--bad)}
+.rpt3-chg b{font-weight:700}
+.rpt3-chg.up{background:var(--good-bg);color:var(--good)}
+.rpt3-chg.down{background:var(--bad-bg);color:var(--bad)}
+.rpt3-legend{flex-direction:row;align-items:center;gap:6px}
+.rpt3-legend-tick{width:2px;height:13px;background:#B5AFA7;border-radius:1px;flex-shrink:0}
+.rpt3-legend b{margin-left:1px}
 
 /* 2. Las tres cifras */
 .rpt3-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px}
@@ -4351,8 +4342,6 @@ select.res-f-field{appearance:none;cursor:pointer;
       <!-- 1. Progreso del plan, con el mismo lenguaje que la Home -->
       <section class="card rpt3-plan" data-rsec="plan">
         <div class="rpt3-plan-row" id="rptPlanRow"></div>
-        <div class="rpt3-plan-sep"></div>
-        <div class="rpt3-res" id="rptPlanRes"></div>
       </section>
 
       <!-- 2. Las tres cifras del periodo -->
@@ -9428,10 +9417,10 @@ const RPT_DOWN = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" st
    Habla el mismo idioma que la Home: el tramo hacia la próxima décima. Por eso
    la serie va en la escala de Booking (8,7x) y no en la del Índice Jaippy. */
 const RPT_PLAN = {
-  12:{nota:8.712, res:571, obj:560},
-  13:{nota:8.726, res:596, obj:600},
-  14:{nota:8.745, res:602, obj:640},
-  15:{nota:8.740, res:607, obj:650}
+  12:{nota:8.712, res:571},
+  13:{nota:8.726, res:596},
+  14:{nota:8.745, res:602},
+  15:{nota:8.740, res:607}
 };
 const RPT_DIANA = `
   <svg viewBox="0 0 120 120" role="img" aria-label="Diana del plan">
@@ -9461,39 +9450,31 @@ function renderRptPlan(idx){
   row.innerHTML = `
     <div class="rpt3-target">${RPT_DIANA}</div>
     <div class="rpt3-plan-text">
-      <p class="rpt3-plan-l1">${prevPct === null ? "Estás al" : up ? "Has avanzado" : "Has retrocedido"}
-        <b class="${prevPct === null ? "" : up ? "up" : "down"}">${prevPct === null ? fmtNum(pct,0) + "%" : (up ? "+" : "−") + fmtNum(Math.abs(d), 1) + " pts"}</b></p>
-      <p class="rpt3-plan-l2">${prevPct === null ? "de alcanzar la próxima décima"
-        : `este mes · estás al <b>${fmtNum(pct, 0)}%</b> de la próxima décima`}</p>
+      <p class="rpt3-plan-l1">Estás al <b>${fmtNum(pct, 0)}%</b></p>
+      <p class="rpt3-plan-l2">de alcanzar la próxima décima</p>
+      ${prevPct === null ? "" : `<span class="rpt3-chg ${up ? "up" : "down"}">
+        ${up ? RPT_UP : RPT_DOWN}
+        ${up ? `Has avanzado un <b>${fmtNum(Math.abs(d), 0)}%</b> este mes`
+             : `Un <b>${fmtNum(Math.abs(d), 0)}%</b> por debajo del mes pasado`}
+      </span>`}
     </div>
     <div class="rpt3-bar-col">
       <span class="rpt3-bar-pill">
         <span class="rpt3-bar-track">
           <span class="rpt3-bar-fill" style="width:${pct.toFixed(1)}%"></span>
-          ${prevPct === null ? "" : `<span class="rpt3-bar-prev" style="left:${prevPct.toFixed(1)}%" title="Mes anterior: ${fmtNum(prevPct,0)}%"></span>`}
+          ${prevPct === null ? "" : `<span class="rpt3-bar-prev" style="left:${prevPct.toFixed(1)}%"></span>`}
         </span>
       </span>
       <div class="rpt3-dates">
-        <span class="rpt3-date"><span>Nota del mes</span><b>${fmtNum(p.nota, 3)}</b></span>
+        ${prevPct === null ? "<span></span>" : `<span class="rpt3-date rpt3-legend">
+          <i class="rpt3-legend-tick"></i>
+          <span>Mes anterior</span><b>${fmtNum(prevPct, 0)}%</b>
+        </span>`}
         <span class="rpt3-date is-goal"><span>Próxima décima</span><b>${fmtNum(HP_TARGET, 2)}</b></span>
       </div>
     </div>
     <span class="rpt3-next">${fmtNum(HP_TARGET, 1)}</span>`;
 
-  const res = document.getElementById("rptPlanRes");
-  const rPct = Math.min(100, p.res / p.obj * 100);
-  const ok = p.res >= p.obj;
-  res.innerHTML = `
-    <div class="rpt3-res-fig">
-      <p class="rpt3-res-lbl">Reseñas del plan</p>
-      <p class="rpt3-res-num">${p.res}<small> de ${p.obj}</small></p>
-    </div>
-    <div class="rpt3-res-bar">
-      <div class="rpt3-res-track"><span class="rpt3-res-fill" style="width:${rPct.toFixed(1)}%"></span></div>
-      <div class="rpt3-res-cap"><span><b>${fmtNum(rPct, 0)}%</b> del objetivo del mes</span>
-        <span>${ok ? "objetivo superado" : `faltan ${p.obj - p.res}`}</span></div>
-    </div>
-    <span class="rpt3-res-note ${ok ? "ok" : "no"}">${ok ? "En plan" : "Por debajo del plan"}</span>`;
 }
 
 /* ── 2. Las tres cifras ────────────────────────────────────────────────────
