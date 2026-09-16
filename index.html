@@ -1554,25 +1554,6 @@ svg{display:block}
 .hp-p-score-n{font-size:.68rem;color:var(--ink-faint);margin-top:3px}
 
 /* ─── Home: widget oportunidades y alertas ─── */
-.home-sig-card{padding:20px 24px;margin-top:18px}
-.home-sig-cols{display:grid;grid-template-columns:1fr 1px 1fr;gap:0 20px}
-@media(max-width:700px){.home-sig-cols{grid-template-columns:1fr;gap:20px}}
-.home-sig-divider{background:var(--line);align-self:stretch}
-.home-sig-group{display:flex;flex-direction:column;gap:0}
-.home-sig-hdr{
-  display:flex;align-items:center;gap:7px;
-  font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  padding:0 0 10px;margin-bottom:8px;border-bottom:1px solid var(--line);
-}
-.home-sig-hdr.is-opp{color:var(--good)}
-.home-sig-hdr.is-alert{color:var(--bad)}
-.home-sig-item{
-  display:flex;align-items:flex-start;gap:8px;
-  padding:9px 0;font-size:.8rem;color:var(--ink-soft);line-height:1.45;
-  border-bottom:1px solid var(--line);
-}
-.home-sig-item:last-child{border-bottom:none;padding-bottom:0}
-.home-sig-item b{color:var(--midnight);font-weight:600}
 
 /* ─── Home: widget compacto perfiles de cliente ─── */
 .home-profiles-widget{
@@ -1743,7 +1724,12 @@ svg{display:block}
 .ini-card{flex-direction:column;align-items:stretch;cursor:pointer;text-align:left;width:100%}
 .ini-card:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
 /* Recomendadas: esquinas ligeramente redondeadas */
-#iniGrid .ini-card{border-radius:12px}
+#iniGrid .ini-card,
+.hrec-grid .ini-card{border-radius:12px}
+/* Las recomendadas de la Home usan la misma tarjeta, con su propia rejilla
+   para que no se aplasten dentro del panel del paso. */
+.hrec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.hrec-grid .ini-card{flex-direction:column;align-items:stretch;text-align:left}
 .ini-art{width:100%;flex-shrink:0;aspect-ratio:3/2;background:var(--ivory)}
 .ini-art svg{width:100%;height:100%;display:block}
 .ini-b{padding:7px 9px;display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
@@ -3148,6 +3134,142 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
 .rpt2-mail-field textarea{resize:vertical;min-height:88px}
 .rpt2-mail-field input:focus,.rpt2-mail-field textarea:focus{outline:none;border-color:var(--amber)}
 .rpt2-mail-note{font-size:.74rem;color:var(--ink-faint);margin-top:12px;line-height:1.5}
+/* ═══════════ Home: gráfica de progreso y evolución semanal ═══════════ */
+.hp-card{position:relative}
+.hp-row{display:flex;align-items:center;gap:28px}
+@media(max-width:860px){.hp-row{flex-wrap:wrap;gap:18px}}
+
+/* Popover de la gráfica de progreso, anclado bajo la barra de objetivo */
+.hprog-pop{
+  position:absolute;left:18px;right:18px;top:calc(100% - 46px);z-index:40;
+  background:#fff;border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 18px 48px rgba(25,25,25,.16);padding:18px 22px 10px;
+}
+.hprog-pop[hidden]{display:none}
+.hprog-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.hprog-title{font-size:1.05rem;font-weight:600;color:var(--midnight);font-family:"Instrument Sans",sans-serif}
+.hprog-acts{display:flex;gap:6px}
+.hprog-act{
+  display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;
+  border:1px solid transparent;background:none;cursor:pointer;
+  font:700 .7rem/1 "Instrument Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-faint);
+}
+.hprog-act:hover{color:var(--midnight)}
+.hprog-act.is-on{background:var(--tab-bg);color:var(--tab-ink)}
+.hprog-plot{position:relative;margin-top:6px}
+.hprog-plot svg{width:100%;height:auto;display:block;overflow:visible}
+.hprog-grid{stroke:var(--line);stroke-width:1}
+.hprog-axis{font-family:"Instrument Sans",sans-serif;font-size:10px;fill:var(--ink-faint)}
+.hprog-band{fill:#DCE6F5;opacity:.55}
+.hprog-future{fill:var(--amber);opacity:.18}
+.hprog-goal{stroke:var(--midnight);stroke-width:1.2;stroke-dasharray:5 4;opacity:.65}
+.hprog-today{stroke:#B5AFA7;stroke-width:1.2;stroke-dasharray:5 4}
+.hprog-line{fill:none;stroke:var(--amber);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.hprog-hit{cursor:crosshair}
+.hprog-cursor{stroke:#B5AFA7;stroke-width:1}
+.hprog-mark{fill:#fff;stroke:var(--amber);stroke-width:2}
+.hprog-tip{
+  position:absolute;top:5%;transform:translateX(-50%);pointer-events:none;z-index:2;
+  background:#fff;border-radius:12px;box-shadow:0 8px 28px rgba(25,25,25,.18);
+  padding:11px 14px 10px;min-width:176px;display:none;
+}
+.hprog-tip.is-on{display:block}
+.hprog-tip-date{font-size:.84rem;font-weight:700;color:var(--midnight);margin-bottom:7px}
+.hprog-tip-row{display:flex;align-items:center;gap:7px;font-size:.79rem;margin-bottom:3px;color:var(--charcoal)}
+.hprog-tip-row b{font-weight:700;color:var(--midnight)}
+.hprog-ring{width:9px;height:9px;border-radius:50%;border:2px solid currentColor;flex-shrink:0}
+.hprog-tip-row.is-ij{color:var(--saffron)}
+.hprog-tip-row.is-res{color:#2B5FAF}
+.hprog-tip-row.is-goal{color:var(--midnight)}
+.hprog-tip-sub{margin-top:8px}
+.hprog-tip-lbl{
+  font-size:.6rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-faint);
+}
+.hprog-tip-bar{display:block;height:4px;border-radius:3px;background:var(--track);margin:4px 0 7px;overflow:hidden}
+.hprog-tip-bar i{display:block;height:100%;border-radius:3px}
+
+/* Desplegable de evolución semanal */
+.hweek-toggle{
+  display:flex;align-items:center;gap:8px;width:100%;margin-top:18px;padding:11px 0 0;
+  border:none;border-top:1px solid var(--line);background:none;cursor:pointer;
+  font:700 .82rem/1 "Instrument Sans",sans-serif;color:var(--charcoal);
+}
+.hweek-toggle:hover{color:var(--midnight)}
+.hweek-caret{transition:transform .18s;color:var(--olive)}
+.hweek-toggle[aria-expanded="true"] .hweek-caret{transform:rotate(180deg)}
+.hweek-panel{margin-top:18px}
+.hweek-panel[hidden]{display:none}
+.hweek-boxes{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.hweek-boxes{grid-template-columns:1fr}}
+.hweek-box{border:1px solid var(--line);border-radius:16px;padding:20px 22px;background:#fff}
+.hweek-h{font-size:1.02rem;font-weight:600;color:var(--midnight);font-family:"Instrument Sans",sans-serif}
+.hweek-sub{font-size:.76rem;color:var(--ink-faint);margin-top:4px}
+.hweek-nav{display:flex;align-items:center;gap:9px;margin-top:4px}
+.hweek-nav button{
+  border:none;background:none;cursor:pointer;color:var(--olive);display:flex;padding:2px;
+}
+.hweek-nav button:hover{color:var(--midnight)}
+.hweek-nav button:disabled{opacity:.3;cursor:default}
+.hweek-nav span{font-size:.76rem;color:var(--ink-faint)}
+.hweek-nav b{font-weight:700;color:var(--charcoal)}
+.hweek-body{display:flex;align-items:flex-end;gap:22px;margin-top:16px;flex-wrap:wrap}
+.hweek-figure{flex-shrink:0;min-width:104px}
+.hweek-avg{font-size:2.6rem;font-weight:700;color:var(--midnight);line-height:1;font-variant-numeric:tabular-nums}
+.hweek-goal{font-size:.74rem;color:var(--ink-faint);margin-top:7px;padding-left:10px;border-left:2px dotted var(--line-strong)}
+.hweek-goal b{font-weight:700;color:var(--charcoal)}
+.hweek-track{height:7px;border-radius:4px;background:var(--ivory);margin-top:10px;overflow:hidden}
+.hweek-fill{display:block;height:100%;border-radius:4px;background:var(--amber)}
+.hweek-chart{flex:1;min-width:230px}
+.hweek-chart svg{width:100%;height:auto;display:block;overflow:visible}
+.hweek-area{fill:var(--amber);opacity:.13}
+.hweek-line{fill:none;stroke:var(--sunflower);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.hweek-dot{fill:var(--sunflower)}
+.hweek-ref{stroke:var(--line-strong);stroke-width:1;stroke-dasharray:3 3}
+.hweek-xlbl{display:flex;margin-top:6px}
+.hweek-xcell{flex:1;text-align:center;min-width:0}
+.hweek-xk{display:block;font-size:.66rem;font-weight:700;color:var(--navy)}
+.hweek-xv{display:block;font-size:.72rem;font-weight:700;color:var(--midnight);margin-top:1px}
+
+/* Rejilla del plan */
+.hweek-plan{border:1px solid var(--line);border-radius:16px;padding:22px 24px 26px;margin-top:16px;background:#fff}
+.hweek-plan-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.hweek-plan-goal{font-size:1.05rem;font-weight:600;color:var(--midnight)}
+.hweek-plan-goal small{font-size:.78rem;font-weight:400;color:var(--ink-faint);margin-left:9px}
+.hweek-plan-desc{font-size:.78rem;color:var(--ink-faint);margin-top:3px}
+.hweek-plan-new{
+  border:1px solid var(--line-strong);background:var(--cotton);border-radius:999px;cursor:pointer;
+  padding:9px 15px;font:700 .7rem/1 "Instrument Sans",sans-serif;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--charcoal);
+}
+.hweek-plan-new:hover{border-color:var(--midnight)}
+.hweek-plan-nav{display:flex;justify-content:center;margin:22px 0 16px}
+.hweek-plan-nav .hweek-nav{margin:0}
+.hweek-pill{
+  border:1px solid var(--line-strong);border-radius:999px;padding:5px 14px;
+  font-size:.78rem;font-weight:700;color:var(--charcoal);
+}
+.hweek-gridwrap{overflow-x:auto}
+.hweek-grid{display:grid;gap:5px;min-width:580px;margin:0 auto;width:fit-content}
+.hweek-gcell{
+  height:30px;border-radius:8px;background:var(--gray-bg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.76rem;font-weight:600;color:var(--ink-faint);
+}
+.hweek-gcell.is-head{
+  background:#C9C9C9;color:#fff;font-weight:700;height:26px;border-radius:7px;
+}
+.hweek-gcell.is-head.is-top{background:var(--midnight)}
+.hweek-gcell.has{background:#9E9E9E;color:#fff;font-weight:700}
+.hweek-gcell.has-lot{background:#4F4F4F;color:#fff}
+.hweek-gday{
+  display:flex;align-items:center;justify-content:center;
+  font-size:.82rem;font-weight:600;color:var(--olive);
+}
+.hweek-gpct{background:var(--gray-bg);color:var(--ink-faint);font-size:.74rem;font-weight:700}
+.hweek-gsum{font-size:.72rem;font-weight:700;color:var(--ink-faint);background:var(--gray-bg)}
+.hweek-gsum.is-ok{background:var(--green);color:#fff}
+.hweek-gsum.is-over{background:var(--bad-bg);color:var(--bad)}
 </style>
 </head>
 <body>
@@ -3305,6 +3427,7 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
 <!-- ═══════════ VISTA: HOME ═══════════ -->
 <main class="wrap view" id="view-home" hidden>
   <section class="card hp-card">
+  <div class="hp-row">
     <div class="hp-target-wrap">
       <!-- Diana con flecha clavada: anillos ámbar sobre trazo negro, rayos y destellos.
            La flecha se dibuja en un grupo rotado -45° para poder definir el astil y las
@@ -3342,7 +3465,7 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
       <p class="hp-prog-l1">Estás al <b id="hpPct">–</b></p>
       <p class="hp-prog-l2">de alcanzar la próxima décima</p>
     </div>
-    <div class="hp-bar-col">
+    <div class="hp-bar-col" id="hpBarCol">
       <button class="hp-bar-btn" onclick="openEvolModal()" aria-label="Ver evolución de la nota">
         <span class="hp-bar-pill">
           <span class="hp-bar-track"><span class="hp-bar-fill" id="hpBarFill"></span></span>
@@ -3364,6 +3487,38 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
       </div>
     </div>
     <span class="hp-next">8,8</span>
+  </div>
+
+    <!-- Gráfica de progreso: aparece al pasar el cursor por la barra de objetivo -->
+    <div class="hprog-pop" id="hprogPop" hidden>
+      <div class="hprog-head">
+        <p class="hprog-title">Progreso</p>
+        <div class="hprog-acts">
+          <button class="hprog-act is-on" data-prg-range="plan" onclick="setPrgRange('plan',this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2.5"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
+            Período del plan
+          </button>
+          <button class="hprog-act" data-prg-range="all" onclick="setPrgRange('all',this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2.5"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
+            Ver todo
+          </button>
+        </div>
+      </div>
+      <div class="hprog-plot" id="hprogPlot"></div>
+    </div>
+
+    <!-- Desplegable: evolución semanal -->
+    <button class="hweek-toggle" id="hweekToggle" onclick="toggleHweek()" aria-expanded="false" aria-controls="hweekPanel">
+      <svg class="hweek-caret" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      Evolución semanal
+    </button>
+    <div class="hweek-panel" id="hweekPanel" hidden>
+      <div class="hweek-boxes">
+        <article class="hweek-box" id="hwPrev"></article>
+        <article class="hweek-box" id="hwSel"></article>
+      </div>
+      <article class="hweek-plan" id="hwPlan"></article>
+    </div>
   </section>
 
   <!-- hpScoreCards oculto: el informe de evolución copia su innerHTML -->
@@ -3382,15 +3537,6 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
     <div class="htag-body" id="htagBody"></div>
   </section>
 
-  <!-- ── Oportunidades y alertas: acceso rápido desde home ── -->
-  <section class="card home-sig-card">
-    <div class="home-sig-cols">
-      <div class="home-sig-group" id="homeSigOpp"></div>
-      <div class="home-sig-divider"></div>
-      <div class="home-sig-group" id="homeSigAlert"></div>
-    </div>
-    <button class="hp-link" style="margin-top:14px" onclick="showView('analiticas',document.querySelector('.nav-tab[data-view=\'analiticas\']'))">Ver análisis completo en Analíticas →</button>
-  </section>
 
 
 </main>
@@ -4435,27 +4581,6 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
 </div>
 
 <!-- ═══════════ MODAL: FICHA DE INICIATIVA ═══════════ -->
-<div class="modal-overlay" id="iniModal" hidden onclick="closeIniModal()">
-  <div class="modal ini-modal" role="dialog" aria-labelledby="iniModalTitle" onclick="event.stopPropagation()">
-    <div class="modal-head">
-      <h3 id="iniModalTitle"></h3>
-      <button class="m-close" onclick="closeIniModal()" aria-label="Cerrar">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-      </button>
-    </div>
-    <div class="ini-modal-art" id="iniModalArt"></div>
-    <p class="ini-modal-desc" id="iniModalDesc"></p>
-    <div class="ini-modal-meta">
-      <span class="ini-tag" id="iniModalTag"></span>
-      <span class="ini-val" id="iniModalVal"></span>
-    </div>
-    <div class="modal-foot">
-      <button class="m-btn" onclick="closeIniModal()">Cerrar</button>
-      <button class="m-btn" onclick="iniToTag()">Crear etiqueta</button>
-    </div>
-  </div>
-</div>
-
 <div id="toast"><span class="t-dot"></span><span id="toastMsg"></span></div>
 
 <script>
@@ -6519,9 +6644,14 @@ function renderIniciativas(){
   const pageItems = items.slice(from, from + INI_PER_PAGE);
   renderIniPager(pages, from, pageItems.length, items.length);
 
-  const profColor = {};
-  HP_PROFILES.forEach(p => profColor[p.name] = p.bg);
-  document.getElementById("iniGrid").innerHTML = pageItems.map(i => {
+  document.getElementById("iniGrid").innerHTML = pageItems.map(iniRecCard).join("");
+}
+
+/* Tarjeta de iniciativa recomendada. La usan la pestaña de Iniciativas y los
+   pasos de la Home, para que la ficha se vea igual en los dos sitios. */
+function iniRecCard(i){
+    const profColor = {};
+    HP_PROFILES.forEach(p => profColor[p.name] = p.bg);
     const catObj = INI_CATS.find(c => c.id === i.cat);
     const isFav = iniFavs.has(i.id);
     const diffDots = Array.from({length:3}, (_, j) => `<span class="ini-diff-dot${j < i.diff ? " filled" : ""}"></span>`).join("");
@@ -6561,7 +6691,6 @@ function renderIniciativas(){
         </div>
       </div>
     </article>`;
-  }).join("");
 }
 /* Marca la pestaña activa solo dentro de su propia barra: hay varias vistas
    que reutilizan .ini-bar-btn y no deben pisarse entre ellas. */
@@ -7692,7 +7821,7 @@ function saveTag(){
   toast(name ? `Iniciativa "${name}" creada` : "Iniciativa creada");
 }
 document.addEventListener("keydown", e => {
-  if (e.key === "Escape"){ closeTagModal(); closeQrModal(); closeRoomModal(); closeConfirm(); closeNotifModal(); closeEvolModal(); closeNewEmpModal(); closeIniModal(); closeTestModal(); closeRptCustom(); closeRptMail(); }
+  if (e.key === "Escape"){ closeTagModal(); closeQrModal(); closeRoomModal(); closeConfirm(); closeNotifModal(); closeEvolModal(); closeNewEmpModal(); closeTestModal(); closeRptCustom(); closeRptMail(); }
 });
 
 /* ═══════════ Datos y render de INFORMES ═══════════ */
@@ -7853,6 +7982,324 @@ function renderEvolChart(){
 renderEvolChart();
 function openEvolModal(){ document.getElementById("evolModal").hidden = false; }
 function closeEvolModal(){ document.getElementById("evolModal").hidden = true; }
+
+/* ═══════════ Home: gráfica de Progreso (hover de la barra de objetivo) ═══════════
+   Tres series sobre el mismo eje: el Índice Jaippy día a día, la nota publicada
+   en Booking (que solo cambia por escalones) y el objetivo del plan. */
+const PRG_GOAL = 8.85;                       // objetivo del plan
+const PRG_START_ALL  = new Date(2024, 5, 1); // 01/06/24
+const PRG_START_PLAN = new Date(2025, 9, 1); // arranque del plan vigente
+const PRG_END = new Date(2026, 9, 27);       // previsión de llegada
+
+/* Serie diaria del Índice Jaippy: tramo plano, subida a partir de 2025 y
+   meseta hasta la nota actual. El ruido es determinista para que no baile. */
+const PRG_DATA = (() => {
+  const out = [];
+  const total = Math.round((TODAY - PRG_START_ALL) / 86400000);
+  for (let d = 0; d <= total; d += 3){
+    const date = new Date(PRG_START_ALL); date.setDate(date.getDate() + d);
+    const t = d / total;
+    const s = t * t * (3 - 2 * t);
+    let v = 8.60 + (HP_CURRENT - 8.60) * s
+      + (t > 0.36 && t < 0.42 ? 0.045 : 0)
+      + 0.016 * Math.sin(d / 11) + 0.008 * Math.sin(d / 4.3 + 1.2)
+      - (t > 0.62 && t < 0.72 ? 0.03 : 0);
+    out.push({date, v});
+  }
+  out[out.length - 1].v = HP_CURRENT;
+  return out;
+})();
+
+/* Nota publicada en Booking: escalones, no una curva */
+const PRG_RESERVA = [
+  {from:new Date(2024, 5, 1),  to:new Date(2025, 2, 1),  v:8.6},
+  {from:new Date(2025, 2, 1),  to:new Date(2025, 11, 1), v:8.7},
+  {from:new Date(2025, 11, 1), to:PRG_END,               v:8.8}
+];
+/* Consistencia y conversión del último año, para el pie del tooltip */
+const PRG_CONS = 32.05, PRG_CONV = 39.37;
+
+let prgRange = "plan";
+function setPrgRange(r, btn){
+  prgRange = r;
+  document.querySelectorAll(".hprog-act").forEach(b => b.classList.toggle("is-on", b === btn));
+  renderPrgChart();
+}
+
+const prgFmt = d => `${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()}`;
+
+function renderPrgChart(){
+  const el = document.getElementById("hprogPlot");
+  if (!el) return;
+  const from = prgRange === "plan" ? PRG_START_PLAN : PRG_START_ALL;
+  const pts = PRG_DATA.filter(p => p.date >= from);
+  const W = 1000, H = 340, ML = 42, MR = 8, MT = 14, MB = 30;
+  const PW = W - ML - MR, PH = H - MT - MB;
+  const yMin = 8.5, yMax = 9.0;
+  const t0 = from.getTime(), t1 = PRG_END.getTime();
+  const x = d => ML + (d.getTime() - t0) / (t1 - t0) * PW;
+  const y = v => MT + (yMax - v) / (yMax - yMin) * PH;
+
+  const grid = [8.5, 9.0].map(v => `
+    <line class="hprog-grid" x1="${ML}" x2="${W - MR}" y1="${y(v)}" y2="${y(v)}"/>
+    <text class="hprog-axis" x="${ML - 9}" y="${y(v) + 4}" text-anchor="end">${fmtNum(v, 1)}</text>`).join("");
+
+  // Escalones de la nota de Booking, como bandas hasta la base del eje
+  const bands = PRG_RESERVA.filter(b => b.to > from).map(b => {
+    const bx = Math.max(x(b.from), ML), bw = x(b.to) - Math.max(x(b.from), ML);
+    return `<rect class="hprog-band" x="${bx.toFixed(1)}" y="${y(b.v).toFixed(1)}"
+      width="${Math.max(0, bw).toFixed(1)}" height="${(y(yMin) - y(b.v)).toFixed(1)}"/>`;
+  }).join("");
+
+  // Lo que queda de plan a partir de hoy
+  const future = `<rect class="hprog-future" x="${x(TODAY).toFixed(1)}" y="${MT}"
+    width="${(W - MR - x(TODAY)).toFixed(1)}" height="${PH}"/>`;
+
+  const path = pts.map((p, i) => `${i === 0 ? "M" : "L"}${x(p.date).toFixed(1)},${y(p.v).toFixed(1)}`).join(" ");
+
+  // Etiquetas del eje X: día 1 de cada trimestre
+  const ticks = [];
+  const cur = new Date(from.getFullYear(), from.getMonth(), 1);
+  while (cur <= PRG_END){
+    if (cur >= from) ticks.push(new Date(cur));
+    cur.setMonth(cur.getMonth() + 3);
+  }
+  const xLabels = ticks.map(d =>
+    `<text class="hprog-axis" x="${x(d).toFixed(1)}" y="${H - 8}" text-anchor="middle">${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getFullYear()).slice(2)}</text>`).join("");
+
+  const hitW = PW / pts.length;
+  const hits = pts.map((p, i) => `<rect class="hprog-hit" data-i="${i}"
+    x="${(x(p.date) - hitW/2).toFixed(1)}" y="${MT}" width="${hitW.toFixed(2)}" height="${PH}" fill="transparent"/>`).join("");
+
+  el.innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Progreso del Índice Jaippy">
+      ${bands}${future}${grid}
+      <line class="hprog-goal" x1="${ML}" x2="${W - MR}" y1="${y(PRG_GOAL)}" y2="${y(PRG_GOAL)}"/>
+      <line class="hprog-today" x1="${x(TODAY).toFixed(1)}" x2="${x(TODAY).toFixed(1)}" y1="${MT}" y2="${MT + PH}"/>
+      ${xLabels}
+      <path class="hprog-line" d="${path}"/>
+      <line class="hprog-cursor" x1="0" x2="0" y1="${MT}" y2="${MT + PH}" opacity="0"/>
+      <circle class="hprog-mark" r="4" cx="0" cy="0" opacity="0"/>
+      ${hits}
+    </svg>
+    <div class="hprog-tip"></div>`;
+
+  // Lectura al pasar el cursor: fecha, las tres series y las dos tasas del año
+  const svg = el.querySelector("svg");
+  const cursor = el.querySelector(".hprog-cursor");
+  const mark = el.querySelector(".hprog-mark");
+  const tip = el.querySelector(".hprog-tip");
+  el.querySelectorAll(".hprog-hit").forEach(hit => {
+    hit.addEventListener("mouseenter", () => {
+      const p = pts[+hit.dataset.i];
+      const px = x(p.date), py = y(p.v);
+      const res = PRG_RESERVA.find(b => p.date >= b.from && p.date < b.to);
+      cursor.setAttribute("x1", px); cursor.setAttribute("x2", px); cursor.setAttribute("opacity", 1);
+      mark.setAttribute("cx", px); mark.setAttribute("cy", py); mark.setAttribute("opacity", 1);
+      tip.innerHTML = `
+        <p class="hprog-tip-date">${prgFmt(p.date)}</p>
+        <p class="hprog-tip-row is-ij"><span class="hprog-ring"></span>IJ: <b>${fmtNum(p.v, 2)}</b></p>
+        <p class="hprog-tip-row is-res"><span class="hprog-ring"></span>Reserva: <b>${fmtNum(res ? res.v : 8.8, 1)}</b></p>
+        <p class="hprog-tip-row is-goal"><span class="hprog-ring"></span>IJ objetivo: <b>${fmtNum(PRG_GOAL, 2)}</b></p>
+        <div class="hprog-tip-sub">
+          <span class="hprog-tip-lbl">Consistencia último año: ${fmtNum(PRG_CONS, 2)}</span>
+          <span class="hprog-tip-bar"><i style="width:${PRG_CONS}%;background:var(--amber)"></i></span>
+          <span class="hprog-tip-lbl">Conversión último año: ${fmtNum(PRG_CONV, 2)}%</span>
+          <span class="hprog-tip-bar"><i style="width:${PRG_CONV}%;background:#B07CC6"></i></span>
+        </div>`;
+      const pct = px / W * 100;
+      tip.style.left = Math.min(Math.max(pct, 12), 88).toFixed(2) + "%";
+      tip.classList.add("is-on");
+    });
+  });
+  svg.addEventListener("mouseleave", () => {
+    cursor.setAttribute("opacity", 0); mark.setAttribute("opacity", 0); tip.classList.remove("is-on");
+  });
+}
+
+/* El popover se abre al pasar por la barra y se mantiene mientras el cursor
+   siga dentro de él, para poder leer la gráfica. */
+(function(){
+  const bar = document.getElementById("hpBarCol");
+  const pop = document.getElementById("hprogPop");
+  if (!bar || !pop) return;
+  let hideT = null;
+  const show = () => { clearTimeout(hideT); pop.hidden = false; };
+  const hide = () => { hideT = setTimeout(() => pop.hidden = true, 160); };
+  bar.addEventListener("mouseenter", show);
+  bar.addEventListener("mouseleave", hide);
+  pop.addEventListener("mouseenter", show);
+  pop.addEventListener("mouseleave", hide);
+})();
+renderPrgChart();
+
+/* ═══════════ Home: evolución semanal ═══════════ */
+const HW_PREV = {
+  range:"18/05/2026 - 25/10/2026", avg:8.76, goal:8.85,
+  pts:[["S1",9.0],["S2",8.74],["S3",8.56],["S4",8.52],["S5",8.97],
+       ["S6",8.9],["S7",8.62],["S8",8.11],["S9",8.65],["S10",8.58]]
+};
+const HW_DAYS = ["L","M","X","J","V","S","D"];
+/* avg va aparte de los días porque la media del hotel pondera por número de
+   reseñas, y cada día recibe un número distinto (ver la rejilla del plan). */
+const HW_WEEKS = [
+  {n:15, from:"24/08/26", to:"30/08/26", avg:8.64, goal:8.86,
+   days:[8.5, 9.0, 8.2, 9.5, 8.0, 9.2, 8.7],
+   grid:{0:{9:2,10:1}, 1:{8:2}, 2:{7:1,9:1}, 3:{9:1,10:2}, 4:{6:1,8:2}, 5:{9:2,10:1}, 6:{8:1,10:1}}},
+  {n:16, from:"31/08/26", to:"06/09/26", avg:8.71, goal:8.87,
+   days:[9.0, 8.4, 8.8, 9.5, 7.8, 9.0, 8.9],
+   grid:{0:{9:3,10:1}, 1:{8:1,9:1}, 2:{8:2,9:1}, 3:{10:3}, 4:{5:1,7:1,8:1}, 5:{9:2,10:2}, 6:{9:1,10:1}}},
+  {n:17, from:"07/09/26", to:"13/09/26", avg:8.79, goal:8.88,
+   days:[8.83, 8.0, 9.5, 9.5, 7.25, 9.4, 8.5],
+   grid:{0:{8:2,9:3,10:1}, 1:{8:1}, 2:{9:1,10:1}, 3:{9:2,10:2}, 4:{6:2,8:1,9:1}, 5:{8:1,9:1,10:3}, 6:{6:1,10:1}}},
+  {n:18, from:"14/09/26", to:"20/09/26", avg:8.82, goal:8.89,
+   days:[8.6, 9.1, 8.4, 9.0, 8.2, 9.3, 8.8],
+   grid:{0:{8:1,9:2}, 1:{9:2,10:1}, 2:{8:2,9:1}, 3:{9:1,10:2}, 4:{7:1,8:2}, 5:{9:3,10:2}, 6:{8:1,9:1,10:1}}}
+];
+/* Objetivo semanal por nota: en las altas hay que llegar, en las bajas no pasarse */
+const HW_TARGETS = {1:0, 2:0, 3:0, 4:0, 5:1, 6:1, 7:2, 8:6, 9:6, 10:4};
+const HW_PLAN = {goal:8.9, days:161};
+let hwWeek = 2;   // Semana 17
+
+const CHEV_L = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>';
+const CHEV_R = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+
+/* Curva de una serie corta con su línea de objetivo punteada */
+function hwChart(vals, goal){
+  const W = 320, H = 86, P = 6;
+  const min = Math.min(...vals, goal) - 0.15, max = Math.max(...vals, goal) + 0.15;
+  const x = i => P + i * (W - P*2) / (vals.length - 1);
+  const y = v => P + (H - P*2) * (1 - (v - min) / (max - min));
+  const pts = vals.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+  return `
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-hidden="true">
+      <polygon class="hweek-area" points="${P},${H-P} ${pts} ${W-P},${H-P}"/>
+      <line class="hweek-ref" x1="${P}" x2="${W-P}" y1="${y(goal).toFixed(1)}" y2="${y(goal).toFixed(1)}"
+        vector-effect="non-scaling-stroke"/>
+      <polyline class="hweek-line" points="${pts}" vector-effect="non-scaling-stroke"/>
+      ${vals.map((v, i) => `<circle class="hweek-dot" cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="2.6"/>`).join("")}
+    </svg>`;
+}
+const hwNota = v => fmtNum(v, Math.round(v * 10) === v * 10 ? 1 : 2);
+function hwLabels(keys, vals){
+  return `<div class="hweek-xlbl">${keys.map((k, i) => `
+    <span class="hweek-xcell"><span class="hweek-xk">${k}</span><span class="hweek-xv">${hwNota(vals[i])}</span></span>`).join("")}</div>`;
+}
+function hwFigure(avg, goal){
+  const pct = Math.max(0, Math.min(100, (avg - 8) / (goal - 8) * 100));
+  return `
+    <div class="hweek-figure">
+      <p class="hweek-avg">${fmtNum(avg, 2)}</p>
+      <p class="hweek-goal">Objetivo: <b>${fmtNum(goal, 2)}</b></p>
+      <div class="hweek-track"><span class="hweek-fill" style="width:${pct.toFixed(1)}%"></span></div>
+    </div>`;
+}
+
+function renderHwPrev(){
+  document.getElementById("hwPrev").innerHTML = `
+    <h3 class="hweek-h">Media de las semanas anteriores</h3>
+    <p class="hweek-sub">(${HW_PREV.range})</p>
+    <div class="hweek-body">
+      ${hwFigure(HW_PREV.avg, HW_PREV.goal)}
+      <div class="hweek-chart">
+        ${hwChart(HW_PREV.pts.map(p => p[1]), HW_PREV.goal)}
+        ${hwLabels(HW_PREV.pts.map(p => p[0]), HW_PREV.pts.map(p => p[1]))}
+      </div>
+    </div>`;
+}
+
+function goHwWeek(d){
+  hwWeek = Math.max(0, Math.min(HW_WEEKS.length - 1, hwWeek + d));
+  renderHwSel(); renderHwPlan();
+}
+function hwNav(){
+  const w = HW_WEEKS[hwWeek];
+  return `
+    <div class="hweek-nav">
+      <button onclick="goHwWeek(-1)" ${hwWeek === 0 ? "disabled" : ""} aria-label="Semana anterior">${CHEV_L}</button>
+      <span><b>Semana ${w.n}</b> (${w.from} - ${w.to})</span>
+      <button onclick="goHwWeek(1)" ${hwWeek === HW_WEEKS.length - 1 ? "disabled" : ""} aria-label="Semana siguiente">${CHEV_R}</button>
+    </div>`;
+}
+function renderHwSel(){
+  const w = HW_WEEKS[hwWeek];
+  document.getElementById("hwSel").innerHTML = `
+    <h3 class="hweek-h">Media de la semana seleccionada</h3>
+    ${hwNav()}
+    <div class="hweek-body">
+      ${hwFigure(w.avg, w.goal)}
+      <div class="hweek-chart">
+        ${hwChart(w.days, w.goal)}
+        ${hwLabels(HW_DAYS, w.days)}
+      </div>
+    </div>`;
+}
+
+/* Rejilla del plan: un cuadro por nota y día, con el recuento de reseñas.
+   La última fila compara lo conseguido con el objetivo semanal de cada nota. */
+function renderHwPlan(){
+  const w = HW_WEEKS[hwWeek];
+  const scores = [1,2,3,4,5,6,7,8,9,10];
+  const cols = `28px repeat(10, 46px) 58px`;
+  const head = `<span></span>` + scores.map(s =>
+    `<span class="hweek-gcell is-head${s >= 9 ? " is-top" : ""}">${s}</span>`).join("") +
+    `<span class="hweek-gcell is-head" title="Reseñas de 9 y 10 sobre el total del día">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h4a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><circle cx="13" cy="11" r="3"/><path d="M4 8v10a2 2 0 0 0 2 2h10"/></svg>
+    </span>`;
+
+  const rows = HW_DAYS.map((d, i) => {
+    const day = w.grid[i] || {};
+    const tot = Object.values(day).reduce((a, n) => a + n, 0);
+    const top = (day[9] || 0) + (day[10] || 0);
+    const pct = tot ? Math.round(top / tot * 100) : 0;
+    const cells = scores.map(s => {
+      const n = day[s] || 0;
+      return `<span class="hweek-gcell${n ? (n >= 3 ? " has-lot" : " has") : ""}">${n || ""}</span>`;
+    }).join("");
+    return `<span class="hweek-gday">${d}</span>${cells}<span class="hweek-gcell hweek-gpct">${pct}%</span>`;
+  }).join("");
+
+  const totals = scores.map(s => {
+    const got = HW_DAYS.reduce((a, _, i) => a + ((w.grid[i] || {})[s] || 0), 0);
+    const tgt = HW_TARGETS[s];
+    if (!got && !tgt) return `<span class="hweek-gcell"></span>`;
+    const good = s >= 8;
+    const cls = good ? (got >= tgt ? " is-ok" : "") : (got > tgt ? " is-over" : "");
+    return `<span class="hweek-gcell hweek-gsum${cls}">${got}/${tgt}</span>`;
+  }).join("");
+
+  document.getElementById("hwPlan").innerHTML = `
+    <div class="hweek-plan-head">
+      <div>
+        <p class="hweek-plan-goal">Objetivo: ${fmtNum(HW_PLAN.goal, 1)}<small>${HW_PLAN.days} días</small></p>
+        <p class="hweek-plan-desc">Sin descripción</p>
+      </div>
+      <button class="hweek-plan-new" onclick="toast('Crear un nuevo plan (mockup)')">Crea un nuevo plan</button>
+    </div>
+    <div class="hweek-plan-nav">
+      <div class="hweek-nav">
+        <button onclick="goHwWeek(-1)" ${hwWeek === 0 ? "disabled" : ""} aria-label="Semana anterior">${CHEV_L}</button>
+        <span class="hweek-pill">Semana ${w.n}</span>
+        <span>(${w.from} → ${w.to})</span>
+        <button onclick="goHwWeek(1)" ${hwWeek === HW_WEEKS.length - 1 ? "disabled" : ""} aria-label="Semana siguiente">${CHEV_R}</button>
+      </div>
+    </div>
+    <div class="hweek-gridwrap">
+      <div class="hweek-grid" style="grid-template-columns:${cols}">
+        ${head}${rows}
+        <span class="hweek-gday">★</span>${totals}<span class="hweek-gcell"></span>
+      </div>
+    </div>`;
+}
+
+function toggleHweek(){
+  const panel = document.getElementById("hweekPanel");
+  const btn = document.getElementById("hweekToggle");
+  const open = panel.hidden;
+  panel.hidden = !open;
+  btn.setAttribute("aria-expanded", open ? "true" : "false");
+}
+renderHwPrev(); renderHwSel(); renderHwPlan();
 
 /* ═══════════ Informe de evolución: evolución semanal, proyección y comparativa ═══
    La serie va en la escala del propio informe (Índice Jaippy, 9,1x contra el
@@ -8660,30 +9107,6 @@ document.getElementById("seaGrid").innerHTML = `
     ${badSeasons.map(renderSeaItem).join("")}
   </div>`;
 
-const SIG_CHANGES = [
-  {kind:"opp", action:"<b>Aprovéchalo:</b> destaca el desayuno en la ficha de Booking y en tus respuestas. Es tu palanca más rentable ahora mismo."},
-  {kind:"alert", action:"<b>Ten cuidado:</b> revisa la cobertura de las plantas altas antes de temporada alta. Es la única queja que ya arrastra la nota de un perfil de 9,1."},
-  {kind:"opp", action:"<b>Aprovéchalo:</b> extiende el QR a zonas comunes y restaurante. El volumen sube sin coste de nota."},
-  {kind:"alert", action:"<b>Ten cuidado:</b> ajusta la asignación de habitaciones familiares o aclara la capacidad real en la ficha, para no fallar la expectativa."}
-];
-
-/* Home: widget oportunidades y alertas */
-(function(){
-  const OPP_ICO = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>';
-  const ALERT_ICO = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4.5"/><path d="M12 16.5h.01"/></svg>';
-  const oppEl   = document.getElementById("homeSigOpp");
-  const alertEl = document.getElementById("homeSigAlert");
-  if (!oppEl || !alertEl) return;
-  const opps   = SIG_CHANGES.filter(s => s.kind === "opp");
-  const alerts = SIG_CHANGES.filter(s => s.kind === "alert");
-  function renderGroup(items, el, icon, label, cls){
-    el.innerHTML = `
-      <div class="home-sig-hdr ${cls}">${icon}${label}</div>
-      ${items.map(s => `<div class="home-sig-item"><span>${s.action}</span></div>`).join("")}`;
-  }
-  renderGroup(opps,   oppEl,   OPP_ICO,   "Oportunidades", "is-opp");
-  renderGroup(alerts, alertEl, ALERT_ICO, "Alertas",        "is-alert");
-})();
 
 /* ═══════════ Aspectos mencionados y pasos para subir la nota ═══════════
    Un mismo componente de barra (.mbar) sirve para las menciones de Opiniones
@@ -8825,13 +9248,7 @@ const STEPS = [
     tagTone:"t-good", tagPrefix:"Potencia",
     open:"Ver 5 iniciativas recomendadas", close:"Ocultar iniciativas",
     panelLbl:"Validadas en hoteles similares al tuyo",
-    inis:[
-      {art:"ficha", h:"Ficha que vende tus fortalezas", d:"Reescribe la ficha de Booking y Google poniendo primero las tres fortalezas más citadas.", tag:"Personal y limpieza", val:"31 hoteles · +0,12 nota"},
-      {art:"campana", h:"Bienvenida con nombre", d:"Recepción saluda por el apellido de la reserva y ofrece agua al llegar. Coste cero.", tag:"Trato del personal", val:"48 hoteles · +0,18 nota"},
-      {art:"desayuno", h:"Desayuno de producto local", d:"Tres referencias locales con cartelito de origen. Es lo que más citan quienes te dan un 10.", tag:"Desayuno", val:"26 hoteles · +0,21 nota"},
-      {art:"cama", h:"Kit de descanso", d:"Cortina blackout y almohada de elección. Refuerza el silencio que ya te valoran.", tag:"Silencio y descanso", val:"19 hoteles · +0,15 nota"},
-      {art:"mapa", h:"Mapa de 5 minutos", d:"Plano propio con lo que hay a menos de 5 min andando y la estación marcada.", tag:"Ubicación", val:"22 hoteles · +0,09 nota"}
-    ]
+    recIds:[2, 3, 8, 16, 17]
   },
   {
     n:2, tone:"warn", notes:[7,8],
@@ -8852,13 +9269,7 @@ const STEPS = [
     tagTone:"t-warn", tagPrefix:"Soluciona",
     open:"Ver 5 iniciativas recomendadas", close:"Ocultar iniciativas",
     panelLbl:"Validadas en hoteles similares al tuyo",
-    inis:[
-      {art:"qr", h:"Check-in exprés con QR", d:"El huésped rellena sus datos antes de llegar y la llave está lista. Elimina la cola.", tag:"Espera en check-in", val:"37 hoteles · +0,23 nota"},
-      {art:"wifi", h:"Refuerzo WiFi plantas altas", d:"Dos repetidores en las plantas 5 a 7, donde se concentran las caídas de la tarde.", tag:"WiFi inestable", val:"29 hoteles · +0,19 nota"},
-      {art:"carta", h:"Desayuno rotativo", d:"Dos platos que cambian cada día de la semana. Corta la queja de 'siempre lo mismo'.", tag:"Desayuno repetitivo", val:"24 hoteles · +0,14 nota"},
-      {art:"puerta", h:"Cierrapuertas y alfombra", d:"Amortiguador en las puertas y moqueta en el pasillo. Quita el portazo de madrugada.", tag:"Ruido de pasillo", val:"33 hoteles · +0,16 nota"},
-      {art:"toallas", h:"Reposición doble", d:"Toalla y amenity extra en habitaciones de 2+ noches, sin esperar a que lo pidan.", tag:"Amenities escasos", val:"41 hoteles · +0,11 nota"}
-    ]
+    recIds:[1, 19, 20, 7, 15]
   },
   {
     n:3, tone:"bad", notes:[1,2,3,4,5,6],
@@ -8881,30 +9292,13 @@ const STEPS = [
   }
 ];
 
-/* Tile cuadrado: al pulsar abre la ficha completa en un pop-up */
-function stepIni(ini, tagTone, tagPrefix, sn, i){
-  return `
-  <button class="ini-card" onclick="openIniModal(${sn},${i})">
-    <div class="ini-art">${INI_ART[ini.art]}</div>
-    <div class="ini-b">
-      <p class="ini-h">${ini.h}</p>
-      <span class="ini-tag ${tagTone}">${ini.tag}</span>
-    </div>
-  </button>`;
+/* Las recomendaciones de cada paso son iniciativas reales del catálogo, así que
+   se pintan con la misma tarjeta que la pestaña de Iniciativas. */
+function stepIni(id){
+  const ini = INI_DATA.find(x => x.id === id);
+  return ini ? iniRecCard(ini) : "";
 }
 
-/* Pop-up de ficha de iniciativa */
-function openIniModal(sn, i){
-  const s = STEPS.find(x => x.n === sn), ini = s.inis[i];
-  document.getElementById("iniModalTitle").textContent = ini.h;
-  document.getElementById("iniModalArt").innerHTML = INI_ART[ini.art];
-  document.getElementById("iniModalDesc").textContent = ini.d;
-  document.getElementById("iniModalTag").className = "ini-tag " + s.tagTone;
-  document.getElementById("iniModalTag").textContent = s.tagPrefix + ": " + ini.tag;
-  document.getElementById("iniModalVal").innerHTML = CHECK_ICO + ini.val;
-  document.getElementById("iniModal").hidden = false;
-}
-function closeIniModal(){ document.getElementById("iniModal").hidden = true; }
 
 /* Pop-up: enviar prueba de la encuesta a un email */
 function openTestModal(){
@@ -8919,8 +9313,6 @@ function sendTestSurvey(){
   document.getElementById("testEmail").value = "";
   toast(`Prueba enviada a ${email}`);
 }
-/* Desde la ficha se salta a crear la etiqueta que mide la iniciativa */
-function iniToTag(){ closeIniModal(); openTagModal(); }
 const CARET = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
 
 document.getElementById("stepsList").innerHTML = STEPS.map(s => {
@@ -8966,15 +9358,15 @@ document.getElementById("stepsList").innerHTML = STEPS.map(s => {
       <span>${s.note}</span>
     </p>` : "";
 
-  const panel = s.inis ? `
+  const panel = s.recIds ? `
     <button class="step-toggle" onclick="toggleStep(this)" data-open="${s.open}" data-close="${s.close}">
       <span>${s.open}</span>${CARET}
     </button>
     <div class="step-panel">
       <div class="step-panel-in">
         <p class="step-panel-lbl">${CHECK_ICO}${s.panelLbl}</p>
-        <div class="ini-grid">
-          ${s.inis.map((i, k) => stepIni(i, s.tagTone, s.tagPrefix, s.n, k)).join("")}
+        <div class="hrec-grid">
+          ${s.recIds.map(stepIni).join("")}
         </div>
         <button class="ini-newtag" onclick="editingTagName=null;openTagModal()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
