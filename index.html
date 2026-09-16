@@ -3469,6 +3469,7 @@ select.res-f-field{appearance:none;cursor:pointer;
 .rpt3-grp + .rpt3-grp .rpt3-grp-hd td{border-top:16px solid #fff}
 .rpt3-grp-hd b{font-size:.8rem;font-weight:700;color:var(--midnight);margin:0 10px 0 9px}
 .rpt3-grp-note{font-size:.74rem;color:var(--ink-faint)}
+.rpt3-grp-more td{text-align:left;font-size:.76rem;color:var(--ink-faint);padding:11px 12px}
 .rpt3-it-name{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--midnight)}
 .rpt3-it-ico{
   width:28px;height:28px;border-radius:9px;background:var(--ivory);color:var(--midnight);
@@ -4367,7 +4368,7 @@ select.res-f-field{appearance:none;cursor:pointer;
 
       <!-- 4. Quién está consiguiendo las reseñas -->
       <section class="card rpt2-sec" data-rsec="emp">
-        <h3 class="rpt2-h">Top empleados por reseñas conseguidas</h3>
+        <h3 class="rpt2-h">Top 5 empleados por reseñas conseguidas</h3>
         <p class="rpt2-sub">Reseñas del periodo en las que el huésped menciona a cada persona del equipo.</p>
         <div class="rpt3-emp" id="rptEmp"></div>
       </section>
@@ -9569,6 +9570,7 @@ function renderRptKpis(idx){
 }
 
 /* ── 3. Evolución de iniciativas ─────────────────────────────────────────── */
+const RPT_INI_TOP = 5;   // por estado; el resto se resume en una línea
 function renderRptIniTable(){
   const el = document.getElementById("rptIniTable");
   if (!el) return;
@@ -9601,7 +9603,8 @@ function renderRptIniTable(){
             <b>${grupos[k].length}</b>
             <span class="rpt3-grp-note">${meta[k].nota}</span>
           </td></tr>
-          ${grupos[k].map(fila).join("")}
+          ${grupos[k].slice(0, RPT_INI_TOP).map(fila).join("")}
+          ${grupos[k].length > RPT_INI_TOP ? `<tr class="rpt3-grp-more"><td colspan="5">y ${grupos[k].length - RPT_INI_TOP} más</td></tr>` : ""}
         </tbody>`).join("")}
     </table>`;
 }
@@ -9611,7 +9614,7 @@ function renderRptEmp(){
   const el = document.getElementById("rptEmp");
   if (!el) return;
   const max = EMP_MENTIONS[0].n;
-  el.innerHTML = EMP_MENTIONS.slice(0, 8).map((m, i) => {
+  el.innerHTML = EMP_MENTIONS.slice(0, 5).map((m, i) => {
     const e = EMPLOYEES[m.e];
     if (!e) return "";
     // nota media plausible y estable: los más mencionados puntúan algo mejor
