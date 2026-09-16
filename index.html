@@ -1843,7 +1843,9 @@ svg{display:block}
 }
 .tile-num{
   border-radius:0 0 10px 10px;text-align:center;
-  font-weight:700;color:var(--charcoal);padding:13px 0 15px;line-height:1;
+  font-weight:700;color:var(--charcoal);line-height:1;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  height:50px;
 }
 .t-es .tile-status{background:#8FB4DE}
 .t-es .tile-num{background:#E9F2FB}
@@ -1854,7 +1856,7 @@ svg{display:block}
 .t-co .tile-status{background:#AE78AA}
 .t-co .tile-num{background:#F7D9F5}
 .tiles.size-m .tile-num{font-size:1.35rem}
-.tiles.size-l .tile-num{font-size:1.68rem;padding:14px 0 16px}
+.tiles.size-l .tile-num{font-size:1.68rem;height:57px}
 .tile-badge{
   position:absolute;right:4px;bottom:4px;
   background:#fff;border-radius:6px;padding:1.5px 5px;
@@ -1862,14 +1864,14 @@ svg{display:block}
   box-shadow:0 1px 3px rgba(25,25,25,.12);
   display:flex;align-items:center;gap:2px;line-height:1.4;
 }
-.tile-inits{display:inline-flex;gap:2px;align-items:center}
+.tile-inits{display:inline-flex;gap:5px;align-items:center}
 .tile-init{
   display:flex;align-items:center;justify-content:center;
-  width:13px;height:13px;color:#fff;
+  width:13px;height:13px;color:var(--midnight);
 }
 .tile-init svg{display:block;width:12px;height:12px}
 /* Diana: la misma marca que el botón "Cliente objetivo" */
-.tile-obj-icon{display:inline-flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
+.tile-obj-icon{display:inline-flex;align-items:center;justify-content:center;color:var(--midnight);flex-shrink:0}
 .tile-obj-icon svg{display:block}
 .tile-profile{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:4px auto 0;border:1.5px solid rgba(0,0,0,.12);cursor:help}
 .tiles.hide-pc .t-pc,.tiles.hide-ci .t-ci,.tiles.hide-es .t-es,.tiles.hide-co .t-co{display:none}
@@ -5948,8 +5950,8 @@ function renderTiles(){
       const tagIcons = inits.map(ini => ini.icon).join("");
       return `
       <div class="tile t-${t.st}${obj ? " is-obj" : ""}" data-obj-profile="${prof.name}" data-tag-icons="${tagIcons}" onclick="openRoomModal(${t.i})">
-        <div class="tile-status">${obj ? OBJ_ICO : ""}${initHtml}</div>
-        <div class="tile-num">${t.n}</div>
+        <div class="tile-status">${obj ? OBJ_ICO : ""}</div>
+        <div class="tile-num">${t.n}${initHtml}</div>
         ${t.b ? `<button class="tile-badge tile-qr" onclick="event.stopPropagation();openQrModal(${t.n})" title="QR de valoración" aria-label="QR de valoración">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#2F53D7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5a2 2 0 0 1 2-2h3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M21 16v3a2 2 0 0 1-2 2h-3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><rect x="8.5" y="8.5" width="7" height="7" rx="1" fill="#2F53D7" stroke="none"/></svg>
         </button>` : ""}
