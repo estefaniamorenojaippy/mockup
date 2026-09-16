@@ -1219,40 +1219,40 @@ svg{display:block}
 .ini-pg.active{background:var(--midnight);border-color:var(--midnight);color:#fff}
 .ini-pg-dots{color:var(--ink-faint);padding:0 2px}
 
-/* ─── Jai, la mascota que atiende el chat de iniciativas ─── */
-.jai{flex-shrink:0;display:block}
+/* ─── Jota, la mascota que atiende el chat de iniciativas ─── */
+.jota{flex-shrink:0;display:block}
 .ini-chat{border-color:rgba(255,161,59,.35)}
 .ini-chat-header{
   background:linear-gradient(90deg,rgba(255,208,59,.22),rgba(255,161,59,.10));
   border-bottom-color:rgba(255,161,59,.28);gap:10px;padding:13px 16px;
 }
-.jai-name{display:flex;flex-direction:column;gap:1px;line-height:1.2}
-.jai-name small{font-size:.68rem;font-weight:500;color:var(--ink-faint)}
-.jai-hello{text-align:center;padding:22px 16px 6px}
-.jai-hello .jai{margin:0 auto 12px}
-.jai-hello h4{font-size:.92rem;font-weight:700;color:var(--midnight);margin-bottom:5px}
-.jai-hello p{font-size:.78rem;color:var(--ink-soft);line-height:1.5;max-width:420px;margin:0 auto}
-.jai-sugs{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:14px}
-.jai-sug{
+.jota-name{display:flex;flex-direction:column;gap:1px;line-height:1.2}
+.jota-name small{font-size:.68rem;font-weight:500;color:var(--ink-faint)}
+.jota-hello{text-align:center;padding:22px 16px 6px}
+.jota-hello .jota{margin:0 auto 12px}
+.jota-hello h4{font-size:.92rem;font-weight:700;color:var(--midnight);margin-bottom:5px}
+.jota-hello p{font-size:.78rem;color:var(--ink-soft);line-height:1.5;max-width:420px;margin:0 auto}
+.jota-sugs{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:14px}
+.jota-sug{
   font-size:.72rem;font-weight:600;color:var(--ink-soft);
   border:1px solid var(--line-strong);border-radius:999px;padding:6px 13px;
   background:#fff;cursor:pointer;transition:all .12s;font-family:inherit;
 }
-.jai-sug:hover{border-color:var(--amber);background:#FFFDF7;color:var(--midnight)}
-/* Mensajes del bot con Jai al lado */
+.jota-sug:hover{border-color:var(--amber);background:#FFFDF7;color:var(--midnight)}
+/* Mensajes del bot con Jota al lado */
 .ini-chat-row{display:flex;align-items:flex-start;gap:9px;margin-bottom:12px}
 .ini-chat-row .ini-chat-msg{margin-bottom:0}
-.jai-typing{
+.jota-typing{
   display:flex;align-items:center;gap:5px;background:#FFF8E7;
   padding:12px 14px;border-radius:12px 12px 12px 4px;
 }
-.jai-typing span{
+.jota-typing span{
   width:6px;height:6px;border-radius:50%;background:var(--saffron);
-  animation:jaiDot 1s infinite ease-in-out;
+  animation:jotaDot 1s infinite ease-in-out;
 }
-.jai-typing span:nth-child(2){animation-delay:.15s}
-.jai-typing span:nth-child(3){animation-delay:.3s}
-@keyframes jaiDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+.jota-typing span:nth-child(2){animation-delay:.15s}
+.jota-typing span:nth-child(3){animation-delay:.3s}
+@keyframes jotaDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
 .ini-chat-msg.is-bot{background:#FFF8E7}
 
 /* ─── Analíticas: resumen ejecutivo ─── */
@@ -4044,7 +4044,7 @@ select.res-f-field{appearance:none;cursor:pointer;
       <div class="ini-chat-header" id="iniChatHeader"></div>
       <div class="ini-chat-messages" id="iniChatMsgs"></div>
       <div class="ini-chat-input">
-        <input type="text" id="iniChatInput" placeholder="Pregúntale a Jai: ¿qué puedo hacer para solucionar el ruido?" onkeydown="if(event.key==='Enter')sendIniChat()">
+        <input type="text" id="iniChatInput" placeholder="Pregúntale a Jota: ¿qué puedo hacer para solucionar el ruido?" onkeydown="if(event.key==='Enter')sendIniChat()">
         <button onclick="sendIniChat()" aria-label="Enviar">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/></svg>
         </button>
@@ -6949,35 +6949,40 @@ function hideInsHotel(){
   box.innerHTML = "";
 }
 
-/* ═══════════ Jai, la mascota de Jaippy ═══════════
-   Un solecito, que es la forma que ya usa la marca (el icono de la pestaña
-   Iniciativas y el degradado sunrise). Se dibuja en SVG para que escale sin
-   pesar nada: 26px de avatar y 76px en el saludo. */
-let jaiSeq = 0;
-function jaiMascot(size = 40, waving = false){
-  const g = "jaiG" + (++jaiSeq);
-  // La jota de Jaippy: el gancho de la letra hace de sonrisa y los ojos van
-  // dentro de la curva, así el icono se lee igual a 26 px que a 76.
+/* ═══════════ Jota, la mascota de Jaippy ═══════════
+   Es la jota de la marca: el gancho de la letra hace de sonrisa y la cara va
+   dentro de la curva. Se dibuja con siluetas simples porque tiene que leerse
+   igual a 26 px en las filas del chat que a 76 en el saludo. */
+let jotaSeq = 0;
+function jotaMascot(size = 40){
+  const g = "jotaG" + (++jotaSeq);
   return `
-  <svg class="jai" width="${size}" height="${size}" viewBox="0 0 64 64" role="img" aria-label="Jai, el asistente de Jaippy">
+  <svg class="jota" width="${size}" height="${size}" viewBox="0 0 64 64" role="img" aria-label="Jota, el asistente de Jaippy">
     <defs>
-      <linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#FFD03B"/>
-        <stop offset="100%" stop-color="#FFA13B"/>
+      <linearGradient id="${g}" x1=".15" y1="0" x2=".7" y2="1">
+        <stop offset="0" stop-color="#FFDC66"/>
+        <stop offset="52%" stop-color="#FFBB3E"/>
+        <stop offset="100%" stop-color="#FB9A2B"/>
       </linearGradient>
+      <radialGradient id="${g}h" cx="34%" cy="24%" r="60%">
+        <stop offset="0" stop-color="#fff" stop-opacity=".5"/>
+        <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+      </radialGradient>
     </defs>
-    <circle cx="32" cy="32" r="28" fill="url(#${g})"/>
-    <path d="M42 15v18a11 11 0 0 1-22 0" fill="none" stroke="#fff"
-          stroke-width="6.5" stroke-linecap="round"/>
-    <circle cx="26.5" cy="27" r="3.1" fill="#191919"/>
-    <circle cx="36" cy="27" r="3.1" fill="#191919"/>
-    <circle cx="27.4" cy="26" r="1" fill="#fff"/>
-    <circle cx="36.9" cy="26" r="1" fill="#fff"/>
-    ${waving ? `<path d="M52 38.5c3-1.2 5.3.4 4.8 3s-3 3.9-5.6 3"
-          fill="#FFD03B" stroke="#FFA13B" stroke-width="1.8" stroke-linejoin="round"/>` : ""}
+    <circle cx="32" cy="32" r="29" fill="url(#${g})"/>
+    <circle cx="32" cy="32" r="29" fill="url(#${g}h)"/>
+    <circle cx="32" cy="32" r="28.4" fill="none" stroke="#E0851C" stroke-width="1.2" opacity=".3"/>
+    <path d="M41.5 13.5v18a10.5 10.5 0 0 1-21 0" fill="none" stroke="#fff"
+          stroke-width="7" stroke-linecap="round"/>
+    <ellipse cx="18.5" cy="33.5" rx="4.2" ry="2.7" fill="#F26A34" opacity=".22"/>
+    <ellipse cx="46.5" cy="33.5" rx="4.2" ry="2.7" fill="#F26A34" opacity=".22"/>
+    <circle cx="25" cy="25.5" r="3.4" fill="#2B2118"/>
+    <circle cx="34.6" cy="25.5" r="3.4" fill="#2B2118"/>
+    <circle cx="26.2" cy="24.2" r="1.15" fill="#fff"/>
+    <circle cx="35.8" cy="24.2" r="1.15" fill="#fff"/>
   </svg>`;
 }
-const JAI_SUGS = [
+const JOTA_SUGS = [
   "¿Qué puedo hacer para solucionar el ruido?",
   "Ideas de coste cero para el check-in",
   "¿Cómo subo la nota del desayuno?"
@@ -6985,23 +6990,23 @@ const JAI_SUGS = [
 function initIniChat(){
   const head = document.getElementById("iniChatHeader");
   if (!head) return;
-  head.innerHTML = `${jaiMascot(30)}
-    <span class="jai-name">Pregúntale a Jai<small>Tu asistente de iniciativas</small></span>`;
+  head.innerHTML = `${jotaMascot(30)}
+    <span class="jota-name">Pregúntale a Jota<small>Tu asistente de iniciativas</small></span>`;
   renderIniChatEmpty();
 }
 function renderIniChatEmpty(){
   document.getElementById("iniChatMsgs").innerHTML = `
-    <div class="jai-hello">
-      ${jaiMascot(76, true)}
-      <h4>¡Hola! Soy Jai 👋</h4>
+    <div class="jota-hello">
+      ${jotaMascot(76)}
+      <h4>¡Hola! Soy Jota 👋</h4>
       <p>Cuéntame qué quieres mejorar en tu hotel y te propongo las iniciativas
          que mejor están funcionando en establecimientos como el tuyo.</p>
-      <div class="jai-sugs">
-        ${JAI_SUGS.map(s => `<button class="jai-sug" onclick="askJai('${s.replace(/'/g,"\\'")}')">${s}</button>`).join("")}
+      <div class="jota-sugs">
+        ${JOTA_SUGS.map(s => `<button class="jota-sug" onclick="askJota('${s.replace(/'/g,"\\'")}')">${s}</button>`).join("")}
       </div>
     </div>`;
 }
-function askJai(q){
+function askJota(q){
   document.getElementById("iniChatInput").value = q;
   sendIniChat();
 }
@@ -7011,16 +7016,16 @@ function sendIniChat(){
   if (!q) return;
   input.value = "";
   const msgs = document.getElementById("iniChatMsgs");
-  const hello = msgs.querySelector(".jai-hello");
+  const hello = msgs.querySelector(".jota-hello");
   if (hello) hello.remove();
   msgs.innerHTML += `<div class="ini-chat-msg is-user">${q}</div>
-    <div class="ini-chat-row" id="jaiTyping">${jaiMascot(26)}
-      <div class="jai-typing"><span></span><span></span><span></span></div>
+    <div class="ini-chat-row" id="jotaTyping">${jotaMascot(26)}
+      <div class="jota-typing"><span></span><span></span><span></span></div>
     </div>`;
   msgs.scrollTop = msgs.scrollHeight;
 
   setTimeout(() => {
-    document.getElementById("jaiTyping")?.remove();
+    document.getElementById("jotaTyping")?.remove();
     const lower = q.toLowerCase();
     let matches = INI_DATA.filter(i => {
       const txt = (i.title + " " + i.desc + " " + i.profiles.join(" ") + " " + i.cat).toLowerCase();
@@ -7037,7 +7042,7 @@ function sendIniChat(){
     });
     resp += `<span style="font-size:.65rem;color:var(--ink-faint)">¿Quieres que profundice en alguna de estas iniciativas?</span>`;
 
-    msgs.innerHTML += `<div class="ini-chat-row">${jaiMascot(26)}
+    msgs.innerHTML += `<div class="ini-chat-row">${jotaMascot(26)}
       <div class="ini-chat-msg is-bot">${resp}</div></div>`;
     msgs.scrollTop = msgs.scrollHeight;
   }, 900);
