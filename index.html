@@ -3298,7 +3298,10 @@ select.res-f-field{appearance:none;cursor:pointer;
 .res-f-apply:hover{background:#000}
 
 /* Cabecera de resultados */
-.res-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.res-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.res-head .status-filters{margin-left:0;flex-wrap:wrap}
+.res-head .sf{cursor:pointer}
+.res-head .res-count{margin-left:auto}
 .res-count{font-size:.8rem;color:var(--ink-faint)}
 .res-count b{font-weight:700;color:var(--midnight)}
 
@@ -3607,6 +3610,7 @@ select.res-f-field{appearance:none;cursor:pointer;
           CLIENTE OBJETIVO
           <span class="sf-count" id="resObjCount"></span>
         </button>
+        <div class="status-filters" id="resStates"></div>
         <p class="res-count" id="resCount"></p>
       </div>
       <div id="resList"></div>
@@ -9834,6 +9838,35 @@ const RES_FACE = {
 };
 const RES_QR_ICO = '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#2F53D7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5a2 2 0 0 1 2-2h3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M21 16v3a2 2 0 0 1-2 2h-3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><rect x="8.5" y="8.5" width="7" height="7" rx="1" fill="#2F53D7" stroke="none"/></svg>';
 
+/* Mismos estados y mismos botones que en Habitaciones, para que el filtro se
+   lea igual en las dos subpestañas. */
+const RES_ST_ICO = {
+  pc:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
+  ci:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><path d="M15 12H3"/></svg>',
+  es:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v10"/><path d="M3 17h18v-4a4 4 0 0 0-4-4H9"/><path d="M8 7a2 2 0 1 0-4 0"/><path d="M21 17v2"/></svg>',
+  co:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><path d="M21 12H9"/></svg>'
+};
+const RES_ST_LBL = {pc:"PRE-CHECK-IN", ci:"CHECK-IN", es:"EN ESTANCIA", co:"CHECK-OUT"};
+const resStates = new Set(["pc","ci","es","co"]);
+function toggleResState(st, btn){
+  // Al menos un estado tiene que quedar marcado: una lista vacía no dice nada
+  if (resStates.has(st) && resStates.size === 1) return;
+  resStates.has(st) ? resStates.delete(st) : resStates.add(st);
+  btn.classList.toggle("active", resStates.has(st));
+  renderReservas();
+}
+function renderResStates(){
+  const el = document.getElementById("resStates");
+  if (!el) return;
+  el.innerHTML = ["pc","ci","es","co"].map(st => `
+    <button class="sf sf-${st}${resStates.has(st) ? " active" : ""}" data-st="${st}"
+      onclick="toggleResState('${st}', this)" aria-label="Filtrar ${RES_ST_LBL[st].toLowerCase()}">
+      <span class="sf-ico">${RES_ST_ICO[st]}</span>
+      ${RES_ST_LBL[st]}
+      <span class="sf-count">${RESERVAS.filter(r => r.st === st).length}</span>
+    </button>`).join("");
+}
+
 let resView = "cards";
 let resObjOnly = false;
 const resIsObj = r => r.tags.some(t => RES_TAGS[t] && RES_TAGS[t].obj);
@@ -9855,6 +9888,8 @@ function clearResFilters(){
   ["resFDateType","resFTag"].forEach(id => document.getElementById(id).value = "");
   document.getElementById("resFBooking").checked = false;
   document.getElementById("resFReview").checked = false;
+  ["pc","ci","es","co"].forEach(st => resStates.add(st));
+  renderResStates();
   if (resObjOnly) toggleResObj(); else renderReservas();
 }
 
@@ -9938,7 +9973,8 @@ function renderReservas(){
     (!tag || r.tags.includes(tag)) &&
     (!onlyBooking || r.booking) &&
     (!onlyReview || r.review) &&
-    (!resObjOnly || resIsObj(r)));
+    (!resObjOnly || resIsObj(r)) &&
+    resStates.has(r.st));
 
   document.getElementById("resObjCount").textContent = RESERVAS.filter(resIsObj).length;
   document.getElementById("resCount").innerHTML = `<b>${items.length}</b> de ${RESERVAS.length} reservas`;
@@ -9964,6 +10000,7 @@ function renderReservas(){
     o.value = k; o.textContent = t.label;
     sel.appendChild(o);
   });
+  renderResStates();
   renderReservas();
 })();
 </script>
