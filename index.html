@@ -3439,6 +3439,7 @@ select.res-f-field{appearance:none;cursor:pointer;
 .rpt3-kpi:hover .rpt3-bars-svg{opacity:0}
 .rpt3-kpi:hover .rpt3-line-svg{opacity:1}
 .rpt3-axis{font-family:"Instrument Sans",sans-serif;font-size:8px;fill:#A9A5A0}
+.rpt3-axis-m{font-size:7px}
 .rpt3-vlbl{font-family:"Instrument Sans",sans-serif;font-size:9.5px;font-weight:700;fill:var(--midnight)}
 .rpt3-grid{stroke:#EFEFEF;stroke-width:1}
 .rpt3-hint{
@@ -3457,7 +3458,11 @@ select.res-f-field{appearance:none;cursor:pointer;
 .rpt3-it td{padding:11px 10px;border-bottom:1px solid var(--line);font-size:.82rem;color:var(--charcoal);text-align:right;
   font-variant-numeric:tabular-nums}
 .rpt3-it td:first-child{text-align:left}
-.rpt3-it tr:last-child td{border-bottom:none}
+.rpt3-it tbody:last-child tr:last-child td{border-bottom:none}
+.rpt3-grp-hd td{padding:18px 10px 8px;border-bottom:1px solid var(--line-strong)}
+.rpt3-grp:first-of-type .rpt3-grp-hd td{padding-top:10px}
+.rpt3-grp-hd b{font-size:.8rem;font-weight:700;color:var(--midnight);margin:0 10px 0 8px}
+.rpt3-grp-note{font-size:.74rem;color:var(--ink-faint)}
 .rpt3-it-name{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--midnight)}
 .rpt3-it-ico{
   width:28px;height:28px;border-radius:9px;background:var(--ivory);color:var(--midnight);
@@ -4351,12 +4356,9 @@ select.res-f-field{appearance:none;cursor:pointer;
 
       <!-- 3. Evolución de iniciativas -->
       <section class="card rpt2-sec" data-rsec="inis">
-        <div class="rpt2-inis-head">
-          <h3 class="rpt2-h">Evolución de iniciativas</h3>
-          <div class="rpt2-tallies" id="rptInisStrip"></div>
-        </div>
+        <h3 class="rpt2-h">Evolución de iniciativas</h3>
+        <p class="rpt2-sub">Cada iniciativa en su estado, con lo que ha movido en el periodo.</p>
         <div class="rpt3-initable" id="rptIniTable"></div>
-        <div class="rpt2-inis" id="rptInis"></div>
       </section>
 
       <!-- 4. Quién está consiguiendo las reseñas -->
@@ -9532,8 +9534,7 @@ function rptLine(vals, months, o){
     <polygon points="${PL + 8},${PT + ph} ${pts} ${W - 8},${PT + ph}" fill="var(--amber)" opacity=".12"/>
     <polyline points="${pts}" fill="none" stroke="var(--amber)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
     ${dots}
-    <text class="rpt3-axis" x="${x(0).toFixed(1)}" y="${H - 9}" text-anchor="middle">${months[0]}</text>
-    <text class="rpt3-axis" x="${x(vals.length - 1).toFixed(1)}" y="${H - 9}" text-anchor="middle">${months[months.length - 1]}</text>
+    ${months.map((mm, i) => `<text class="rpt3-axis rpt3-axis-m" x="${x(i).toFixed(1)}" y="${H - 9}" text-anchor="middle">${mm}</text>`).join("")}
   </svg>`;
 }
 function renderRptKpis(idx){
@@ -9567,66 +9568,38 @@ function renderRptKpis(idx){
 function renderRptIniTable(){
   const el = document.getElementById("rptIniTable");
   if (!el) return;
-  const rows = Object.keys(TAG_STATS)
-    .map(n => ({n, s:TAG_STATS[n], st:getTagState(n)}))
-    .filter(r => r.s.res > 0)
-    .sort((a, b) => b.s.res - a.s.res)
-    .slice(0, 8);
-  const stLbl = {"validada":"Validada", "descartada":"Descartada", "en-prueba":"En prueba"};
+  const grupos = {"validada":[], "descartada":[], "en-prueba":[]};
+  Object.keys(TAG_STATS).forEach(n => grupos[getTagState(n)].push(n));
+  Object.values(grupos).forEach(g => g.sort((a, b) => TAG_STATS[b].res - TAG_STATS[a].res));
+  const meta = {
+    "validada":  {lbl:"Validadas",   nota:"Superaron los 25 huéspedes y mejoraron la nota"},
+    "descartada":{lbl:"Descartadas", nota:"Ya no se aplican a nuevos huéspedes"},
+    "en-prueba": {lbl:"En prueba",   nota:"Todavía sin huéspedes suficientes para decidir"}
+  };
+  const fila = n => {
+    const t = TAG_STATS[n];
+    const imp = typeof t.imp === "number" ? t.imp : null;
+    return `<tr>
+      <td><span class="rpt3-it-name"><span class="rpt3-it-ico">${tagGlyph(getTagIcon(n), 16)}</span>${n}</span></td>
+      <td>${t.res}</td>
+      <td>${t.pct ? fmtNum(t.pct, 2) + " %" : "—"}</td>
+      <td>${t.punt != null ? fmtNum(t.punt, 1) : "—"}</td>
+      <td class="rpt3-it-imp ${imp === null ? "" : imp >= 0 ? "up" : "down"}">${imp === null ? "—" : (imp >= 0 ? "+" : "−") + fmtNum(Math.abs(imp), 2)}</td>
+    </tr>`;
+  };
   el.innerHTML = `
     <table class="rpt3-it">
-      <thead><tr><th>Iniciativa</th><th>Estado</th><th>Huéspedes</th><th>Conversión</th><th>Nota media</th><th>Impacto</th></tr></thead>
-      <tbody>${rows.map(r => {
-        const imp = typeof r.s.imp === "number" ? r.s.imp : null;
-        return `<tr>
-          <td><span class="rpt3-it-name"><span class="rpt3-it-ico">${tagGlyph(getTagIcon(r.n), 16)}</span>${r.n}</span></td>
-          <td><span class="rpt3-it-st ${r.st}">${stLbl[r.st]}</span></td>
-          <td>${r.s.res}</td>
-          <td>${r.s.pct ? fmtNum(r.s.pct, 2) + " %" : "—"}</td>
-          <td>${r.s.punt != null ? fmtNum(r.s.punt, 1) : "—"}</td>
-          <td class="rpt3-it-imp ${imp === null ? "" : imp >= 0 ? "up" : "down"}">${imp === null ? "—" : (imp >= 0 ? "+" : "−") + fmtNum(Math.abs(imp), 2)}</td>
-        </tr>`;
-      }).join("")}</tbody>
+      <thead><tr><th>Iniciativa</th><th>Huéspedes</th><th>Conversión</th><th>Nota media</th><th>Impacto</th></tr></thead>
+      ${["validada","descartada","en-prueba"].map(k => !grupos[k].length ? "" : `
+        <tbody class="rpt3-grp">
+          <tr class="rpt3-grp-hd"><td colspan="5">
+            <span class="rpt3-it-st ${k}">${meta[k].lbl}</span>
+            <b>${grupos[k].length}</b>
+            <span class="rpt3-grp-note">${meta[k].nota}</span>
+          </td></tr>
+          ${grupos[k].map(fila).join("")}
+        </tbody>`).join("")}
     </table>`;
-}
-
-/* Cierre de iniciativas: mismo estado que la tabla de "Mis iniciativas" */
-function rptIniRow(name){
-  const st = TAG_STATS[name] || {};
-  const imp = typeof st.imp === "number" ? st.imp : null;
-  return `
-    <div class="rpt2-ini-row">
-      <span class="rpt2-ini-ico">${tagGlyph(getTagIcon(name), 15)}</span>
-      <span class="rpt2-ini-name" title="${name}">${name}</span>
-      <span class="rpt2-ini-imp ${imp === null ? "" : imp >= 0 ? "up" : "down"}">${imp === null ? "—" : (imp >= 0 ? "+" : "−") + fmtNum(Math.abs(imp), 2)}</span>
-    </div>`;
-}
-function renderRptInis(){
-  const el = document.getElementById("rptInis");
-  if (!el) return;
-  const val = [], des = [];
-  let prueba = 0;
-  Object.keys(TAG_STATS).forEach(n => {
-    const st = getTagState(n);
-    if (st === "validada") val.push(n);
-    else if (st === "descartada") des.push(n);
-    else prueba++;
-  });
-  val.sort((a, b) => (TAG_STATS[b].imp || 0) - (TAG_STATS[a].imp || 0));
-  des.sort((a, b) => (TAG_STATS[a].imp || 0) - (TAG_STATS[b].imp || 0));
-  const strip = document.getElementById("rptInisStrip");
-  if (strip) strip.innerHTML = `
-    <span class="rpt2-tally ok">${val.length} validadas</span>
-    <span class="rpt2-tally no">${des.length} descartada${des.length === 1 ? "" : "s"}</span>
-    <span class="rpt2-tally test">${prueba} en prueba</span>`;
-  const col = (cls, title, list) => `
-    <div class="rpt2-ini-col ${cls}">
-      <div class="rpt2-ini-hd"><span class="rpt2-ini-dot"></span><span class="rpt2-ini-ttl">${title}</span></div>
-      ${list.length ? list.slice(0, 4).map(rptIniRow).join("")
-                    : `<p class="rpt2-ini-empty">Ninguna todavía.</p>`}
-      ${list.length > 4 ? `<p class="rpt2-ini-more">y ${list.length - 4} más</p>` : ""}
-    </div>`;
-  el.innerHTML = col("ok", "Validadas", val) + col("no", "Descartadas", des);
 }
 
 /* ── 4. Top empleados por reseñas conseguidas ────────────────────────────── */
@@ -9668,7 +9641,6 @@ function renderInforme(){
     : `${m.dias} · ${m.res} reseñas`;
   renderRptPlan(idx);
   renderRptKpis(idx);
-  renderRptInis();
   renderRptIniTable();
   renderRptEmp();
 }
