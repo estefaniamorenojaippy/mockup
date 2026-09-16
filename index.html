@@ -3396,13 +3396,7 @@ select.res-f-field{appearance:none;cursor:pointer;
   display:block;height:100%;border-radius:999px;background:var(--amber);
   background-image:repeating-linear-gradient(-45deg, rgba(255,255,255,.42) 0 5px, transparent 5px 10px);
 }
-.rpt3-bar-prev{position:absolute;top:-3px;width:2px;height:23px;background:#B5AFA7;border-radius:1px}
-.rpt3-dates{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:0 4px}
-.rpt3-date{display:flex;flex-direction:column;gap:2px}
-.rpt3-date.is-goal{text-align:right}
-.rpt3-date span{font-size:.66rem;color:var(--ink-faint)}
-.rpt3-date b{font-size:.82rem;font-weight:700;color:var(--midnight)}
-.rpt3-date.is-goal b{color:#C77800}
+.rpt3-bar-prev{position:absolute;top:-3px;width:2px;height:23px;background:#8C8781;border-radius:1px}
 .rpt3-next{font-size:2rem;font-weight:700;color:var(--midnight);flex-shrink:0}
 .rpt3-chg{
   display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:5px 11px;border-radius:999px;
@@ -3411,9 +3405,17 @@ select.res-f-field{appearance:none;cursor:pointer;
 .rpt3-chg b{font-weight:700}
 .rpt3-chg.up{background:var(--good-bg);color:var(--good)}
 .rpt3-chg.down{background:var(--bad-bg);color:var(--bad)}
-.rpt3-legend{flex-direction:row;align-items:center;gap:6px}
-.rpt3-legend-tick{width:2px;height:13px;background:#B5AFA7;border-radius:1px;flex-shrink:0}
-.rpt3-legend b{margin-left:1px}
+/* La marca del mes anterior se rotula justo debajo de su posición en la barra */
+.rpt3-marks{position:relative;min-height:26px;padding:0 4px}
+.rpt3-mark-lbl{
+  position:absolute;top:0;transform:translateX(-50%);white-space:nowrap;
+  font-size:.7rem;color:var(--ink-faint);padding-top:7px;
+}
+.rpt3-mark-lbl b{font-weight:700;color:var(--charcoal)}
+.rpt3-mark-lbl::before{
+  content:"";position:absolute;top:-4px;left:50%;transform:translateX(-50%);
+  width:2px;height:7px;background:#B5AFA7;border-radius:1px;
+}
 
 /* 2. Las tres cifras */
 .rpt3-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px}
@@ -9471,12 +9473,10 @@ function renderRptPlan(idx){
           ${prevPct === null ? "" : `<span class="rpt3-bar-prev" style="left:${prevPct.toFixed(1)}%"></span>`}
         </span>
       </span>
-      <div class="rpt3-dates">
-        ${prevPct === null ? "<span></span>" : `<span class="rpt3-date rpt3-legend">
-          <i class="rpt3-legend-tick"></i>
-          <span>Mes anterior</span><b>${fmtNum(prevPct, 0)}%</b>
+      <div class="rpt3-marks">
+        ${prevPct === null ? "" : `<span class="rpt3-mark-lbl" style="left:${Math.min(88, Math.max(12, prevPct)).toFixed(1)}%">
+          Mes anterior · <b>${fmtNum(prevPct, 0)}%</b>
         </span>`}
-        <span class="rpt3-date is-goal"><span>Próxima décima</span><b>${fmtNum(HP_TARGET, 2)}</b></span>
       </div>
     </div>
     <span class="rpt3-next">${fmtNum(HP_TARGET, 1)}</span>`;
