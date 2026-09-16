@@ -3451,17 +3451,21 @@ select.res-f-field{appearance:none;cursor:pointer;
 .rpt3-initable{overflow-x:auto;margin:18px 0 6px}
 .rpt3-it{width:100%;border-collapse:collapse;min-width:520px}
 .rpt3-it th{
-  text-align:right;padding:8px 10px;border-bottom:1px solid var(--line);
+  text-align:right;padding:0 12px 12px;
   font-size:.64rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--olive);white-space:nowrap;
 }
 .rpt3-it th:first-child{text-align:left}
-.rpt3-it td{padding:11px 10px;border-bottom:1px solid var(--line);font-size:.82rem;color:var(--charcoal);text-align:right;
+.rpt3-it td{padding:15px 12px;border-bottom:1px solid var(--line);font-size:.82rem;color:var(--charcoal);text-align:right;
   font-variant-numeric:tabular-nums}
 .rpt3-it td:first-child{text-align:left}
 .rpt3-it tbody:last-child tr:last-child td{border-bottom:none}
-.rpt3-grp-hd td{padding:18px 10px 8px;border-bottom:1px solid var(--line-strong)}
-.rpt3-grp:first-of-type .rpt3-grp-hd td{padding-top:10px}
-.rpt3-grp-hd b{font-size:.8rem;font-weight:700;color:var(--midnight);margin:0 10px 0 8px}
+/* Cada estado arranca con su banda; los siguientes dejan hueco por delante */
+.rpt3-grp-hd td{
+  padding:11px 12px;border-bottom:none;background:var(--cotton);
+  box-shadow:inset 0 1px 0 var(--line), inset 0 -1px 0 var(--line);
+}
+.rpt3-grp + .rpt3-grp .rpt3-grp-hd td{border-top:16px solid #fff}
+.rpt3-grp-hd b{font-size:.8rem;font-weight:700;color:var(--midnight);margin:0 10px 0 9px}
 .rpt3-grp-note{font-size:.74rem;color:var(--ink-faint)}
 .rpt3-it-name{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--midnight)}
 .rpt3-it-ico{
@@ -3472,8 +3476,6 @@ select.res-f-field{appearance:none;cursor:pointer;
 .rpt3-it-st.validada{background:var(--good-bg);color:var(--good)}
 .rpt3-it-st.descartada{background:var(--bad-bg);color:var(--bad)}
 .rpt3-it-st.en-prueba{background:#FFF4E3;color:#B87309}
-.rpt3-it-imp.up{color:var(--good);font-weight:700}
-.rpt3-it-imp.down{color:var(--bad);font-weight:700}
 
 /* 4. Top empleados */
 .rpt3-emp{margin-top:18px;display:flex;flex-direction:column;gap:3px}
@@ -7626,6 +7628,10 @@ const RM_TAGS = [
 ];
 
 /* Icono de cada iniciativa (se elige al crearla en el modal) */
+/* Medias del hotel contra las que se compara cada iniciativa: por encima va en
+   verde, por debajo en rojo. Las usan la tabla de Iniciativas y el informe. */
+const HOTEL_PUNT = 8.7, HOTEL_PCT = 26.18;
+const tagVsRef = (v, ref) => v === null ? "flat" : v > ref ? "up" : v < ref ? "down" : "flat";
 const TAG_ICON_MAP = {
   "BOTELLA NEGRA SPIRIT":"🍾", "chocolate":"🍫", "Donuts":"🍩", "FREE UPGRADE":"⬆️",
   "GELES":"🧴", "LLAMADA IN":"📞", "PILATES":"🤸", "PLATO FRUTA":"🍓",
@@ -7721,16 +7727,14 @@ function renderTagPanel(){
     totRes += s.res;
     if (s.punt !== null){ weighted += s.punt * s.res; totRev += s.res; }
   });
-  const HOTEL_PUNT = 8.7, HOTEL_PCT = 26.18;
-  const vsRef = (v, ref) => v === null ? "flat" : v > ref ? "up" : v < ref ? "down" : "flat";
   const stateLabels = {"en-prueba":"En prueba","validada":"Validada","descartada":"Descartada"};
   const rowsHtml = rows.map(([name, color]) => {
     const s = TAG_STATS[name] || {res:0, pct:0, punt:null, imp:null};
     const state = getTagState(name);
     const impCls = s.imp === null ? "flat" : s.imp > 0 ? "up" : s.imp < 0 ? "down" : "flat";
     const impTxt = s.imp === null ? "—" : `${s.imp > 0 ? "+" : ""}${fmtNum(s.imp)} pts`;
-    const pctCls = s.pct ? vsRef(s.pct, HOTEL_PCT) : "flat";
-    const puntCls = s.punt !== null ? vsRef(s.punt, HOTEL_PUNT) : "flat";
+    const pctCls = s.pct ? tagVsRef(s.pct, HOTEL_PCT) : "flat";
+    const puntCls = s.punt !== null ? tagVsRef(s.punt, HOTEL_PUNT) : "flat";
     const tooltipHtml = state === "en-prueba" ? `
       <span class="tag-tooltip">${s.res}/${VALIDATION_THRESHOLD} huéspedes
         <div class="tag-tooltip-bar"><div class="tag-tooltip-fill" style="width:${Math.min(100, (s.res / VALIDATION_THRESHOLD) * 100)}%"></div></div>
@@ -9582,9 +9586,9 @@ function renderRptIniTable(){
     return `<tr>
       <td><span class="rpt3-it-name"><span class="rpt3-it-ico">${tagGlyph(getTagIcon(n), 16)}</span>${n}</span></td>
       <td>${t.res}</td>
-      <td>${t.pct ? fmtNum(t.pct, 2) + " %" : "—"}</td>
-      <td>${t.punt != null ? fmtNum(t.punt, 1) : "—"}</td>
-      <td class="rpt3-it-imp ${imp === null ? "" : imp >= 0 ? "up" : "down"}">${imp === null ? "—" : (imp >= 0 ? "+" : "−") + fmtNum(Math.abs(imp), 2)}</td>
+      <td class="tag-impact ${t.pct ? tagVsRef(t.pct, HOTEL_PCT) : "flat"}">${t.pct ? fmtNum(t.pct) + "%" : "—"}</td>
+      <td class="tag-impact ${t.punt != null ? tagVsRef(t.punt, HOTEL_PUNT) : "flat"}">${t.punt != null ? fmtNum(t.punt) : "—"}</td>
+      <td class="tag-impact ${imp === null ? "flat" : imp > 0 ? "up" : imp < 0 ? "down" : "flat"}">${imp === null ? "—" : `${imp > 0 ? "+" : ""}${fmtNum(imp)} pts`}</td>
     </tr>`;
   };
   el.innerHTML = `
