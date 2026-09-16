@@ -3189,10 +3189,17 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
 
 /* Evolución semanal */
 .hweek-sec{margin-top:18px}
-.hweek-sec-title{
-  font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--olive);margin:0 0 10px 4px;
+.hweek-toggle{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  width:100%;padding:18px 24px;cursor:pointer;text-align:left;
+  border:1px solid var(--line);transition:border-color .15s;
 }
+.hweek-toggle:hover{border-color:var(--line-strong)}
+.hweek-sec-title{font-size:.95rem;font-weight:700;color:var(--midnight)}
+.hweek-caret{color:var(--olive);flex-shrink:0;transition:transform .25s}
+.hweek-toggle[aria-expanded="true"] .hweek-caret{transform:rotate(180deg)}
+.hweek-panel{margin-top:16px}
+.hweek-panel[hidden]{display:none}
 .hweek-boxes{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media(max-width:900px){.hweek-boxes{grid-template-columns:1fr}}
 .hweek-box{padding:20px 22px;margin:0}
@@ -3502,12 +3509,18 @@ span.comp-google{font-weight:600;color:var(--ink-soft);border-bottom:none}
 
   <!-- ── Evolución semanal ── -->
   <section class="hweek-sec">
-    <p class="hweek-sec-title">Evolución semanal</p>
-    <div class="hweek-boxes">
-      <article class="card hweek-box" id="hwPrev"></article>
-      <article class="card hweek-box" id="hwSel"></article>
+    <button class="card hweek-toggle" id="hweekToggle" onclick="toggleHweek()"
+            aria-expanded="false" aria-controls="hweekPanel">
+      <span class="hweek-sec-title">Evolución semanal</span>
+      <svg class="hweek-caret" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="hweek-panel" id="hweekPanel" hidden>
+      <div class="hweek-boxes">
+        <article class="card hweek-box" id="hwPrev"></article>
+        <article class="card hweek-box" id="hwSel"></article>
+      </div>
+      <article class="card hweek-plan" id="hwPlan"></article>
     </div>
-    <article class="card hweek-plan" id="hwPlan"></article>
   </section>
 
   <!-- hpScoreCards oculto: el informe de evolución copia su innerHTML -->
@@ -8285,6 +8298,12 @@ function renderHwPlan(){
     </div>`;
 }
 
+function toggleHweek(){
+  const panel = document.getElementById("hweekPanel");
+  const open = panel.hidden;
+  panel.hidden = !open;
+  document.getElementById("hweekToggle").setAttribute("aria-expanded", open ? "true" : "false");
+}
 renderHwPrev(); renderHwSel(); renderHwPlan();
 
 /* ═══════════ Informe de evolución: evolución semanal, proyección y comparativa ═══
