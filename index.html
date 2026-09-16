@@ -1219,40 +1219,40 @@ svg{display:block}
 .ini-pg.active{background:var(--midnight);border-color:var(--midnight);color:#fff}
 .ini-pg-dots{color:var(--ink-faint);padding:0 2px}
 
-/* ─── Jota, la mascota que atiende el chat de iniciativas ─── */
-.jota{flex-shrink:0;display:block}
+/* ─── Jaippy, la mascota que atiende el chat de iniciativas ─── */
+.jaippy{flex-shrink:0;display:block}
 .ini-chat{border-color:rgba(255,161,59,.35)}
 .ini-chat-header{
   background:linear-gradient(90deg,rgba(255,208,59,.22),rgba(255,161,59,.10));
   border-bottom-color:rgba(255,161,59,.28);gap:10px;padding:13px 16px;
 }
-.jota-name{display:flex;flex-direction:column;gap:1px;line-height:1.2}
-.jota-name small{font-size:.68rem;font-weight:500;color:var(--ink-faint)}
-.jota-hello{text-align:center;padding:22px 16px 6px}
-.jota-hello .jota{margin:0 auto 12px}
-.jota-hello h4{font-size:.92rem;font-weight:700;color:var(--midnight);margin-bottom:5px}
-.jota-hello p{font-size:.78rem;color:var(--ink-soft);line-height:1.5;max-width:420px;margin:0 auto}
-.jota-sugs{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:14px}
-.jota-sug{
+.jaippy-name{display:flex;flex-direction:column;gap:1px;line-height:1.2}
+.jaippy-name small{font-size:.68rem;font-weight:500;color:var(--ink-faint)}
+.jaippy-hello{text-align:center;padding:22px 16px 6px}
+.jaippy-hello .jaippy{margin:0 auto 12px}
+.jaippy-hello h4{font-size:.92rem;font-weight:700;color:var(--midnight);margin-bottom:5px}
+.jaippy-hello p{font-size:.78rem;color:var(--ink-soft);line-height:1.5;max-width:420px;margin:0 auto}
+.jaippy-sugs{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:14px}
+.jaippy-sug{
   font-size:.72rem;font-weight:600;color:var(--ink-soft);
   border:1px solid var(--line-strong);border-radius:999px;padding:6px 13px;
   background:#fff;cursor:pointer;transition:all .12s;font-family:inherit;
 }
-.jota-sug:hover{border-color:var(--amber);background:#FFFDF7;color:var(--midnight)}
-/* Mensajes del bot con Jota al lado */
+.jaippy-sug:hover{border-color:var(--amber);background:#FFFDF7;color:var(--midnight)}
+/* Mensajes del bot con Jaippy al lado */
 .ini-chat-row{display:flex;align-items:flex-start;gap:9px;margin-bottom:12px}
 .ini-chat-row .ini-chat-msg{margin-bottom:0}
-.jota-typing{
+.jaippy-typing{
   display:flex;align-items:center;gap:5px;background:#FFF8E7;
   padding:12px 14px;border-radius:12px 12px 12px 4px;
 }
-.jota-typing span{
+.jaippy-typing span{
   width:6px;height:6px;border-radius:50%;background:var(--saffron);
-  animation:jotaDot 1s infinite ease-in-out;
+  animation:jaippyDot 1s infinite ease-in-out;
 }
-.jota-typing span:nth-child(2){animation-delay:.15s}
-.jota-typing span:nth-child(3){animation-delay:.3s}
-@keyframes jotaDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+.jaippy-typing span:nth-child(2){animation-delay:.15s}
+.jaippy-typing span:nth-child(3){animation-delay:.3s}
+@keyframes jaippyDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
 .ini-chat-msg.is-bot{background:#FFF8E7}
 
 /* ─── Analíticas: resumen ejecutivo ─── */
@@ -4044,7 +4044,7 @@ select.res-f-field{appearance:none;cursor:pointer;
       <div class="ini-chat-header" id="iniChatHeader"></div>
       <div class="ini-chat-messages" id="iniChatMsgs"></div>
       <div class="ini-chat-input">
-        <input type="text" id="iniChatInput" placeholder="Pregúntale a Jota: ¿qué puedo hacer para solucionar el ruido?" onkeydown="if(event.key==='Enter')sendIniChat()">
+        <input type="text" id="iniChatInput" placeholder="Pregúntale a Jaippy: ¿qué puedo hacer para solucionar el ruido?" onkeydown="if(event.key==='Enter')sendIniChat()">
         <button onclick="sendIniChat()" aria-label="Enviar">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/></svg>
         </button>
@@ -6949,15 +6949,15 @@ function hideInsHotel(){
   box.innerHTML = "";
 }
 
-/* ═══════════ Jota, la mascota de Jaippy ═══════════
-   Es la jota de la marca: el gancho de la letra hace de sonrisa y la cara va
+/* ═══════════ Jaippy, la mascota del chat ═══════════
+   Es la jota del logotipo: el gancho de la letra hace de sonrisa y la cara va
    dentro de la curva. Se dibuja con siluetas simples porque tiene que leerse
    igual a 26 px en las filas del chat que a 76 en el saludo. */
-let jotaSeq = 0;
-function jotaMascot(size = 40){
-  const g = "jotaG" + (++jotaSeq);
+let jaippySeq = 0;
+function jaippyMascot(size = 40){
+  const g = "jaippyG" + (++jaippySeq);
   return `
-  <svg class="jota" width="${size}" height="${size}" viewBox="0 0 64 64" role="img" aria-label="Jota, el asistente de Jaippy">
+  <svg class="jaippy" width="${size}" height="${size}" viewBox="0 0 64 64" role="img" aria-label="Jaippy, tu asistente de iniciativas">
     <defs>
       <linearGradient id="${g}" x1=".15" y1="0" x2=".7" y2="1">
         <stop offset="0" stop-color="#FFDC66"/>
@@ -6982,7 +6982,7 @@ function jotaMascot(size = 40){
     <circle cx="35.8" cy="24.2" r="1.15" fill="#fff"/>
   </svg>`;
 }
-const JOTA_SUGS = [
+const JAIPPY_SUGS = [
   "¿Qué puedo hacer para solucionar el ruido?",
   "Ideas de coste cero para el check-in",
   "¿Cómo subo la nota del desayuno?"
@@ -6990,23 +6990,23 @@ const JOTA_SUGS = [
 function initIniChat(){
   const head = document.getElementById("iniChatHeader");
   if (!head) return;
-  head.innerHTML = `${jotaMascot(30)}
-    <span class="jota-name">Pregúntale a Jota<small>Tu asistente de iniciativas</small></span>`;
+  head.innerHTML = `${jaippyMascot(30)}
+    <span class="jaippy-name">Pregúntale a Jaippy<small>Tu asistente de iniciativas</small></span>`;
   renderIniChatEmpty();
 }
 function renderIniChatEmpty(){
   document.getElementById("iniChatMsgs").innerHTML = `
-    <div class="jota-hello">
-      ${jotaMascot(76)}
-      <h4>¡Hola! Soy Jota 👋</h4>
+    <div class="jaippy-hello">
+      ${jaippyMascot(76)}
+      <h4>¡Hola! Soy Jaippy 👋</h4>
       <p>Cuéntame qué quieres mejorar en tu hotel y te propongo las iniciativas
          que mejor están funcionando en establecimientos como el tuyo.</p>
-      <div class="jota-sugs">
-        ${JOTA_SUGS.map(s => `<button class="jota-sug" onclick="askJota('${s.replace(/'/g,"\\'")}')">${s}</button>`).join("")}
+      <div class="jaippy-sugs">
+        ${JAIPPY_SUGS.map(s => `<button class="jaippy-sug" onclick="askJaippy('${s.replace(/'/g,"\\'")}')">${s}</button>`).join("")}
       </div>
     </div>`;
 }
-function askJota(q){
+function askJaippy(q){
   document.getElementById("iniChatInput").value = q;
   sendIniChat();
 }
@@ -7016,16 +7016,16 @@ function sendIniChat(){
   if (!q) return;
   input.value = "";
   const msgs = document.getElementById("iniChatMsgs");
-  const hello = msgs.querySelector(".jota-hello");
+  const hello = msgs.querySelector(".jaippy-hello");
   if (hello) hello.remove();
   msgs.innerHTML += `<div class="ini-chat-msg is-user">${q}</div>
-    <div class="ini-chat-row" id="jotaTyping">${jotaMascot(26)}
-      <div class="jota-typing"><span></span><span></span><span></span></div>
+    <div class="ini-chat-row" id="jaippyTyping">${jaippyMascot(26)}
+      <div class="jaippy-typing"><span></span><span></span><span></span></div>
     </div>`;
   msgs.scrollTop = msgs.scrollHeight;
 
   setTimeout(() => {
-    document.getElementById("jotaTyping")?.remove();
+    document.getElementById("jaippyTyping")?.remove();
     const lower = q.toLowerCase();
     let matches = INI_DATA.filter(i => {
       const txt = (i.title + " " + i.desc + " " + i.profiles.join(" ") + " " + i.cat).toLowerCase();
@@ -7042,7 +7042,7 @@ function sendIniChat(){
     });
     resp += `<span style="font-size:.65rem;color:var(--ink-faint)">¿Quieres que profundice en alguna de estas iniciativas?</span>`;
 
-    msgs.innerHTML += `<div class="ini-chat-row">${jotaMascot(26)}
+    msgs.innerHTML += `<div class="ini-chat-row">${jaippyMascot(26)}
       <div class="ini-chat-msg is-bot">${resp}</div></div>`;
     msgs.scrollTop = msgs.scrollHeight;
   }, 900);
