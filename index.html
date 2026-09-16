@@ -4871,10 +4871,6 @@ function renderList(list){
         </span>
         <p class="rd-text">${r.text}</p>
         <div class="rd-actions">
-          <button class="btn btn-primary" onclick="toast('Abriendo ${r.source} para responder…')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17l-5-5 5-5"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
-            Responder en ${r.source}
-          </button>
           <button class="btn-kebab" onclick="toast('Más opciones (mockup)')" aria-label="Más opciones">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg>
           </button>
@@ -5333,10 +5329,21 @@ function guestHistData(type, id){
       initiatives.push({...ini, date: `${String(d.getDate()).padStart(2,"0")} ${MESES[d.getMonth()]}`});
     }
   }
-  const interactions = [];
-  for (let i = 0; i < nInter; i++){
-    interactions.push(GH_INTERACTIONS[(seed + i*2) % GH_INTERACTIONS.length]);
+  /* El salto de 2 sobre una lista de 10 caía siempre en índices de la misma
+     paridad, así que a la mitad de los huéspedes no les salía ni una queja.
+     Ahora se reserva sitio para las negativas: un historial de solo elogios
+     no se parece a lo que ve un hotel de verdad. */
+  const negs = GH_INTERACTIONS.filter(x => x.f === "neg");
+  const rest = GH_INTERACTIONS.filter(x => x.f !== "neg");
+  const interactions = [negs[seed % negs.length]];
+  if (nInter >= 4) interactions.push(negs[(seed + 1) % negs.length]);
+  for (let i = 0; interactions.length < nInter && i < rest.length * 2; i++){
+    const x = rest[(seed + i * 3) % rest.length];
+    if (!interactions.includes(x)) interactions.push(x);
   }
+  // De lo más reciente a lo más antiguo; todas caen en agosto de 2026
+  const ghWhen = w => { const m = w.match(/^(\d+) \w+ \d+ · (\d+):(\d+)$/); return m ? +m[1]*1440 + +m[2]*60 + +m[3] : 0; };
+  interactions.sort((a, b) => ghWhen(b.when) - ghWhen(a.when));
   const requests = [], usedReq = new Set();
   for (let i = 0; requests.length < nReq && i < GH_REQUESTS.length; i++){
     const idx = (seed + i*3) % GH_REQUESTS.length;
